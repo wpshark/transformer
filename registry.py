@@ -5,7 +5,6 @@ def register(name, transform):
     if name in __GLOBAL_REGISTRY:
         raise Exception("Transform with the name {} already exists".format(name))
     __GLOBAL_REGISTRY[name] = transform
-    print __GLOBAL_REGISTRY
 
 def lookup(name):
     if name in __GLOBAL_REGISTRY:

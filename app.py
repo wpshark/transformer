@@ -1,8 +1,10 @@
-from flask import Flask, jsonify
+import json
+import registry
+
+from flask import Flask, jsonify, request, abort
 app = Flask(__name__)
 
-from registry import make_registry, getall
-make_registry()
+registry.make_registry()
 
 
 """
@@ -13,7 +15,7 @@ POST /transform -> run the transform
 
 @app.route("/")
 def hello():
-    return jsonify(transforms=getall())
+    return jsonify(transforms=registry.getall())
 
 @app.route("/fields")
 def fields():
@@ -30,7 +32,21 @@ def transform():
     # else
     #     transform(v, **data)
 
-    return jsonify("hello world")
+    try:
+        data = json.loads(request.data)
+    except:
+        abort(400)
+
+    if not data:
+        abort(400)
+
+    transform = registry.lookup(data['transform'])
+    if not transform:
+        abort(400)
+
+    output = transform.transform(data['inputs'])
+
+    return jsonify(output=output)
 
 if __name__ == "__main__":
     app.run(debug=True)

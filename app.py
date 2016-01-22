@@ -18,7 +18,7 @@ POST /transform -> run the transform
 def hello():
     data = request.args
     transforms = registry.getall(category=data.get('category'))
-    return jsonify(transforms=[v.key for v in transforms])
+    return jsonify(transforms=[v.to_dict() for v in transforms])
 
 
 @app.route("/fields")

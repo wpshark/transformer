@@ -2,10 +2,21 @@ class BaseTransform:
     category = ''
     name = ''
     label = ''
+    help_text = ''
 
     @property
     def key(self):
         return '{}.{}'.format(self.category, self.name)
+
+    def to_dict(self):
+        return {
+            'key': self.key,
+            'label': self.label,
+            'name': self.name,
+            'category': self.category,
+            'help_text': self.help_text,
+            'type': 'transform'
+        }
 
     def transform(self, *args, **kwargs):
         raise Exception('Must implement transform method')

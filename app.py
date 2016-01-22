@@ -2,9 +2,9 @@ import os
 import json
 import registry
 
-from util import APIError, smart_dump
+from util import APIError
 
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request
 
 # Create our Flask App
 app = Flask(__name__)
@@ -66,26 +66,6 @@ def error(e):
     response = jsonify(e.to_dict())
     response.status_code = e.status_code
     return response
-
-
-@app.route('/tester', methods=['GET', 'POST'])
-def tester():
-    """ Render a really simple tester form for testing the transforms """
-    inputs = request.form.get('inputs')
-    outputs = None
-    if request.method == 'POST':
-        transform = registry.lookup(request.form.get('transform'))
-        try:
-            inputs = json.loads(inputs)
-        except:
-            if '[' in inputs or '{' in inputs:
-                raise
-        outputs = transform_many(transform, inputs, dict(request.form))
-
-    return render_template('tester.html',
-                            transforms=registry.getall(),
-                            inputs=smart_dump(inputs),
-                            outputs=smart_dump(outputs))
 
 
 def transform_many(transform, inputs, data):

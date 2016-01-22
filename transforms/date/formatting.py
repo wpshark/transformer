@@ -3,7 +3,6 @@ import dateutil.parser
 
 from registry import register
 from transforms.base import BaseTransform
-print('hey')
 
 class DateFormattingTransform(BaseTransform):
 
@@ -27,8 +26,8 @@ class DateFormattingTransform(BaseTransform):
         if data is None:
             data = {}
 
-        from_format = data.get('from_format')
-        to_format = data.get('to_format')
+        from_format = data.get('from_format', '')
+        to_format = data.get('to_format', '')
 
         dt = self.try_parse(date_value, from_format=from_format)
         if not dt:

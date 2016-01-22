@@ -1,5 +1,3 @@
-import json
-
 class APIError(Exception):
     """ Base Exception for the API """
     status_code = 400
@@ -16,15 +14,3 @@ class APIError(Exception):
         rv['message'] = self.message
         rv['status'] = self.status_code
         return rv
-
-
-def smart_dump(v):
-    """
-    if the value is a string, just return it because that's ok to display...
-    otherwise, json dumps it!
-
-    """
-    if isinstance(v, basestring) or isinstance(v, str):
-        return v
-    else:
-        return json.dumps(v)

@@ -36,7 +36,7 @@ class DateFormattingTransform(BaseTransform):
 
         return arrow.get(dt).to('utc').format(to_format)
 
-    def fields(self):
+    def fields(self, *args, **kwargs):
         return [
             {
                 'type': 'unicode',

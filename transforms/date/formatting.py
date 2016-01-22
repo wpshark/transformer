@@ -70,7 +70,7 @@ class DateFormattingTransform(BaseTransform):
             'DD/MM/YY'
         ]
 
-        choices = ','.join(['{}|{}'.format(f, dt.format(f)) for f in formats])
+        choices = ','.join(['{}|{} ({})'.format(f, f, dt.format(f)) for f in formats])
 
         return [
             {

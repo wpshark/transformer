@@ -55,10 +55,28 @@ class DateFormattingTransform(BaseTransform):
         return arrow.get(dt).to('utc').format(to_format)
 
     def fields(self, *args, **kwargs):
+        # Mon Jan 2 15:04:05 MST 2006
+
+        dt = arrow.get(self.try_parse('Mon Jan 2 15:04:05 MST 2006')).to('utc')
+
+        formats = [
+            'MMMM DD YYYY HH:mm:ss',
+            'MMMM DD YYYY',
+            'MMM DD YYYY',
+            'YYYY-MM-DD HH:mm:ss ZZ'
+            'YYYY-MM-DD',
+            'MM-DD-YYYY',
+            'MM/DD/YYYY',
+            'DD/MM/YY'
+        ]
+
+        choices = ','.join(['{}|{}'.format(f, dt.format(f)) for f in formats])
+
         return [
             {
                 'type': 'unicode',
                 'required': False,
+                'hide': True,
                 'key': 'from_format',
                 'help_text': 'Optionally provide the format that the date is coming from (especially useful for uncommon strings)'
             },
@@ -66,6 +84,7 @@ class DateFormattingTransform(BaseTransform):
                 'type': 'unicode',
                 'required': True,
                 'key': 'to_format',
+                'choices': choices,
                 'help_text': 'Provide the format that the date should be converted to.'
             }
         ]

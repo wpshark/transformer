@@ -5,6 +5,7 @@ class StringUppercaseTransform(BaseTransform):
 
     category = 'string'
     name = 'uppercase'
+    label = 'String / Uppercase'
 
     def transform(self, str_input, **kwargs):
         return str_input.upper() if str_input else ''

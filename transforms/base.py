@@ -1,6 +1,7 @@
 class BaseTransform:
     category = ''
     name = ''
+    label = ''
 
     @property
     def key(self):

@@ -2,7 +2,7 @@ import os
 import json
 import registry
 
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, render_template
 app = Flask(__name__)
 
 registry.make_registry()
@@ -17,7 +17,9 @@ POST /transform -> run the transform
 @app.route("/")
 def hello():
     data = request.args
-    return jsonify(transforms=registry.getall(category=data.get('category')))
+    transforms = registry.getall(category=data.get('category'))
+    return jsonify(transforms=[v.key for v in transforms])
+
 
 @app.route("/fields")
 def fields():
@@ -33,6 +35,7 @@ def fields():
     fields = transform._fields_internal(inputs=inputs)
 
     return jsonify(fields=fields)
+
 
 @app.route("/transform", methods=["POST"])
 def transform():
@@ -50,6 +53,40 @@ def transform():
 
     inputs = data.get('inputs')
 
+    outputs = transform_many(transform, inputs, data)
+
+    return jsonify(outputs=outputs)
+
+
+@app.route('/tester', methods=['GET', 'POST'])
+def tester():
+    inputs = request.form.get('inputs')
+    outputs = None
+    if request.method == 'POST':
+        transform = registry.lookup(request.form.get('transform'))
+        try:
+            inputs = json.loads(inputs)
+        except:
+            if '[' in inputs or '{' in inputs:
+                raise
+        outputs = transform_many(transform, inputs, dict(request.form))
+
+    return render_template('tester.html', transforms=registry.getall(), inputs=smart_dump(inputs), outputs=smart_dump(outputs))
+
+
+def smart_dump(v):
+    """
+    if the value is a string, just return it because that's ok to display...
+    otherwise, json dumps it!
+
+    """
+    if isinstance(v, basestring) or isinstance(v, str):
+        return v
+    else:
+        return json.dumps(v)
+
+
+def transform_many(transform, inputs, data):
     if isinstance(inputs, dict):
         outputs = {}
         for k, v in inputs.iteritems():
@@ -60,8 +97,8 @@ def transform():
             outputs.append(transform.transform(v, data=data))
     else:
         outputs = transform.transform(inputs, data=data)
+    return outputs
 
-    return jsonify(outputs=outputs)
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))

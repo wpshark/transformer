@@ -15,7 +15,7 @@ def lookup(name, category=""):
     return None
 
 def getall(category=""):
-    return [v.key for k, v in __GLOBAL_REGISTRY.iteritems() if not category or category == v.category]
+    return [v for k, v in __GLOBAL_REGISTRY.iteritems() if not category or category == v.category]
 
 def make_registry():
     from transforms import string # NOQA

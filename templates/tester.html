@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block body %}
+<form method="post">
+    <div>
+        <label>
+            <span>Transform</span>
+            <select name="transform">
+                {% for transform in transforms %}
+                    <option value="{{transform.key}}">{{transform.label}}</option>
+                {% endfor %}
+            </select>
+        </label>
+    </div>
+    <div>
+        <label>
+            <span>Inputs</span>
+            <textarea name="inputs">{% if inputs %}{{inputs}}{% endif %}</textarea>
+        </label>
+    </div>
+    <div>
+        <label>
+            <span>Outputs</span>
+            <pre>{% if outputs %}{{outputs}}{% endif %}</pre>
+        </label>
+    </div>
+    <div>
+        <label>
+            <button>GO</button>
+        </label>
+    </div>
+</form>
+{% endblock %}

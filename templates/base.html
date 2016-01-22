@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Transformer</title>
+        <style type="text/css">
+        div { margin:20px; }
+        label span { display:block; }
+        textarea { padding:20px; width:50%; min-height:300px; }
+        </style>
+    </head>
+    <body>
+        <div>
+            <h1>Transformer</h1>
+        </div>
+        {% for message in get_flashed_messages() %}
+            <div class=flash>{{ message }}</div>
+        {% endfor %}
+        {% block body %}{% endblock %}
+    </body>
+</html>

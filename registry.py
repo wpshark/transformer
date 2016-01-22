@@ -15,7 +15,6 @@ def lookup(name, category=""):
     return None
 
 def getall(category=""):
-    #return [k for k in __GLOBAL_REGISTRY if not category or k.startswith(category)]
     return [v.key for k, v in __GLOBAL_REGISTRY.iteritems() if not category or category == v.category]
 
 def make_registry():

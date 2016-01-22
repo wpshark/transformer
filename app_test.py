@@ -14,6 +14,16 @@ class TestApp(unittest.TestCase):
         transforms = json.loads(response.data)['transforms']
         self.assertIn('string.uppercase', transforms)
 
+    def test_list_transforms_category(self):
+        response = self.app.get('/', query_string={'category': 'string'})
+        transforms = json.loads(response.data)['transforms']
+        self.assertIn('string.uppercase', transforms)
+
+    def test_list_transforms_invalid_category(self):
+        response = self.app.get('/', query_string={'category': 'astring'})
+        transforms = json.loads(response.data)['transforms']
+        self.assertNotIn('string.uppercase', transforms)
+
     def test_no_transform(self):
         response = self.app.post('/transform', data=json.dumps({}))
         self.assertEqual(400, response.status_code)

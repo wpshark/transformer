@@ -20,5 +20,15 @@ class TestApp(unittest.TestCase):
 
     def test_run_transform(self):
         response = self.app.post('/transform', data=json.dumps({'transform': 'string.uppercase', 'inputs': 'abc'}))
-        output = json.loads(response.data)['output']
+        output = json.loads(response.data)['outputs']
         self.assertEqual('ABC', output)
+
+    def test_run_transform_list(self):
+        response = self.app.post('/transform', data=json.dumps({'transform': 'string.uppercase', 'inputs': ['abc', 'def']}))
+        output = json.loads(response.data)['outputs']
+        self.assertEqual(['ABC', 'DEF'], output)
+
+    def test_run_transform_dict(self):
+        response = self.app.post('/transform', data=json.dumps({'transform': 'string.uppercase', 'inputs': {'abc': 'def', 'ghi': 'jkl'}}))
+        output = json.loads(response.data)['outputs']
+        self.assertEqual({'abc': 'DEF', 'ghi': 'JKL'}, output)

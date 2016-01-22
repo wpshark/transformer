@@ -19,19 +19,21 @@ def hello():
 
 @app.route("/fields")
 def fields():
-    return jsonify([])
+    data = request.args
+    if not data:
+        abort(400)
+
+    transform = registry.lookup(data.get('transform'))
+    if not transform:
+        abort(400)
+
+    inputs = data.get('inputs')
+    fields = transform._fields_internal(inputs=inputs)
+
+    return jsonify(fields=fields)
 
 @app.route("/transform", methods=["POST"])
 def transform():
-    # if dict
-    #     for k, v in ...
-    #         transform(v, **data)
-    # if list
-    #     for v in ...
-    #         transform(v, **data)
-    # else
-    #     transform(v, **data)
-
     try:
         data = json.loads(request.data)
     except:
@@ -40,13 +42,24 @@ def transform():
     if not data:
         abort(400)
 
-    transform = registry.lookup(data['transform'])
+    transform = registry.lookup(data.get('transform'))
     if not transform:
         abort(400)
 
-    output = transform.transform(data['inputs'])
+    inputs = data.get('inputs')
 
-    return jsonify(output=output)
+    if isinstance(inputs, dict):
+        outputs = {}
+        for k, v in inputs.iteritems():
+            outputs[k] = transform.transform(v, data=data)
+    elif isinstance(inputs, list):
+        outputs = []
+        for v in inputs:
+            outputs.append(transform.transform(v, data=data))
+    else:
+        outputs = transform.transform(inputs, data=data)
+
+    return jsonify(outputs=outputs)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -23,7 +23,7 @@ def fields():
     if not data:
         abort(400)
 
-    transform = registry.lookup(data.get('transform'))
+    transform = registry.lookup(data.get('transform'), category=data.get('category'))
     if not transform:
         abort(400)
 
@@ -42,7 +42,7 @@ def transform():
     if not data:
         abort(400)
 
-    transform = registry.lookup(data.get('transform'))
+    transform = registry.lookup(data.get('transform'), category=data.get('category'))
     if not transform:
         abort(400)
 

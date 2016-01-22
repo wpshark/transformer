@@ -1,4 +1,11 @@
 class BaseTransform:
+    category = ''
+    name = ''
+
+    @property
+    def key(self):
+        return '{}.{}'.format(self.category, self.name)
+
     def transform(self, *args, **kwargs):
         raise Exception('Must implement transform method')
 

@@ -1,3 +1,4 @@
+import os
 import json
 import registry
 
@@ -63,4 +64,6 @@ def transform():
     return jsonify(outputs=outputs)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    debug = True if os.environ.get('DEBUG', 'false') == 'true' else False
+    app.run(port=port, debug=debug)

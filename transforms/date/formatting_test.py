@@ -20,3 +20,29 @@ class TestDateFormattingTransform(unittest.TestCase):
         self.assertNotEqual(transformer.transform('next friday', {
             'to_format': 'MM-DD-YYYY'
         }), "")
+
+    def test_parse_timestamp(self):
+        transformer = formatting.DateFormattingTransform()
+        self.assertEqual(transformer.transform(1453498140, {
+            'to_format': 'MM-DD-YYYY'
+        }), "01-22-2016")
+
+        self.assertEqual(transformer.transform(1453498140000, {
+            'to_format': 'MM-DD-YYYY'
+        }), "01-22-2016")
+
+        self.assertEqual(transformer.transform(1453498140.001, {
+            'to_format': 'MM-DD-YYYY'
+        }), "01-22-2016")
+
+        self.assertEqual(transformer.transform('1453498140', {
+            'to_format': 'MM-DD-YYYY'
+        }), '01-22-2016')
+
+        self.assertEqual(transformer.transform('1453498140000', {
+            'to_format': 'MM-DD-YYYY'
+        }), '01-22-2016')
+
+        self.assertEqual(transformer.transform('1453498140.001', {
+            'to_format': 'MM-DD-YYYY'
+        }), '01-22-2016')

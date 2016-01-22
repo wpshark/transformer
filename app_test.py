@@ -11,17 +11,17 @@ class TestApp(unittest.TestCase):
 
     def test_list_transforms(self):
         response = self.app.get('/')
-        transforms = json.loads(response.data)['transforms']
+        transforms = [v.get('key') for v in json.loads(response.data)['transforms']]
         self.assertIn('string.uppercase', transforms)
 
     def test_list_transforms_category(self):
         response = self.app.get('/', query_string={'category': 'string'})
-        transforms = json.loads(response.data)['transforms']
+        transforms = [v.get('key') for v in json.loads(response.data)['transforms']]
         self.assertIn('string.uppercase', transforms)
 
     def test_list_transforms_invalid_category(self):
         response = self.app.get('/', query_string={'category': 'astring'})
-        transforms = json.loads(response.data)['transforms']
+        transforms = [v.get('key') for v in json.loads(response.data)['transforms']]
         self.assertNotIn('string.uppercase', transforms)
 
     def test_no_transform(self):

@@ -2,20 +2,20 @@ import os
 import json
 import registry
 
-from flask import Flask, jsonify, request, abort, render_template
+from util import APIError, smart_dump
+
+from flask import Flask, jsonify, request, render_template
+
+# Create our Flask App
 app = Flask(__name__)
 
+# Prepare the application transform registry
 registry.make_registry()
 
 
-"""
-GET / -> list of transforms
-GET /fields -> fields for this transform
-POST /transform -> run the transform
-"""
-
 @app.route("/")
 def hello():
+    """ Returns a list of transforms available to be used """
     data = request.args
     transforms = registry.getall(category=data.get('category'))
     return jsonify(transforms=[v.to_dict() for v in transforms])
@@ -23,13 +23,14 @@ def hello():
 
 @app.route("/fields")
 def fields():
+    """ Returns a list of fields for a given transform """
     data = request.args
     if not data:
-        abort(400)
+        raise APIError('Missing Transform', 400)
 
     transform = registry.lookup(data.get('transform'), category=data.get('category'))
     if not transform:
-        abort(400)
+        raise APIError('Transform Not Found', 404)
 
     inputs = data.get('inputs')
     fields = transform._fields_internal(inputs=inputs)
@@ -39,17 +40,18 @@ def fields():
 
 @app.route("/transform", methods=["POST"])
 def transform():
+    """ Perform a transformation """
     try:
         data = json.loads(request.data)
     except:
-        abort(400)
+        raise APIError('Missing Body', 400)
 
     if not data:
-        abort(400)
+        raise APIError('Invalid Body', 400)
 
     transform = registry.lookup(data.get('transform'), category=data.get('category'))
     if not transform:
-        abort(400)
+        raise APIError('Transform Not Found', 404)
 
     inputs = data.get('inputs')
 
@@ -58,8 +60,17 @@ def transform():
     return jsonify(outputs=outputs)
 
 
+@app.errorhandler(APIError)
+def error(e):
+    """ Handle our APIError exceptions """
+    response = jsonify(e.to_dict())
+    response.status_code = e.status_code
+    return response
+
+
 @app.route('/tester', methods=['GET', 'POST'])
 def tester():
+    """ Render a really simple tester form for testing the transforms """
     inputs = request.form.get('inputs')
     outputs = None
     if request.method == 'POST':
@@ -71,22 +82,17 @@ def tester():
                 raise
         outputs = transform_many(transform, inputs, dict(request.form))
 
-    return render_template('tester.html', transforms=registry.getall(), inputs=smart_dump(inputs), outputs=smart_dump(outputs))
-
-
-def smart_dump(v):
-    """
-    if the value is a string, just return it because that's ok to display...
-    otherwise, json dumps it!
-
-    """
-    if isinstance(v, basestring) or isinstance(v, str):
-        return v
-    else:
-        return json.dumps(v)
+    return render_template('tester.html',
+                            transforms=registry.getall(),
+                            inputs=smart_dump(inputs),
+                            outputs=smart_dump(outputs))
 
 
 def transform_many(transform, inputs, data):
+    """
+    take the inputs object and try to convert all of the inputs with the data provided
+
+    """
     if isinstance(inputs, dict):
         outputs = {}
         for k, v in inputs.iteritems():

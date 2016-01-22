@@ -19,7 +19,10 @@ class BaseTransform:
         }
 
     def transform(self, *args, **kwargs):
-        raise Exception('Must implement transform method')
+        self.raise_exception('Must implement transform method')
+
+    def raise_exception(self, message):
+        raise Exception(message)
 
     def fields(self, *args, **kwargs):
         return []

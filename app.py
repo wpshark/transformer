@@ -66,4 +66,5 @@ def transform():
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     debug = True if os.environ.get('DEBUG', 'false') == 'true' else False
-    app.run(port=port, debug=debug)
+    host = os.environ.get('HOST', '0.0.0.0')
+    app.run(host=host, port=port, debug=debug)

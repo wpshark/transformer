@@ -15,7 +15,8 @@ POST /transform -> run the transform
 
 @app.route("/")
 def hello():
-    return jsonify(transforms=registry.getall())
+    data = request.args
+    return jsonify(transforms=registry.getall(category=data.get('category')))
 
 @app.route("/fields")
 def fields():

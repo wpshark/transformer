@@ -63,7 +63,7 @@ class DateFormattingTransform(BaseTransform):
             'MMMM DD YYYY HH:mm:ss',
             'MMMM DD YYYY',
             'MMM DD YYYY',
-            'YYYY-MM-DD HH:mm:ss ZZ'
+            'YYYY-MM-DD HH:mm:ss ZZ',
             'YYYY-MM-DD',
             'MM-DD-YYYY',
             'MM/DD/YYYY',

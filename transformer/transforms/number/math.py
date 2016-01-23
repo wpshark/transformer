@@ -53,7 +53,7 @@ class NumberMathTransform(BaseTransform):
         return value
 
 
-    def fields(self, **kwargs):
+    def _fields_internal(self, **kwargs):
         return [
             {
                 'type': 'unicode',

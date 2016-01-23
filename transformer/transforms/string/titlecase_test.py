@@ -1,9 +1,9 @@
 import unittest
-import uppercase
+import titlecasetransform
 
 class TestStringTitlecaseTransform(unittest.TestCase):
     def test_titlecase(self):
-        transformer = uppercase.StringTitlecaseTransform()
+        transformer = titlecasetransform.StringTitlecaseTransform()
         self.assertEqual(transformer.transform(""), "")
-        self.assertEqual(transformer.transform("my dog is blue"), "My Dog is Blue")
+        self.assertEqual(transformer.transform("my dog is blue"), "My Dog Is Blue")
         self.assertEqual(transformer.transform(None), "")

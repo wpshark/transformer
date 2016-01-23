@@ -1,6 +1,6 @@
 import arrow
-import datetime
-import dateutil.parser
+
+import transforms.date
 
 from registry import register
 from transforms.base import BaseTransform
@@ -12,35 +12,6 @@ class DateFormattingTransform(BaseTransform):
     label = 'Date / Formatting'
     help_text = 'Format a date into a specific format.'
 
-    def try_parse(self, date_value, from_format=None):
-        """
-        try to parse a int or string value into a datetime format
-
-        """
-        try:
-            # check to see if the string can be converted into a float (a timestamp)
-            try:
-                date_value = float(date_value)
-            except:
-                pass
-
-            # if this is a unix string... or a milliseconds since epoch
-            if isinstance(date_value, int) or isinstance(date_value, long) or isinstance(date_value, float):
-                if date_value >= (1 << 32) - 1:
-                    date_value /= 1000.0
-                return datetime.datetime.fromtimestamp(date_value)
-
-            # otherwise, try to parse the date value from the from_format
-            if from_format:
-                dt = arrow.get(date_value, from_format)
-                if dt:
-                    return dt
-        except:
-            pass
-
-        # otherwise, use the fuzzy parser
-        return dateutil.parser.parse(date_value, fuzzy=True)
-
     def transform(self, date_value, data=None, **kwargs):
         if data is None:
             data = {}
@@ -48,7 +19,7 @@ class DateFormattingTransform(BaseTransform):
         from_format = data.get('from_format', '')
         to_format = data.get('to_format', '')
 
-        dt = self.try_parse(date_value, from_format=from_format)
+        dt = transforms.date.try_parse(date_value, from_format=from_format)
         if not dt:
             return self.raise_exception('Date could not be parsed')
 
@@ -57,13 +28,14 @@ class DateFormattingTransform(BaseTransform):
     def fields(self, *args, **kwargs):
         # Mon Jan 2 15:04:05 MST 2006
 
-        dt = arrow.get(self.try_parse('Mon Jan 2 15:04:05 MST 2006')).to('utc')
+        dt = arrow.get(transforms.date.try_parse('Mon Jan 2 15:04:05 -0800 2006')).to('utc')
 
         formats = [
+            'ddd DDD d HH:mm:ss Z YYYY',
             'MMMM DD YYYY HH:mm:ss',
             'MMMM DD YYYY',
             'MMM DD YYYY',
-            'YYYY-MM-DD HH:mm:ss ZZ',
+            'YYYY-MM-DD HH:mm:ss Z',
             'YYYY-MM-DD',
             'MM-DD-YYYY',
             'MM/DD/YYYY',
@@ -73,13 +45,6 @@ class DateFormattingTransform(BaseTransform):
         choices = ','.join(['{}|{} ({})'.format(f, f, dt.format(f)) for f in formats])
 
         return [
-            {
-                'type': 'unicode',
-                'required': False,
-                'hide': True,
-                'key': 'from_format',
-                'help_text': 'Optionally provide the format that the date is coming from (especially useful for uncommon strings)'
-            },
             {
                 'type': 'unicode',
                 'required': True,

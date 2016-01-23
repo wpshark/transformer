@@ -35,5 +35,6 @@ class BaseTransform:
                 'list': True,
                 'required': True,
                 'key': 'inputs',
+                'help_text': 'Value(s) you would like to transform'
             }
         ] + self.fields(*args, **kwargs)

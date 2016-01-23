@@ -74,6 +74,34 @@ def try_parse_date(date_value, from_format=None):
     return dateutil.parser.parse(date_value, fuzzy=True)
 
 
+def int_or_float(v):
+    """
+    returns an int if the value is a long or int or a float that can be
+    represented by an int...otherwise returns a float
+
+    """
+    if isinstance(v, int) or isinstance(v, long):
+        return v
+    if v.is_integer():
+        return long(v)
+    return float(v)
+
+
+def try_parse_number(number_value, cls=float, default=0):
+    """
+    rudimentary number parsing.
+
+    TODO: bring in the zapier/zapier number parsing utility
+
+    """
+    if isinstance(number_value, int) or isinstance(number_value, long) or isinstance(number_value, float):
+        return number_value
+    try:
+        return int_or_float(cls(number_value))
+    except:
+        return cls(default)
+
+
 def import_submodules(package_name):
     """ Import all submodules of a module, recursively
 

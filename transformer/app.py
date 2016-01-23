@@ -74,11 +74,21 @@ def error(e):
     return response
 
 
+@app.errorhandler(Exception)
+def exception(e):
+    """ Handle generic exceptions """
+    response = jsonify(message=str(e))
+    response.status_code = 500
+    return response
+
+
 def transform_many(transform, inputs, data):
     """
     take the inputs object and try to convert all of the inputs with the data provided
 
     """
+    if hasattr(transform, 'transform_many') and callable(transform.transform_many):
+        return transform.transform_many(inputs, data=data)
     if isinstance(inputs, dict):
         outputs = {}
         for k, v in inputs.iteritems():

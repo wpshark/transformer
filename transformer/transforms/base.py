@@ -1,3 +1,5 @@
+from transformer.util import APIError
+
 class BaseTransform:
     category = ''
     name = ''
@@ -21,8 +23,8 @@ class BaseTransform:
     def transform(self, *args, **kwargs):
         self.raise_exception('Must implement transform method')
 
-    def raise_exception(self, message):
-        raise Exception(message)
+    def raise_exception(self, message, status=400):
+        raise APIError(message, status)
 
     def fields(self, *args, **kwargs):
         return []

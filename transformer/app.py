@@ -87,18 +87,20 @@ def transform_many(transform, inputs, data):
     take the inputs object and try to convert all of the inputs with the data provided
 
     """
+    data = data or {}
+
     if hasattr(transform, 'transform_many') and callable(transform.transform_many):
-        return transform.transform_many(inputs, data=data)
+        return transform.transform_many(inputs, **data)
     if isinstance(inputs, dict):
         outputs = {}
         for k, v in inputs.iteritems():
-            outputs[k] = transform.transform(v, data=data)
+            outputs[k] = transform.transform(v, **data)
     elif isinstance(inputs, list):
         outputs = []
         for v in inputs:
-            outputs.append(transform.transform(v, data=data))
+            outputs.append(transform.transform(v, **data))
     else:
-        outputs = transform.transform(inputs, data=data)
+        outputs = transform.transform(inputs, **data)
     return outputs
 
 

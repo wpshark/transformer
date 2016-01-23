@@ -12,13 +12,7 @@ class DateManipulateTransform(BaseTransform):
     help_text = 'Manipulate a date and time by adding or subtracting '
     'days, months, years, hours, minutes, or seconds.'
 
-    def transform(self, date_value, data=None, **kwargs):
-        if data is None:
-            data = {}
-
-        expression = data.get('expression', '')
-        to_format = data.get('to_format', '')
-
+    def transform(self, date_value, expression='', to_format='', **kwargs):
         delta = tdelta(expression)
 
         dt = try_parse_date(date_value)

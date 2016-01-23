@@ -31,7 +31,6 @@ class BaseTransform:
 
     def _fields_internal(self, *args, **kwargs):
         return [
-            # up to dev app to do the parent_key hack
             {
                 'type': 'unicode',
                 'list': True,

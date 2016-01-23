@@ -8,8 +8,8 @@ class DateFormattingTransform(BaseTransform):
 
     category = 'date'
     name = 'formatting'
-    label = 'Date / Formatting'
-    help_text = 'Format a date into a specific format.'
+    label = 'Format'
+    help_text = 'Change a date or time to a new format or style'
 
     def transform(self, date_value, from_format='', to_format='', **kwargs):
         dt = try_parse_date(date_value, from_format=from_format)

@@ -1,15 +1,15 @@
+import operator
+
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 from transformer.util import try_parse_number
 
-import inspect
-import operator
 
 class NumberMathTransform(BaseTransform):
 
     category = 'number'
     name = 'math'
-    label = 'Number / Math'
+    label = 'Perform Math Operation'
     help_text = 'Perform mathematical operations on value(s)'
 
     _operations = {

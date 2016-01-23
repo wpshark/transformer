@@ -8,9 +8,8 @@ class DateManipulateTransform(BaseTransform):
 
     category = 'date'
     name = 'manipulate'
-    label = 'Date / Formatting'
-    help_text = 'Manipulate a date and time by adding or subtracting '
-    'days, months, years, hours, minutes, or seconds.'
+    label = 'Manipulate'
+    help_text = 'Manipulate a date and/or time by adding/subtracting days, months, years, hours, minutes, seconds.'
 
     def transform(self, date_value, expression='', to_format='', **kwargs):
         delta = tdelta(expression)
@@ -27,7 +26,7 @@ class DateManipulateTransform(BaseTransform):
                 'type': 'unicode',
                 'required': True,
                 'key': 'expression',
-                'help_text': 'Provide the amount of time you would like to add to the date (negative values subtracts time).'
+                'help_text': 'Provide the amount of time you would like to add to the date (negative values subtract time).'
             },
             {
                 'type': 'unicode',

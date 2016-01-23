@@ -5,8 +5,8 @@ class StringUppercaseTransform(BaseTransform):
 
     category = 'string'
     name = 'uppercase'
-    label = 'String / Uppercase'
-    help_text = 'Convert all characters in a string to uppercase'
+    label = 'Uppercase'
+    help_text = 'Capitalize every character in the text'
 
     def transform(self, str_input, **kwargs):
         return str_input.upper() if str_input else ''

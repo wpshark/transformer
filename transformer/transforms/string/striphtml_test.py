@@ -6,4 +6,4 @@ class TestStringStripHtmlTransform(unittest.TestCase):
         transformer = striphtml.StringStripHtmlTransform()
         self.assertEqual(transformer.transform(""), "")
         self.assertEqual(transformer.transform("<b>Bold</b>"), "Bold")
-        self.assertEqual(transformer.transform(None), "")
+        self.assertEqual(transformer.transform("< 3 donuts and > 4 pies"), "< 3 donuts and > 4 pies")

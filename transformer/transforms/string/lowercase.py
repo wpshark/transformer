@@ -5,7 +5,7 @@ class StringLowercaseTransform(BaseTransform):
 
     category = 'string'
     name = 'lowercase'
-    label = 'String / Uppercase'
+    label = 'String / Lowercase'
     help_text = 'Convert all characters in a string to lowercase'
 
     def transform(self, str_input, **kwargs):

@@ -1,7 +1,7 @@
 import json
 import unittest
 
-from app import app
+from transformer.app import app
 
 
 class TestApp(unittest.TestCase):

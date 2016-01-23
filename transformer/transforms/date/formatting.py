@@ -1,9 +1,8 @@
 import arrow
 
-import transforms.date
-
-from registry import register
-from transforms.base import BaseTransform
+from transformer.registry import register
+from transformer.util import try_parse_date
+from transformer.transforms.base import BaseTransform
 
 class DateFormattingTransform(BaseTransform):
 
@@ -19,7 +18,7 @@ class DateFormattingTransform(BaseTransform):
         from_format = data.get('from_format', '')
         to_format = data.get('to_format', '')
 
-        dt = transforms.date.try_parse(date_value, from_format=from_format)
+        dt = try_parse_date(date_value, from_format=from_format)
         if not dt:
             return self.raise_exception('Date could not be parsed')
 
@@ -28,7 +27,7 @@ class DateFormattingTransform(BaseTransform):
     def fields(self, *args, **kwargs):
         # Mon Jan 2 15:04:05 MST 2006
 
-        dt = arrow.get(transforms.date.try_parse('Mon Jan 2 15:04:05 -0800 2006')).to('utc')
+        dt = arrow.get(try_parse_date('Mon Jan 2 15:04:05 -0800 2006')).to('utc')
 
         formats = [
             'ddd DDD d HH:mm:ss Z YYYY',

@@ -1,10 +1,16 @@
+from __future__ import absolute_import
 import os
+import sys
 import json
-import registry
 
-from util import APIError
+# insert the root dir into the system path
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
+from transformer import registry
+from transformer.util import APIError
 
 from flask import Flask, jsonify, request
+
 
 # Create our Flask App
 app = Flask(__name__)
@@ -17,7 +23,7 @@ registry.make_registry()
 def hello():
     """ Returns a list of transforms available to be used """
     data = request.args
-    transforms = registry.getall(category=data.get('category'))
+    transforms = registry.get_all(category=data.get('category'))
     return jsonify(transforms=[v.to_dict() for v in transforms])
 
 
@@ -86,8 +92,15 @@ def transform_many(transform, inputs, data):
     return outputs
 
 
-if __name__ == "__main__":
+def serve_locally(app):
+    """
+    serve this flask application locally
+
+    """
     port = int(os.environ.get('PORT', 5000))
     debug = True if os.environ.get('DEBUG', 'false') == 'true' else False
     host = os.environ.get('HOST', '0.0.0.0')
     app.run(host=host, port=port, debug=debug)
+
+if __name__ == '__main__':
+    serve_locally(app)

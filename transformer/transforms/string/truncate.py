@@ -8,11 +8,11 @@ class StringTruncateTransform(BaseTransform):
     label = 'Truncate'
     help_text = 'Limit your text to a specific character length, and delete anything over that.'
 
-    def transform(self, str_input, length=-1, append_ellipsis=False, **kwargs):
-        if not str_input or length <= 0:
+    def transform(self, str_input, max_length=-1, append_ellipsis=False, **kwargs):
+        if not str_input or max_length <= 0:
             return ''
 
-        short_text = str_input[0:length]
+        short_text = str_input[0:max_length]
 
         if append_ellipsis and len(short_text) != len(str_input) and len(short_text) > 3:
             short_text = short_text[0:-3] + '...'

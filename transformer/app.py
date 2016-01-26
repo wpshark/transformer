@@ -55,15 +55,16 @@ def transform():
     if not data:
         raise APIError('Missing request body', 400)
 
-    if not data.get('transform'):
-        raise APIError('Missing transform', 400)
-
     if 'inputs' not in data:
         raise APIError('Missing input data', 400)
 
-    transform = registry.lookup(data['transform'], category=data.get('category'))
+    transform_name = data.get('transform')
+    if not transform_name:
+        raise APIError('Missing transform', 400)
+
+    transform = registry.lookup(transform_name, category=data.get('category'))
     if not transform:
-        raise APIError('Transform "{}" not found'.format(data['transform']), 404)
+        raise APIError('Transform "{}" not found'.format(transform_name), 404)
 
     inputs = data.pop('inputs')
 

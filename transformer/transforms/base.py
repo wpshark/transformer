@@ -1,6 +1,6 @@
 from transformer.util import APIError
 
-class BaseTransform:
+class BaseTransform(object):
     category = ''
     name = ''
     label = ''
@@ -24,7 +24,7 @@ class BaseTransform:
 
     ### Other methods that can be overwritten by transforms in special cases
 
-    def transform_many(transform, inputs, data):
+    def transform_many(self, inputs, data):
         """
         Takes input values (possibly as a single value, a list, or a dictionary)
         and runs each one through the transform individually.
@@ -40,13 +40,13 @@ class BaseTransform:
         if isinstance(inputs, dict):
             outputs = {}
             for k, v in inputs.iteritems():
-                outputs[k] = transform.transform(v, **data)
+                outputs[k] = self.transform(v, **data)
         elif isinstance(inputs, list):
             outputs = []
             for v in inputs:
-                outputs.append(transform.transform(v, **data))
+                outputs.append(self.transform(v, **data))
         else:
-            outputs = transform.transform(inputs, **data)
+            outputs = self.transform(inputs, **data)
         return outputs
 
     def all_fields(self, *args, **kwargs):

@@ -13,7 +13,7 @@ class NumberMathTransform(BaseTransform):
     help_text = 'Perform mathematical operations on value(s)'
 
     _operations = {
-        'sum': (2, operator.add),
+        'add': (2, operator.add),
         'sub': (2, operator.sub),
         'mul': (2, operator.mul),
         'div': (2, lambda a, b: operator.div(float(a), b)),
@@ -58,8 +58,8 @@ class NumberMathTransform(BaseTransform):
                 'type': 'unicode',
                 'required': True,
                 'key': 'operation',
-                'choices': 'sum|Sum,sub|Subtract,mul|Multiply,div|Divide,neg|Make Negative',
-                'help_text': 'What type of math would you like to do?'
+                'choices': 'add|Add,sub|Subtract,mul|Multiply,div|Divide,neg|Make Negative',
+                'help_text': 'The math operation to perform.'
             },
             self.build_list_input_field()
         ]

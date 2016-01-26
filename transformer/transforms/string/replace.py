@@ -5,7 +5,7 @@ class StringReplaceTransform(BaseTransform):
 
     category = 'string'
     name = 'replace'
-    label = 'String / Replace'
+    label = 'Replace'
     help_text = 'Replace any character, word or phrase in the text with another character, word or phrase'
 
     def transform(self, str_input, str_old, str_new='', **kwargs):

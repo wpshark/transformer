@@ -58,15 +58,18 @@ def transform():
     if 'inputs' not in data:
         raise APIError('Missing input data', 400)
 
-    transform_name = data.get('transform')
+    # Each of these gets popped off so that we don't pass it along in the
+    # options to the transform function
+    inputs = data.pop('inputs')
+    transform_name = data.pop('transform', '')
+    category = data.pop('category', '')
+
     if not transform_name:
         raise APIError('Missing transform', 400)
 
-    transform = registry.lookup(transform_name, category=data.get('category'))
+    transform = registry.lookup(transform_name, category=category)
     if not transform:
         raise APIError('Transform "{}" not found'.format(transform_name), 404)
-
-    inputs = data.pop('inputs')
 
     outputs = transform.transform_many(inputs, data)
 

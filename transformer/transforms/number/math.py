@@ -20,7 +20,7 @@ class NumberMathTransform(BaseTransform):
         'neg': (1, operator.neg)
     }
 
-    def transform_many(self, inputs, data=None, **kwargs):
+    def transform_many(self, inputs, options=None, **kwargs):
         """
         Override the standard behavior of the transform_many by only
         accepting list inputs which we use to perform math operations.
@@ -29,14 +29,14 @@ class NumberMathTransform(BaseTransform):
         if not isinstance(inputs, list):
             self.raise_exception('Math Operations require a list of inputs')
 
-        if data is None:
-            data = {}
+        if options is None:
+            options = {}
 
         # try converting inputs to numbers
         inputs = map(try_parse_number, inputs)
 
         # get the operation
-        op = data.get('operation')
+        op = options.get('operation')
         if not op or op not in self._operations:
             self.raise_exception('Invalid Operation')
 

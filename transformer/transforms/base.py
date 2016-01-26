@@ -24,7 +24,7 @@ class BaseTransform(object):
 
     ### Other methods that can be overwritten by transforms in special cases
 
-    def transform_many(self, inputs, data):
+    def transform_many(self, inputs, options):
         """
         Takes input values (possibly as a single value, a list, or a dictionary)
         and runs each one through the transform individually.
@@ -35,18 +35,18 @@ class BaseTransform(object):
         {'first': a, 'second': b} -> {'first': A, 'second': B}
         """
 
-        data = data or {}
+        options = options or {}
 
         if isinstance(inputs, dict):
             outputs = {}
             for k, v in inputs.iteritems():
-                outputs[k] = self.transform(v, **data)
+                outputs[k] = self.transform(v, **options)
         elif isinstance(inputs, list):
             outputs = []
             for v in inputs:
-                outputs.append(self.transform(v, **data))
+                outputs.append(self.transform(v, **options))
         else:
-            outputs = self.transform(inputs, **data)
+            outputs = self.transform(inputs, **options)
         return outputs
 
     def all_fields(self, *args, **kwargs):

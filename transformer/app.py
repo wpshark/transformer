@@ -31,15 +31,15 @@ def hello():
 def fields():
     """ Returns a list of fields for a given transform """
     data = request.args
-    if not data:
-        raise APIError('Missing Transform', 400)
+    if not data or 'transform' not in data:
+        raise APIError('Missing transform', 400)
 
-    transform = registry.lookup(data.get('transform'), category=data.get('category'))
+    transform = registry.lookup(data['transform'], category=data.get('category'))
     if not transform:
-        raise APIError('Transform Not Found', 404)
+        raise APIError('Transform "{}" not found'.format(data['transform']), 404)
 
     inputs = data.get('inputs')
-    fields = transform._fields_internal(inputs=inputs)
+    fields = transform.all_fields(inputs=inputs)
 
     return jsonify(fields=fields)
 
@@ -50,18 +50,24 @@ def transform():
     try:
         data = json.loads(request.data)
     except:
-        raise APIError('Missing Body', 400)
+        raise APIError('Missing or malformed request body', 400)
 
     if not data:
-        raise APIError('Invalid Body', 400)
+        raise APIError('Missing request body', 400)
 
-    transform = registry.lookup(data.get('transform'), category=data.get('category'))
+    if not data.get('transform'):
+        raise APIError('Missing transform', 400)
+
+    if 'inputs' not in data:
+        raise APIError('Missing input data', 400)
+
+    transform = registry.lookup(data['transform'], category=data.get('category'))
     if not transform:
-        raise APIError('Transform Not Found', 404)
+        raise APIError('Transform "{}" not found'.format(data['transform']), 404)
 
-    inputs = data.get('inputs')
+    inputs = data.pop('inputs')
 
-    outputs = transform_many(transform, inputs, data)
+    outputs = transform.transform_many(inputs, data)
 
     return jsonify(outputs=outputs)
 
@@ -80,28 +86,6 @@ def exception(e):
     response = jsonify(message=str(e))
     response.status_code = 500
     return response
-
-
-def transform_many(transform, inputs, data):
-    """
-    take the inputs object and try to convert all of the inputs with the data provided
-
-    """
-    data = data or {}
-
-    if hasattr(transform, 'transform_many') and callable(transform.transform_many):
-        return transform.transform_many(inputs, **data)
-    if isinstance(inputs, dict):
-        outputs = {}
-        for k, v in inputs.iteritems():
-            outputs[k] = transform.transform(v, **data)
-    elif isinstance(inputs, list):
-        outputs = []
-        for v in inputs:
-            outputs.append(transform.transform(v, **data))
-    else:
-        outputs = transform.transform(inputs, **data)
-    return outputs
 
 
 def serve_locally(app):

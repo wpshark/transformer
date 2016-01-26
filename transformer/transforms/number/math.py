@@ -20,15 +20,14 @@ class NumberMathTransform(BaseTransform):
         'neg': (1, operator.neg)
     }
 
-
     def transform_many(self, inputs, data=None, **kwargs):
         """
-        we override the standard behavior of the transform_many by only
+        Override the standard behavior of the transform_many by only
         accepting list inputs which we use to perform math operations.
 
         """
         if not isinstance(inputs, list):
-            self.raise_exception('Math Operations Require a List of Inputs')
+            self.raise_exception('Math Operations require a list of inputs')
 
         if data is None:
             data = {}
@@ -53,7 +52,7 @@ class NumberMathTransform(BaseTransform):
         return value
 
 
-    def _fields_internal(self, **kwargs):
+    def all_fields(self, **kwargs):
         return [
             {
                 'type': 'unicode',
@@ -62,13 +61,7 @@ class NumberMathTransform(BaseTransform):
                 'choices': 'sum|Sum,sub|Subtract,mul|Multiply,div|Divide,neg|Make Negative',
                 'help_text': 'What type of math would you like to do?'
             },
-            {
-                'type': 'unicode',
-                'list': True,
-                'required': True,
-                'key': 'inputs',
-                'help_text': 'Value(s) you would like to transform'
-            }
+            self.build_list_input_field()
         ]
 
 register(NumberMathTransform())

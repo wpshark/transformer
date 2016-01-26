@@ -41,7 +41,7 @@ class DateFormattingTransform(BaseTransform):
                 'required': True,
                 'key': 'to_format',
                 'choices': choices,
-                'help_text': 'Provide the format that the date should be converted to.'
+                'help_text': 'Provide the format that the date is converted to.'
             }
         ]
 

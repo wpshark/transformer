@@ -11,7 +11,7 @@ class DateFormattingTransform(BaseTransform):
     label = 'Format'
     help_text = 'Change a date or time to a new format or style'
 
-    def transform(self, date_value, from_format='', to_format='', **kwargs):
+    def transform(self, date_value, from_format=u'', to_format=u'', **kwargs):
         dt = try_parse_date(date_value, from_format=from_format)
         if not dt:
             return self.raise_exception('Date could not be parsed')

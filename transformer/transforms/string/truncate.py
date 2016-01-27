@@ -10,12 +10,12 @@ class StringTruncateTransform(BaseTransform):
 
     def transform(self, str_input, max_length=-1, append_ellipsis=False, **kwargs):
         if not str_input or max_length <= 0:
-            return ''
+            return u''
 
         short_text = str_input[0:max_length]
 
         if append_ellipsis and len(short_text) != len(str_input) and len(short_text) > 3:
-            short_text = short_text[0:-3] + '...'
+            short_text = short_text[0:-3] + u'...'
 
         return short_text
 

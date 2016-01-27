@@ -19,7 +19,7 @@ app = Flask(__name__)
 registry.make_registry()
 
 
-@app.route("/")
+@app.route('/')
 def hello():
     """ Returns a list of transforms available to be used """
     data = request.args
@@ -27,24 +27,24 @@ def hello():
     return jsonify(transforms=[v.to_dict() for v in transforms])
 
 
-@app.route("/fields")
+@app.route('/fields')
 def fields():
     """ Returns a list of fields for a given transform """
     data = request.args
-    if not data or 'transform' not in data:
+    if not data or u'transform' not in data:
         raise APIError('Missing transform', 400)
 
-    transform = registry.lookup(data['transform'], category=data.get('category'))
+    transform = registry.lookup(data['transform'], category=data.get(u'category'))
     if not transform:
         raise APIError('Transform "{}" not found'.format(data['transform']), 404)
 
-    inputs = data.get('inputs')
+    inputs = data.get(u'inputs')
     fields = transform.all_fields(inputs=inputs)
 
     return jsonify(fields=fields)
 
 
-@app.route("/transform", methods=["POST"])
+@app.route('/transform', methods=["POST"])
 def transform():
     """ Perform a transformation """
     try:
@@ -55,14 +55,14 @@ def transform():
     if not data:
         raise APIError('Missing request body', 400)
 
-    if 'inputs' not in data:
+    if u'inputs' not in data:
         raise APIError('Missing input data', 400)
 
     # Each of these gets popped off so that we don't pass it along in the
     # options to the transform function
-    inputs = data.pop('inputs')
-    transform_name = data.pop('transform', '')
-    category = data.pop('category', '')
+    inputs = data.pop(u'inputs')
+    transform_name = data.pop(u'transform', u'')
+    category = data.pop(u'category', u'')
 
     if not transform_name:
         raise APIError('Missing transform', 400)

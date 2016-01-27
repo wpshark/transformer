@@ -11,7 +11,7 @@ class DateManipulateTransform(BaseTransform):
     label = 'Manipulate'
     help_text = 'Manipulate a date and/or time by adding/subtracting days, months, years, hours, minutes, seconds.'
 
-    def transform(self, date_value, expression='', to_format='', **kwargs):
+    def transform(self, date_value, expression=u'', to_format=u'', **kwargs):
         delta = tdelta(expression)
 
         dt = try_parse_date(date_value)

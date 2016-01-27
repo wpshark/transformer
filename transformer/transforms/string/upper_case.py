@@ -4,7 +4,7 @@ from transformer.transforms.base import BaseTransform
 class StringUppercaseTransform(BaseTransform):
 
     category = 'string'
-    name = 'uppercase'
+    name = 'upper_case'
     label = 'Uppercase'
     help_text = 'Capitalize every character in the text'
 

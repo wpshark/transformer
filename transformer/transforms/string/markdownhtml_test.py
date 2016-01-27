@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import unittest
-import markdowntohtml
+import markdownhtml
 
 class TestMarkdownHTMLTransform(unittest.TestCase):
     def test_markdowntohtml(self):
-        transformer = markdowntohtml.StringMarkdownHTMLTransform()
+        transformer = markdownhtml.StringMarkdownHTMLTransform()
         self.assertEqual(transformer.transform(""), "")
         self.assertEqual(transformer.transform("* thing"), "<ul>\n<li>thing</li>\n</ul>")
         self.assertEqual(transformer.transform('![image](http://zapier.com/image.png)'), '<p><img alt="image" src="http://zapier.com/image.png" /></p>')
@@ -13,7 +13,7 @@ class TestMarkdownHTMLTransform(unittest.TestCase):
         self.assertEqual(transformer.transform("[link](http://google.com)"), '<p><a href="http://google.com">link</a></p>')
 
     def test_markdowntohtml_unicode(self):
-        transformer = markdowntohtml.StringMarkdownHTMLTransform()
+        transformer = markdownhtml.StringMarkdownHTMLTransform()
         self.assertEqual(transformer.transform(u""), u"")
         self.assertEqual(transformer.transform(u"* thing"), u"<ul>\n<li>thing</li>\n</ul>")
         self.assertEqual(transformer.transform(u"* \u5b57 thing"), u"<ul>\n<li>\u5b57 thing</li>\n</ul>")

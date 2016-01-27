@@ -6,7 +6,7 @@ class StringEmailExtractTransform(BaseTransform):
 
     category = 'string'
     name = 'emailextract'
-    label = 'String / Email Extract'
+    label = 'Email Extract'
     help_text = 'Extract the first email address from an input'
     
 

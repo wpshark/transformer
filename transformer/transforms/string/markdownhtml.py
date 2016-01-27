@@ -7,8 +7,8 @@ from transformer.transforms.base import BaseTransform
 class StringMarkdownHTMLTransform(BaseTransform):
 
     category = 'string'
-    name = 'Markdown'
-    label = 'String / Convert Markdown'
+    name = 'markdown'
+    label = 'Convert Markdown to HTML'
     help_text = 'Convert Markdown text into valid HTML'
     
 

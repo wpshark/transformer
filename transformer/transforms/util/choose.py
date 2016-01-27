@@ -48,7 +48,7 @@ class UtilChooseTransform(BaseTransform):
                 'required': True,
                 'key': 'operation',
                 'choices': 'first|Choose First,last|Choose Last,random|Choose Random',
-                'help_text': 'The item type to be choosen.'
+                'help_text': 'Item to choose.'
             },
             self.build_list_input_field(),
             {
@@ -92,9 +92,6 @@ class UtilChooseTransform(BaseTransform):
         or the default value if there is neither.
         
         """
-        # `truthy` values equal all values `v` of `inputs` that:
-        # - are NOT strings
-        # - OR that _are_ strings AND _are_ truthy.
         truthy = [v for v in inputs if not isinstance(v, basestring) or v]
         if not truthy:
             return default

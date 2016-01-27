@@ -30,10 +30,26 @@ class TestUtilChooseTransform(unittest.TestCase):
         self.assertEqual(1, transformer.transform_many([1, 2, 3], options={'operation': 'first', 'default':0}))
         self.assertEqual(3, transformer.transform_many([1, 2, 3], options={'operation': 'last', 'default':0}))
 
-        # ensure we never get the default value...
-        for i in range(100):
-            self.assertNotEqual(0, transformer.transform_many([1, 2, 3], options={'operation': 'random', 'default':0}))
-            self.assertNotEqual('', transformer.transform_many(['', 1, 2, 3, 'a'], options={'operation': 'random', 'default':''}))
+        self.assertNotEqual(0, transformer.transform_many([1, 2, 3], options={'operation': 'random', 'default':0}))
+        self.assertNotEqual('', transformer.transform_many(['', 1, 2, 3, 'a'], options={'operation': 'random', 'default':''}))
+
+        self.assertEqual(1, transformer.transform_many([1, '', ''], options={'operation': 'first', 'default':0}))
+        self.assertEqual(1, transformer.transform_many([1, '', ''], options={'operation': 'last', 'default':0}))
+        self.assertEqual(1, transformer.transform_many([1, '', ''], options={'operation': 'random', 'default':0}))
+        self.assertEqual(1, transformer.transform_many([1, '', ''], options={'operation': 'random', 'default':0}))
+        self.assertEqual(1, transformer.transform_many([1, '', ''], options={'operation': 'random', 'default':0}))
+
+        self.assertEqual(1, transformer.transform_many(['', 1, ''], options={'operation': 'first', 'default':0}))
+        self.assertEqual(1, transformer.transform_many(['', 1, ''], options={'operation': 'last', 'default':0}))
+        self.assertEqual(1, transformer.transform_many(['', 1, ''], options={'operation': 'random', 'default':0}))
+        self.assertEqual(1, transformer.transform_many(['', 1, ''], options={'operation': 'random', 'default':0}))
+        self.assertEqual(1, transformer.transform_many(['', 1, ''], options={'operation': 'random', 'default':0}))
+
+        self.assertEqual(1, transformer.transform_many(['', '', 1], options={'operation': 'first', 'default':0}))
+        self.assertEqual(1, transformer.transform_many(['', '', 1], options={'operation': 'last', 'default':0}))
+        self.assertEqual(1, transformer.transform_many(['', '', 1], options={'operation': 'random', 'default':0}))
+        self.assertEqual(1, transformer.transform_many(['', '', 1], options={'operation': 'random', 'default':0}))
+        self.assertEqual(1, transformer.transform_many(['', '', 1], options={'operation': 'random', 'default':0}))
 
         self.assertEqual(2, transformer.transform_many(['', 2, 3, ''], options={'operation': 'first', 'default':0}))
         self.assertEqual(3, transformer.transform_many(['', 2, 3, ''], options={'operation': 'last', 'default':0}))

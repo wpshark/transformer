@@ -83,14 +83,7 @@ class UtilChooseTransform(BaseTransform):
         or the default value if there is none.
         
         """
-        last = default
-        for v in inputs:
-            # if this value is a string and is falsy (i.e., empty) skip it
-            if isinstance(v, basestring) and not v:
-                continue
-            # otherwise, we have a valid last value...set it
-            last = v
-        return last
+        return self.choose_first(reversed(inputs), default=default)
 
 
     def choose_random(self, inputs, default=None):
@@ -99,13 +92,10 @@ class UtilChooseTransform(BaseTransform):
         or the default value if there is neither.
         
         """
-        truthy = []
-        for v in inputs:
-            # if this value is a string and is falsy (i.e., empty) skip it
-            if isinstance(v, basestring) and not v:
-                continue
-            # otherwise, we have a valid value...use it in our random selection
-            truthy.append(v)
+        # `truthy` values equal all values `v` of `inputs` that:
+        # - are NOT strings
+        # - OR that _are_ strings AND _are_ truthy.
+        truthy = [v for v in inputs if not isinstance(v, basestring) or v]
         if not truthy:
             return default
         return random.choice(truthy)

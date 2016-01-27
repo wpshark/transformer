@@ -1,9 +1,9 @@
 import unittest
-import striphtml
+import strip_html
 
 class TestStringStripHtmlTransform(unittest.TestCase):
     def test_striphtml(self):
-        transformer = striphtml.StringStripHtmlTransform()
+        transformer = strip_html.StringStripHtmlTransform()
         self.assertEqual(transformer.transform(''), '')
         self.assertEqual(transformer.transform('<b>Bold</b>'), 'Bold')
         self.assertEqual(transformer.transform('< 3 donuts and > 4 pies'), '< 3 donuts and > 4 pies')

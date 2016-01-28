@@ -5,6 +5,7 @@ Transformer is a little web app that performs data transformations. You specifcy
 Usage:
 
 `GET /` - Lists all the available transforms
+
 `GET /?category=<category_name>` - Lists transforms in a category. Category can be one of: date, number, string, util
 
 `GET /fields?transform=<transform_name>` - Tells you required data for the given transform. `transform_name` should be a key from the `/` endpoint

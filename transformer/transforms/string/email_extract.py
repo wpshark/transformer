@@ -5,9 +5,9 @@ from transformer.transforms.base import BaseTransform
 class StringEmailExtractTransform(BaseTransform):
 
     category = 'string'
-    name = 'emailextract'
-    label = 'Email Extract'
-    help_text = 'Extract the first email address from an input'
+    name = 'email_extract'
+    label = 'Extract Email Address'
+    help_text = 'Find and copy an email address out of a text field. Finds the first email address only.'
 
 
     def transform(self, str_input, **kwargs):

@@ -7,6 +7,7 @@ inflect==0.2.5
 Jinja2==2.8
 markdown==2.6.5
 MarkupSafe==0.23	
+newrelic==2.60.0.46
 python-dateutil==2.4.2
 six==1.10.0
 titlecase==0.8.1

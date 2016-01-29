@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import money
 
-import collections
-
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 

@@ -8,7 +8,7 @@ class UtilChooseTransform(BaseTransform):
 
     category = 'util'
     name = 'choose'
-    label = 'Choose'
+    label = 'Pick from list'
     help_text = 'Pick the first, last, or random value that is not empty.'
 
     def __init__(self):
@@ -81,7 +81,7 @@ class UtilChooseTransform(BaseTransform):
         """
         choose the last _truthy_ string value or the last non-string value
         or the default value if there is none.
-        
+
         """
         return self.choose_first(reversed(inputs), default=default)
 
@@ -90,7 +90,7 @@ class UtilChooseTransform(BaseTransform):
         """
         choose a random _truthy_ string value or a random non-string value
         or the default value if there is neither.
-        
+
         """
         truthy = [v for v in inputs if not isinstance(v, basestring) or v]
         if not truthy:

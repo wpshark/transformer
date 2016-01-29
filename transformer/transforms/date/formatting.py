@@ -19,10 +19,10 @@ class DateFormattingTransform(BaseTransform):
         return arrow.get(dt).to('utc').format(to_format)
 
     def fields(self, *args, **kwargs):
-        dt = arrow.get(try_parse_date('Mon Jan 2 15:04:05 -0800 2006')).to('utc')
+        dt = arrow.get(try_parse_date('Mon Jan 22 15:04:05 -0800 2006')).to('utc')
 
         formats = [
-            'ddd DDD d HH:mm:ss Z YYYY',
+            'ddd MMM DDD HH:mm:ss Z YYYY',
             'MMMM DD YYYY HH:mm:ss',
             'MMMM DD YYYY',
             'MMM DD YYYY',

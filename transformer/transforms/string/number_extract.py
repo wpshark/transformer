@@ -1,4 +1,3 @@
-import re
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 

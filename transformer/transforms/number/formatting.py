@@ -6,7 +6,7 @@ class NumberFormattingTransform(BaseTransform):
 
     category = 'number'
     name = 'formatting'
-    label = 'Format'
+    label = 'Format Number'
     help_text = 'Format a number to a new style. Does not perform any rounding or padding of the number.'
 
     def transform(self, val, input_decimal_mark, output_format, **kwargs):
@@ -45,12 +45,10 @@ class NumberFormattingTransform(BaseTransform):
             return before_decimal
 
     def fields(self, *args, **kwargs):
-        available_formats = [
-            '0|Comma as grouping & dot as decimal, \
-            1|Dot as grouping & comma as decimal, \
-            2|Space as grouping & dot as decimal, \
-            3|Space as grouping & comma as decimal'
-        ]
+        available_formats = '0|Comma for grouping & dot for decimal, \
+                             1|Dot for grouping & comma for decimal, \
+                             2|Space for grouping & dot for decimal, \
+                             3|Space for grouping & comma for decimal'
 
         return [
             {

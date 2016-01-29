@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import money
 
+import collections
+
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 
@@ -50,7 +52,15 @@ class NumberCurrencyTransform(BaseTransform):
                     u'Use the unicode currency symbol (¤) for special formatting options. '
                     u'Formatting rules can be found here: http://www.unicode.org/reports/tr35/tr35-numbers.html#Number_Format_Patterns'
                 ),
-                'default': u'¤#,##0.00 ¤¤'
+                'choices': [
+                    u'¤#,##0.00',
+                    u'¤#,##0.00 ¤¤',
+                    u'¤#,##0.00 ¤¤¤',
+                    u'¤###0.00',
+                    u'#,##0.00',
+                    u'###0.00',
+                ],
+                'default': u'¤#,##0.00'
             },
         ]
 

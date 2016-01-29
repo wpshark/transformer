@@ -45,23 +45,27 @@ class NumberFormattingTransform(BaseTransform):
             return before_decimal
 
     def fields(self, *args, **kwargs):
-        available_formats = '0|Comma for grouping & dot for decimal, \
-                             1|Dot for grouping & comma for decimal, \
-                             2|Space for grouping & dot for decimal, \
-                             3|Space for grouping & comma for decimal'
+        available_formats = {
+            '0': 'Comma for grouping & period for decimal',
+            '1': 'Period for grouping & comma for decimal',
+            '2': 'Space for grouping & period for decimal',
+            '3': 'Space for grouping & comma for decimal'
+        }
 
         return [
             {
                 'key': 'input_decimal_mark',
                 'type': 'unicode',
                 'label': 'Input Decimal Mark',
+                'help_text': 'The character the input uses to denote the decimal/fractional portion of the number.',
                 'required': True,
-                'choices': ['Comma (,)', 'Dot (.)'],
+                'choices': {'.': 'Period', ',': 'Comma'},
             },
             {
                 'key': 'output_format',
                 'type': 'unicode',
-                'label': 'Desired Format',
+                'label': 'To Format',
+                'help_text': 'The format the number will be converted to.',
                 'required': True,
                 'choices': available_formats,
             }

@@ -11,6 +11,6 @@ class StringTitlecaseTransform(BaseTransform):
     help_text = 'Convert all characters in a string to titlecase'
 
     def transform(self, str_input, **kwargs):
-        return titlecase(str_input) if str_input else ''
+        return titlecase(str_input) if str_input else u''
 
 register(StringTitlecaseTransform())

@@ -9,6 +9,6 @@ class StringCapitalizeTransform(BaseTransform):
     help_text = 'Capitalize the first character of every word.'
 
     def transform(self, str_input, **kwargs):
-        return str_input.title() if str_input else ''
+        return str_input.title() if str_input else u''
 
 register(StringCapitalizeTransform())

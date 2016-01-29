@@ -9,6 +9,6 @@ class StringLowercaseTransform(BaseTransform):
     help_text = 'Convert all characters in a string to lowercase'
 
     def transform(self, str_input, **kwargs):
-        return str_input.lower() if str_input else ''
+        return str_input.lower() if str_input else u''
 
 register(StringLowercaseTransform())

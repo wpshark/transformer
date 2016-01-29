@@ -12,6 +12,6 @@ class StringPluralizeTransform(BaseTransform):
     help_text = 'Pluralize any English word (frog turns into frogs; child turns into children)'
 
     def transform(self, str_input, **kwargs):
-        return pluralizer.plural(str_input) if str_input else ''
+        return pluralizer.plural(str_input) if str_input else u''
 
 register(StringPluralizeTransform())

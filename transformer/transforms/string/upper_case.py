@@ -9,6 +9,6 @@ class StringUppercaseTransform(BaseTransform):
     help_text = 'Capitalize every character in the text'
 
     def transform(self, str_input, **kwargs):
-        return str_input.upper() if str_input else ''
+        return str_input.upper() if str_input else u''
 
 register(StringUppercaseTransform())

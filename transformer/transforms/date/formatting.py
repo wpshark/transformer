@@ -11,7 +11,7 @@ class DateFormattingTransform(BaseTransform):
     label = 'Format'
     help_text = 'Change a date or time to a new format or style'
 
-    def transform(self, date_value, from_format='', to_format='', **kwargs):
+    def transform(self, date_value, from_format=u'', to_format=u'', **kwargs):
         dt = try_parse_date(date_value, from_format=from_format)
         if not dt:
             return self.raise_exception('Date could not be parsed')
@@ -19,10 +19,10 @@ class DateFormattingTransform(BaseTransform):
         return arrow.get(dt).to('utc').format(to_format)
 
     def fields(self, *args, **kwargs):
-        dt = arrow.get(try_parse_date('Mon Jan 2 15:04:05 -0800 2006')).to('utc')
+        dt = arrow.get(try_parse_date('Mon Jan 22 15:04:05 -0800 2006')).to('utc')
 
         formats = [
-            'ddd DDD d HH:mm:ss Z YYYY',
+            'ddd MMM DDD HH:mm:ss Z YYYY',
             'MMMM DD YYYY HH:mm:ss',
             'MMMM DD YYYY',
             'MMM DD YYYY',

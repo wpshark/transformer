@@ -90,9 +90,6 @@ def int_or_float(v):
 def try_parse_number(number_value, cls=float, default=0):
     """
     rudimentary number parsing.
-
-    TODO: bring in the zapier/zapier number parsing utility
-
     """
     if isinstance(number_value, int) or isinstance(number_value, long) or isinstance(number_value, float):
         return number_value

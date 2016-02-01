@@ -30,6 +30,9 @@ class DateFormattingTransform(BaseTransform):
             'YYYY-MM-DD',
             'MM-DD-YYYY',
             'MM/DD/YYYY',
+            'MM/DD/YY',
+            'DD-MM-YYYY',
+            'DD/MM/YYYY',
             'DD/MM/YY'
         ]
 

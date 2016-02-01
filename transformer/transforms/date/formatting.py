@@ -42,6 +42,13 @@ class DateFormattingTransform(BaseTransform):
                 'key': 'to_format',
                 'choices': choices,
                 'help_text': 'Provide the format that the date is converted to.'
+            },
+            {
+                'type': 'unicode',
+                'required': False,
+                'key': 'from_format',
+                'choices': choices,
+                'help_text': 'If we incorrectly interpret the incoming (input) date, set this to explicitly tell us the format. Otherwise, we will do our best to figure it out.'
             }
         ]
 

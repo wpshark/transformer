@@ -1,5 +1,4 @@
 import arrow
-import datetime
 import dateutil.parser
 
 import collections
@@ -55,17 +54,17 @@ def try_parse_date(date_value, from_format=None):
             if dt:
                 return dt
 
-        # check to see if the string can be converted into a float (a timestamp)
         try:
+            # Assume that a sufficiently large timestamp is actually in millisecond resolution, but with the decimal point missing
             date_value = float(date_value)
+            if date_value >= (1 << 32) - 1:
+                date_value /= 1000.0
         except:
             pass
 
-        if isinstance(date_value, int) or isinstance(date_value, long) or isinstance(date_value, float):
-            if date_value >= (1 << 32) - 1:
-                date_value /= 1000.0
-            return datetime.datetime.fromtimestamp(date_value)
-
+        dt = arrow.get(date_value)
+        if dt:
+            return dt
     except:
         pass
 

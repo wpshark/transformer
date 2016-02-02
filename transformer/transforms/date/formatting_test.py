@@ -26,13 +26,6 @@ class TestDateFormattingTransform(unittest.TestCase):
             from_format='MM/DD/YYYY'
         ), '2016-01-22')
 
-        # TODO: Check a weird format
-        # self.assertEqual(transformer.transform(
-        #     '01022016',
-        #     to_format='YYYY-MM-DD',
-        #     from_format='DDMMYYYY'
-        # ), '2016-02-01')
-
     def test_fuzzy_to_format(self):
         transformer = formatting.DateFormattingTransform()
         self.assertEqual(transformer.transform(
@@ -78,3 +71,10 @@ class TestDateFormattingTransform(unittest.TestCase):
             '1453498140.001',
             to_format='MM-DD-YYYY'
         ), '01-22-2016')
+
+        # Including a from_format should prevent the usual timestamp parsing
+        self.assertEqual(transformer.transform(
+            '01022016',
+            to_format='YYYY-MM-DD',
+            from_format='MMDDYYYY'
+        ), '2016-01-02')

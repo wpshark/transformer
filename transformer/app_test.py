@@ -22,11 +22,23 @@ class TestApp(unittest.TestCase):
     def test_list_transforms_invalid_category(self):
         response = self.app.get('/', query_string={'category': 'astring'})
         transforms = [v.get('key') for v in json.loads(response.data)['transforms']]
-        self.assertNotIn('string.upper_case', transforms)
+        self.assertEqual([], transforms)
 
     def test_no_transform(self):
-        response = self.app.post('/transform', data=json.dumps({}))
+        response = self.app.post('/transform', data=json.dumps({'inputs': ['1']}))
         self.assertEqual(400, response.status_code)
+        output = json.loads(response.data)
+        self.assertIn('Missing transform', output['message'])
+
+    def test_no_input(self):
+        response = self.app.post('/transform', data=json.dumps({'transform': 'string.upper_case'}))
+        self.assertEqual(400, response.status_code)
+        output = json.loads(response.data)
+        self.assertIn('Missing input', output['message'])
+
+    def test_invalid_transform(self):
+        response = self.app.post('/transform', data=json.dumps({'transform': 'does-not-exist', 'inputs': []}))
+        self.assertEqual(404, response.status_code)
 
     def test_run_transform(self):
         response = self.app.post('/transform', data=json.dumps({'transform': 'string.upper_case', 'inputs': 'abc'}))

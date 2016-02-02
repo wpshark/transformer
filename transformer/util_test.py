@@ -12,3 +12,4 @@ class TestApp(unittest.TestCase):
         self.assertEqual(-2, util.tdelta('5 years -3 months 1 seconds 4 minutes -2 months').get('months'))
         self.assertEqual(1, util.tdelta('-+ 1 day - 1 week').get('days'))
         self.assertEqual(-1, util.tdelta('-+ 1 day - 1 week').get('weeks'))
+        self.assertEqual(1, util.tdelta('+1 day').get('days'))

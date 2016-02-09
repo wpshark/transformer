@@ -30,13 +30,16 @@ class DateManipulateTransform(BaseTransform):
                 'type': 'unicode',
                 'required': True,
                 'key': 'expression',
-                'help_text': 'Provide the amount of time you would like to add to the date (negative values subtract time).'
+                'help_text': (
+                    'Provide the amount of time you would like to add or subtract to the date (negative values subtract time). '
+                    'Examples: `+8 hours 1 minute`, `+1 month -2 days`, `-1 day +8 hours`.'
+                )
             },
             {
                 'type': 'unicode',
                 'required': True,
                 'key': 'to_format',
-                'help_text': 'Provide the format that the date should be converted to.'
+                'help_text': 'Provide the format that the date should be converted to. For date format help, see: https://zapier.com/help/formatter/#date-time'
             }
         ]
 

@@ -11,6 +11,10 @@ class DateManipulateTransform(BaseTransform):
     label = 'Add/Subtract Time'
     help_text = 'Manipulate a date and/or time by adding/subtracting days, months, years, hours, minutes, seconds.'
 
+    noun = 'Date value'
+    noun_plural = 'Date values'
+    verb = 'manipulate'
+
     def transform(self, date_value, expression=u'', to_format=u'', **kwargs):
         delta = tdelta(expression)
 

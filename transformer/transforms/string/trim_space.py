@@ -8,6 +8,10 @@ class StringTrimSpaceTransform(BaseTransform):
     label = 'Trim Whitespace'
     help_text = 'Removes leading and trailing whitespace.'
 
+    noun = 'Text'
+    noun_plural = 'Text'
+    verb = 'remove leading and trailing whitespace from'
+
     def transform(self, str_input, **kwargs):
         return str_input.strip() if str_input else u''
 

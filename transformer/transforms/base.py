@@ -6,6 +6,10 @@ class BaseTransform(object):
     label = ''
     help_text = ''
 
+    noun = ''
+    noun_plural = ''
+    verb = ''
+
     ### Primary interface transforms are concerned about
 
     def transform(self, value, **kwargs):
@@ -91,7 +95,7 @@ class BaseTransform(object):
             'required': True,
             'key': 'inputs',
             'label': 'Input',
-            'help_text': 'Value you would like to transform.'
+            'help_text': '{} you would like to {}.'.format(self.noun or 'Value', self.verb or 'transform')
         }
 
     def build_list_input_field(self):
@@ -103,5 +107,5 @@ class BaseTransform(object):
         field = self.build_input_field()
 
         field['list'] = True
-        field['help_text'] = 'Values you would like to transform.'
+        field['help_text'] = '{} you would like to {}.'.format(self.noun_plural or 'Values', self.verb or 'transform')
         return field

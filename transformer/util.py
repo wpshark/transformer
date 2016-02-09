@@ -2,6 +2,7 @@ import arrow
 import dateutil.parser
 
 import collections
+import itertools
 import re
 
 
@@ -32,14 +33,28 @@ def tdelta(input_):
     """
     keys = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']
 
+    legacy = collections.OrderedDict([
+        ('d', 'days'),
+        ('h', 'hours'),
+        ('m', 'minutes')
+    ])
+
     delta = collections.OrderedDict()
-    for key in keys:
-        matches = re.findall('((?:-\s*)?\d+)\s?{}?'.format(key), input_)
+    for key in itertools.chain(keys, legacy.keys()):
+        regex = '((?:-\s*)?\d+)\s?{}{}'.format(key, '?' if key.endswith('s') else r'(?:\s|$)')
+        matches = re.findall(regex, input_)
         if not matches:
-            delta[key] = 0
+            if key in legacy:
+                key = legacy[key]
+            if key not in delta:
+                delta[key] = 0
             continue
         for m in matches:
-            delta[key] = int(m) if m else 0
+            if key in legacy:
+                key = legacy[key]
+            if key not in delta:
+                delta[key] = 0
+            delta[key] += int(m) if m else 0
     return delta
 
 

@@ -28,33 +28,42 @@ def tdelta(input_):
     """
     convert a human readable time delta into a dictionary that can be used
     to create an actual time delta object or other method for manipulating a
-    date
+    date.
+
+    * positive and negative values are allowed
+    * multiple values of the same key are summed together
+
+    >>> tdelta('5 months 4 weeks 3 days -1mo').get('months')
+    4
+
+    >>> tdelta('+ 1day - 5 days').get('days')
+    -4
 
     """
+    matcher = re.compile(r"""(?:
+        (?P<years>    ((?:[-+]\s*)?\d+))\s*y((ea)?r(s)?)?   | # y, yr, yrs, year, years
+        (?P<months>   ((?:[-+]\s*)?\d+))\s*mo(nth(s)?)?     | # mo, month, months
+        (?P<weeks>    ((?:[-+]\s*)?\d+))\s*w((ee)?(k(s)?)?) | # w, wk, wks, week, weeks
+        (?P<days>     ((?:[-+]\s*)?\d+))\s*d(ay(s)?)?       | # d, day, days
+        (?P<hours>    ((?:[-+]\s*)?\d+))\s*h(ou)?(r(s)?)?   | # h, hr, hrs, hour, hours
+        (?P<minutes>  ((?:[-+]\s*)?\d+))\s*m(in(ute)?(s)?)? | # m, min, mins, minute, minutes
+        (?P<seconds>  ((?:[-+]\s*)?\d+))\s*s(ec(ond)?(s)?)?   # s, sec, secs, second, seconds
+    ) (?:\s|$)
+    """, re.U | re.X)
+
     keys = ['years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']
 
-    legacy = collections.OrderedDict([
-        ('d', 'days'),
-        ('h', 'hours'),
-        ('m', 'minutes')
-    ])
+    delta = collections.OrderedDict((k, 0) for k in keys)
 
-    delta = collections.OrderedDict()
-    for key in itertools.chain(keys, legacy.keys()):
-        regex = '((?:-\s*)?\d+)\s?{}{}'.format(key, '?' if key.endswith('s') else r'(?:\s|$)')
-        matches = re.findall(regex, input_)
-        if not matches:
-            if key in legacy:
-                key = legacy[key]
-            if key not in delta:
-                delta[key] = 0
+    for match in matcher.finditer(input_):
+        if not match:
             continue
-        for m in matches:
-            if key in legacy:
-                key = legacy[key]
-            if key not in delta:
-                delta[key] = 0
+        for key in keys:
+            m = match.group(key)
+            if m is None:
+                continue
             delta[key] += int(m) if m else 0
+
     return delta
 
 

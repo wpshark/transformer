@@ -41,3 +41,59 @@ class TestApp(unittest.TestCase):
         self.assertEqual(-4, delta.get('days'))
         self.assertEqual(9, delta.get('hours'))
         self.assertEqual(21, delta.get('minutes'))
+
+    def test_util_tdelta_all(self):
+        tests = [
+            ('years',   [0, 1, 2, -1, -10, 10], 'y'),
+            ('years',   [0, 1, 2, -1, -10, 10], 'yr'),
+            ('years',   [0, 1, 2, -1, -10, 10], 'yrs'),
+            ('years',   [0, 1, 2, -1, -10, 10], 'year'),
+            ('years',   [0, 1, 2, -1, -10, 10], 'years'),
+            ('months',  [0, 1, 2, -1, -10, 10], 'mo'),
+            ('months',  [0, 1, 2, -1, -10, 10], 'month'),
+            ('months',  [0, 1, 2, -1, -10, 10], 'months'),
+            ('weeks',   [0, 1, 2, -1, -10, 10], 'w'),
+            ('weeks',   [0, 1, 2, -1, -10, 10], 'wk'),
+            ('weeks',   [0, 1, 2, -1, -10, 10], 'wks'),
+            ('weeks',   [0, 1, 2, -1, -10, 10], 'week'),
+            ('weeks',   [0, 1, 2, -1, -10, 10], 'weeks'),
+            ('days',    [0, 1, 2, -1, -10, 10], 'd'),
+            ('days',    [0, 1, 2, -1, -10, 10], 'day'),
+            ('days',    [0, 1, 2, -1, -10, 10], 'days'),
+            ('hours',   [0, 1, 2, -1, -10, 10], 'h'),
+            ('hours',   [0, 1, 2, -1, -10, 10], 'hr'),
+            ('hours',   [0, 1, 2, -1, -10, 10], 'hrs'),
+            ('hours',   [0, 1, 2, -1, -10, 10], 'hour'),
+            ('hours',   [0, 1, 2, -1, -10, 10], 'hours'),
+            ('minutes', [0, 1, 2, -1, -10, 10], 'm'),
+            ('minutes', [0, 1, 2, -1, -10, 10], 'min'),
+            ('minutes', [0, 1, 2, -1, -10, 10], 'mins'),
+            ('minutes', [0, 1, 2, -1, -10, 10], 'minute'),
+            ('minutes', [0, 1, 2, -1, -10, 10], 'minutes'),
+            ('seconds', [0, 1, 2, -1, -10, 10], 's'),
+            ('seconds', [0, 1, 2, -1, -10, 10], 'sec'),
+            ('seconds', [0, 1, 2, -1, -10, 10], 'secs'),
+            ('seconds', [0, 1, 2, -1, -10, 10], 'second'),
+            ('seconds', [0, 1, 2, -1, -10, 10], 'seconds '),
+        ]
+
+        # for each value in each test, check to make sure a string formatted
+        # with the value + suffix (with and without a space separator)
+        # returns the value for the key in the output
+        for key, values, suffix in tests:
+            for v in values:
+                # test without a separator, ala '5d'
+                input_string = '{}{}'.format(v, suffix)
+                self.assertEqual(v, util.tdelta(input_string).get(key), '{} != {}'.format(input_string, v))
+
+                # test with a separator, ala '5 days'
+                input_string = '{} {}'.format(v, suffix)
+                self.assertEqual(v, util.tdelta(input_string).get(key), '{} != {}'.format(input_string, v))
+                
+                # test with other text
+                input_string = 'hello {} {} world'.format(v, suffix)
+                self.assertEqual(v, util.tdelta(input_string).get(key), '{} != {}'.format(input_string, v))
+
+                # test with a + prefix, ala '+5d' or '+-10 days'
+                input_string = '+{}{}'.format(v, suffix)
+                self.assertEqual(v, util.tdelta(input_string).get(key), '{} != {}'.format(input_string, v))

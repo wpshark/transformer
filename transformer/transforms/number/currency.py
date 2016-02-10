@@ -12,6 +12,9 @@ class NumberCurrencyTransform(BaseTransform):
     label = 'Format Currency'
     help_text = 'Format a number as a currency.'
 
+    noun = 'Number'
+    verb = 'format as a currency'
+
     def transform(self, currency_input, currency=u'USD', currency_locale=u'en_US', currency_format=u'¤#,##0.00 ¤¤'):
         m = money.Money(currency_input, currency)
         currency_locale = currency_locale.replace('-', '_') # make sure to use the babel locale format

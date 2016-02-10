@@ -11,6 +11,9 @@ class DateFormattingTransform(BaseTransform):
     label = 'Format'
     help_text = 'Change a date or time to a new format or style'
 
+    noun = 'Date'
+    verb = 'format'
+
     def transform(self, date_value, from_format=u'', to_format=u'', **kwargs):
         dt = try_parse_date(date_value, from_format=from_format)
         if not dt:
@@ -45,7 +48,7 @@ class DateFormattingTransform(BaseTransform):
                 'required': True,
                 'key': 'to_format',
                 'choices': choices,
-                'help_text': 'Provide the format that the date is converted to.'
+                'help_text': 'Provide the format that the date is converted to. For date format help, see: https://zapier.com/help/formatter/#date-time'
             },
             {
                 'type': 'unicode',

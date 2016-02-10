@@ -8,6 +8,9 @@ class StringReplaceTransform(BaseTransform):
     label = 'Replace'
     help_text = 'Replace any character, word or phrase in the text with another character, word or phrase'
 
+    noun = 'Text'
+    verb = 'find and replace values within'
+
     def transform(self, str_input, old, new=u'', **kwargs):
         return str_input.replace(old, new) if str_input and old else u''
 

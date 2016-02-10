@@ -11,6 +11,9 @@ class UtilChooseTransform(BaseTransform):
     label = 'Pick from list'
     help_text = 'Pick the first, last, or random value that is not empty.'
 
+    noun = 'Values'
+    verb = 'choose from'
+
     def __init__(self):
         self._operations = {
             'first': self.choose_first,
@@ -48,7 +51,7 @@ class UtilChooseTransform(BaseTransform):
                 'required': True,
                 'key': 'operation',
                 'choices': 'first|Choose First,last|Choose Last,random|Choose Random',
-                'help_text': 'Item to choose.'
+                'help_text': 'Value to choose.'
             },
             self.build_list_input_field(),
             {

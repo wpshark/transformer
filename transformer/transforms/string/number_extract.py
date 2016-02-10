@@ -8,6 +8,8 @@ class StringNumberExtractTransform(BaseTransform):
     label = 'Extract Number'
     help_text = 'Find and copy a number in text.'
 
+    noun = 'Text'
+    verb = 'find and copy a number from'
 
     def transform(self, str_input, **kwargs):
         if not str_input:

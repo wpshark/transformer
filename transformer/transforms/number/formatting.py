@@ -9,6 +9,9 @@ class NumberFormattingTransform(BaseTransform):
     label = 'Format Number'
     help_text = 'Format a number to a new style. Does not perform any rounding or padding of the number.'
 
+    noun = 'Number'
+    verb = 'format'
+
     def transform(self, val, input_decimal_mark, output_format, **kwargs):
         if val is None:
             return u''

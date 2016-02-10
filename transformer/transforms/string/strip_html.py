@@ -9,6 +9,9 @@ class StringStripHtmlTransform(BaseTransform):
     label = 'Remove HTML Tags'
     help_text = 'Remove every HTML tag to leave just the plain text.'
 
+    noun = 'HTML'
+    verb = 'convert to plain text'
+
     def transform(self, str_input, **kwargs):
         soup = BeautifulSoup(str_input, 'html.parser')
         return soup.get_text()

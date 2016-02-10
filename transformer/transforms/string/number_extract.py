@@ -9,7 +9,6 @@ class StringNumberExtractTransform(BaseTransform):
     help_text = 'Find and copy a number in text.'
 
     noun = 'Text'
-    noun_plural = 'Text'
     verb = 'find and copy a number from'
 
     def transform(self, str_input, **kwargs):

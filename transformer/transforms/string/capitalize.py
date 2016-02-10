@@ -9,7 +9,6 @@ class StringCapitalizeTransform(BaseTransform):
     help_text = 'Capitalize the first character of every word.'
 
     noun = 'Text'
-    noun_plural = 'Text'
     verb = 'capitalize'
 
     def transform(self, str_input, **kwargs):

@@ -11,8 +11,7 @@ class UtilChooseTransform(BaseTransform):
     label = 'Pick from list'
     help_text = 'Pick the first, last, or random value that is not empty.'
 
-    noun = 'Value'
-    noun_plural = 'Values'
+    noun = 'Values'
     verb = 'choose from'
 
     def __init__(self):

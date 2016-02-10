@@ -11,7 +11,6 @@ class StringTitlecaseTransform(BaseTransform):
     help_text = 'Convert all characters in a string to titlecase'
 
     noun = 'Text'
-    noun_plural = 'Text'
     verb = 'titlecase'
 
     def transform(self, str_input, **kwargs):

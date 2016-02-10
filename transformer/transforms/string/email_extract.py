@@ -10,7 +10,6 @@ class StringEmailExtractTransform(BaseTransform):
     help_text = 'Find and copy an email address out of a text field. Finds the first email address only.'
 
     noun = 'Text'
-    noun_plural = 'Text'
     verb = 'find and copy an email address from'
 
     def transform(self, str_input, **kwargs):

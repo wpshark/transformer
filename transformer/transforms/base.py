@@ -7,7 +7,6 @@ class BaseTransform(object):
     help_text = ''
 
     noun = ''
-    noun_plural = ''
     verb = ''
 
     ### Primary interface transforms are concerned about
@@ -107,5 +106,5 @@ class BaseTransform(object):
         field = self.build_input_field()
 
         field['list'] = True
-        field['help_text'] = '{} you would like to {}.'.format(self.noun_plural or 'Values', self.verb or 'transform')
+        field['help_text'] = '{} you would like to {}.'.format(self.noun or 'Values', self.verb or 'transform')
         return field

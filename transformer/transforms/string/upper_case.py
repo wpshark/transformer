@@ -9,7 +9,6 @@ class StringUppercaseTransform(BaseTransform):
     help_text = 'Capitalize every character in the text'
 
     noun = 'Text'
-    noun_plural = 'Text'
     verb = 'capitalize every character'
 
     def transform(self, str_input, **kwargs):

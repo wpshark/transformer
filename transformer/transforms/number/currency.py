@@ -12,8 +12,7 @@ class NumberCurrencyTransform(BaseTransform):
     label = 'Format Currency'
     help_text = 'Format a number as a currency.'
 
-    noun = 'Number value'
-    noun_plural = 'Number values'
+    noun = 'Number'
     verb = 'format as a currency'
 
     def transform(self, currency_input, currency=u'USD', currency_locale=u'en_US', currency_format=u'¤#,##0.00 ¤¤'):

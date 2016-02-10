@@ -11,8 +11,7 @@ class DateFormattingTransform(BaseTransform):
     label = 'Format'
     help_text = 'Change a date or time to a new format or style'
 
-    noun = 'Date value'
-    noun_plural = 'Date values'
+    noun = 'Date'
     verb = 'format'
 
     def transform(self, date_value, from_format=u'', to_format=u'', **kwargs):

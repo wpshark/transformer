@@ -12,7 +12,6 @@ class StringMarkdownHTMLTransform(BaseTransform):
     help_text = 'Convert Markdown text into valid HTML'
 
     noun = 'Markdown text'
-    noun_plural = 'Markdown text'
     verb = 'convert to HTML'
 
 

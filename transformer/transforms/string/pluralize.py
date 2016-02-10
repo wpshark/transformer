@@ -12,7 +12,6 @@ class StringPluralizeTransform(BaseTransform):
     help_text = 'Pluralize any English word (frog turns into frogs; child turns into children)'
 
     noun = 'Text'
-    noun_plural = 'Text'
     verb = 'make plural'
 
     def transform(self, str_input, **kwargs):

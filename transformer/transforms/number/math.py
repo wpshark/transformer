@@ -12,8 +12,7 @@ class NumberMathTransform(BaseTransform):
     label = 'Perform Math Operation'
     help_text = 'Perform mathematical operations on value(s)'
 
-    noun = 'Number value'
-    noun_plural = 'Number values'
+    noun = 'Numbers'
     verb = 'use in the math operation'
 
     _operations = {

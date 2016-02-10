@@ -9,7 +9,6 @@ class StringLowercaseTransform(BaseTransform):
     help_text = 'Convert all characters in a string to lowercase'
 
     noun = 'Text'
-    noun_plural = 'Text'
     verb = 'lowercase'
 
     def transform(self, str_input, **kwargs):

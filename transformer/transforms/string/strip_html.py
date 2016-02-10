@@ -10,7 +10,6 @@ class StringStripHtmlTransform(BaseTransform):
     help_text = 'Remove every HTML tag to leave just the plain text.'
 
     noun = 'HTML'
-    noun_plural = 'HTML'
     verb = 'convert to plain text'
 
     def transform(self, str_input, **kwargs):

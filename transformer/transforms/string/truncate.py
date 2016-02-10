@@ -9,7 +9,6 @@ class StringTruncateTransform(BaseTransform):
     help_text = 'Limit your text to a specific character length, and delete anything over that.'
 
     noun = 'Text'
-    noun_plural = 'Text'
     verb = 'truncate'
 
     def transform(self, str_input, max_length=-1, append_ellipsis=False, **kwargs):

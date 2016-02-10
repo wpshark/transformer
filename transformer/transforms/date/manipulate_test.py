@@ -27,3 +27,21 @@ class TestDateManipulateTransform(unittest.TestCase):
             expression='+ 1 month - 1 day',
             to_format='MMMM DD, YYYY'
         ), "February 29, 2016")
+
+        self.assertEqual(transformer.transform(
+            '2016-02-01',
+            expression='',
+            to_format='MMMM DD, YYYY'
+        ), "February 01, 2016")
+
+        self.assertEqual(transformer.transform(
+            '1455043091',
+            expression='',
+            to_format='MMMM DD, YYYY HH:mm'
+        ), 'February 09, 2016 18:38')
+
+        self.assertEqual(transformer.transform(
+            '1455043091',
+            expression='+1d +1h +1m',
+            to_format='MMMM DD, YYYY HH:mm'
+        ), "February 10, 2016 19:39")

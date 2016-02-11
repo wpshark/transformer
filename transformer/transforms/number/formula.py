@@ -3,51 +3,70 @@ from transformer.transforms.base import BaseTransform
 from transformer.transforms.number.formula_tokenizer import shunting_yard, FunctionNode, OperatorNode, OperandNode, RangeNode
 from transformer.util import math, int_or_float
 
-import collections
+import fractions
 import operator
 
-Func = collections.namedtuple('Func', ['n', 'f'])
 
-def evaluate(formula):
-    """ evaluate an excel-style formula """
-    functions = {
-        'MAX':     Func(0, wrap_reduce(max)),
-        'MIN':     Func(0, wrap_reduce(min)),
-        'MOD':     Func(2, operator.mod),
-        'SQRT':    Func(1, math.sqrt),
-        'POW':     Func(2, math.pow),
+def get_default_functions():
+    """ generate a mapping of default functions allowed for evaluation """
+    return {
+        'MAX': Func(0, wrap_reduce(max)),
+        'MIN': Func(0, wrap_reduce(min)),
+        'MOD': Func(2, operator.mod),
+        'SQRT': Func(1, math.sqrt),
+        'POW': Func(2, math.pow),
+        'ABS': Func(1, operator.abs),
+        'GCD': Func(-2, wrap_reduce(fractions.gcd)),
+        'LCM': Func(-2, wrap_reduce(func_lcm)),
         'CEILING': Func(-1, math.ceil),
-        'FLOOR':   Func(-1, math.floor),
-        'ROUND':   Func(-1, round),
-        'IF':      Func(-2, op_if),
-        'AND':     Func(-1, wrap_varlist(all)),
-        'OR':      Func(-1, wrap_varlist(any)),
+        'FLOOR': Func(-1, math.floor),
+        'ROUND': Func(-1, round),
+        'IF': Func(-2, func_if),
+        'AND': Func(-1, wrap_varlist(all)),
+        'OR': Func(-1, wrap_varlist(any)),
+        'NOT': Func(1, operator.not_),
+        'TRUE': Func(0, lambda: 1),
+        'FALSE': Func(0, lambda: 0),
     }
 
-    operators = {
+
+def get_default_operators():
+    """ generate a mapping of default operators allowed for evaluation """
+    return {
         'u-': Func(1, operator.neg),             # unary negation
         'u%': Func(1, lambda a: a / float(100)), # unary percentage
-        '+':  Func(2, operator.add),
-        '-':  Func(2, operator.sub),
-        '/':  Func(2, operator.truediv),
-        '*':  Func(2, operator.mul),
-        '=':  Func(2, operator.eq),
+        '+': Func(2, operator.add),
+        '-': Func(2, operator.sub),
+        '/': Func(2, operator.truediv),
+        '*': Func(2, operator.mul),
+        '=': Func(2, operator.eq),
         '<>': Func(2, lambda a, b: not operator.eq(a, b)),
-        '>':  Func(2, operator.gt),
-        '<':  Func(2, operator.lt),
+        '>': Func(2, operator.gt),
+        '<': Func(2, operator.lt),
         '>=': Func(2, operator.ge),
         '<=': Func(2, operator.le),
     }
 
+
+def evaluate(formula, functions=None, operators=None):
+    """
+    evaluate an excel-style formula using the functions and operators provided
+
+    """
+    if functions is None:
+        functions = get_default_functions()
+    if operators is None:
+        operators = get_default_operators()
+
     # first, parse the formula into reverse polish notation
-    rpn = parse_rpn(formula)
+    rpn = shunting_yard(formula)
 
     # check the nodes to make sure they are valid
     for i, n in enumerate(rpn):
         key = str(n).upper()
         if isinstance(n, RangeNode):
             if n.token.tsubtype not in ('logical', 'text'):
-                raise Exception('Invalid Syntax: Only numeric values are allowed.')
+                raise Exception('Invalid Syntax: Only numeric values are allowed')
         if isinstance(n, FunctionNode) and key not in functions:
             raise Exception('Unknown Function: {}'.format(n))
         if isinstance(n, OperatorNode) and key not in operators and 'u{}'.format(key) not in operators:
@@ -65,7 +84,7 @@ def evaluate(formula):
             if func.n < 0 and num < -func.n:
                 raise Exception('Invalid Formula: {} requires at least {} arguments'.format(str(n), -func.n))
             if func.n > 0 and num != func.n:
-                raise Exception('Invalid Formula: {} requires {} arguments ({} supplied)'.format(str(n), func.n, num))
+                raise Exception('Invalid Formula: {} requires {} arguments ({} provided)'.format(str(n), func.n, num))
             stack, args = stack[:-num], stack[-num:]
             stack.append(func.f(*args))
 
@@ -78,20 +97,29 @@ def evaluate(formula):
             if op.n < 0 and num < -op.n:
                 raise Exception('Invalid Formula: {} requires at least {} arguments'.format(str(n), -op.n))
             if op.n > 0 and num != op.n:
-                raise Exception('Invalid Formula: {} requires {} arguments ({} supplied)'.format(str(n), op.n, num))
+                raise Exception('Invalid Formula: {} requires {} arguments ({} provided)'.format(str(n), op.n, num))
             stack, args = stack[:-num], stack[-num:]
             stack.append(op.f(*args))
 
     # if there's any stack left...the formula is invalid
     # all formulas should reduce to a single value
     if len(stack) > 1:
-        raise Exception('Invalid Formula.')
+        raise Exception('Invalid Formula')
 
     return stack.pop()
 
-def parse_rpn(formula):
-    """ parse a formula into reverse polish notation """
-    return shunting_yard(formula)
+
+class Func(object):
+    """
+    wrapper of a function and it's argument count
+
+    if n > 0 then the function call requires n arguments
+    if n =< 0 then the function call requires -n or more arguments
+    """
+    def __init__(self, n, f):
+        self.n = n
+        self.f = f
+
 
 def eval_operand(n):
     """ evaluate an operand into a numeric value """
@@ -104,7 +132,8 @@ def eval_operand(n):
     # if we want to use allow text output, this will be needed
     # if n.token.tsubtype == 'text':
     #     return n.token.tvalue
-    raise Exception('Invalid Operand: Only numeric values allowed. ({} provided)'.format(n.token.tsubtype))
+    raise Exception('Invalid Syntax: Only numeric values allowed ({} provided)'.format(n.token.tsubtype))
+
 
 def wrap_reduce(f):
     """ wrap a 2 argument function as a multi-argument function via reduce """
@@ -114,16 +143,24 @@ def wrap_reduce(f):
         return reduce(f, args)
     return _wrap
 
+
 def wrap_varlist(f):
     """ wrap a 1 argument function as a multi-argument function via list """
     def _wrap(*args):
         return f(args)
     return _wrap
 
-def op_if(test, true_value, *args):
-    """ operator for if functions """
+
+def func_if(test, true_value, *args):
+    """ functor for ifs """
     false_value = args[0] if args else None
     return true_value if test else false_value
+
+
+def func_lcm(a, b):
+    """ functor for lowest common multiple """
+    return a * b // fractions.gcd(a, b)
+
 
 class NumberFormulaTransform(BaseTransform):
     category = 'number'

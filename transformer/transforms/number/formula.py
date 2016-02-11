@@ -10,7 +10,11 @@ import random
 
 
 def get_default_functions():
-    """ generate a mapping of default functions allowed for evaluation """
+    """
+    generate a mapping of default functions allowed for evaluation
+
+    reference: http://www.excelfunctions.net/ExcelFunctions.html
+    """
     return {
         'MAX': Func(0, wrap_reduce(max)),
         'MIN': Func(0, wrap_reduce(min)),

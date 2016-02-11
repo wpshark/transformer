@@ -75,6 +75,7 @@ def get_default_functions():
 
         # Factorials
         'FACT': Func(1, func_factorial),
+        'FACTDOUBLE': Func(1, func_double_factorial),
 
         # Averages
         'AVERAGE': Func(-1, func_average),
@@ -276,6 +277,13 @@ def func_factorial(a):
     if a > 170:
         raise Exception('Factorial limited to N <= 170')
     return math.factorial(a)
+
+
+def func_double_factorial(a):
+    """ functor for a bounded double factorial """
+    if a > 288:
+        raise Exception('Double factorial limited to N <= 288')
+    return reduce(operator.mul, range(a, 0, -2), 1L)
 
 
 def func_average(*args):

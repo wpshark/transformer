@@ -305,7 +305,7 @@ class NumberFormulaTransform(BaseTransform):
     def all_fields(self, *args, **kwargs):
         input_field = self.build_input_field()
         input_field['label'] = 'Formula'
-        input_field['help_text'] = 'Excel-style formula to evaluate'
+        input_field['help_text'] = 'Excel-style formula to evaluate. Example: `ROUNDUP(100.1231, 2) * 100`'
         return [input_field]
 
 register(NumberFormulaTransform())

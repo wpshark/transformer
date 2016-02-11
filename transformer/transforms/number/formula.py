@@ -273,8 +273,8 @@ def func_randbetween(a, b):
 
 def func_factorial(a):
     """ functor for a bounded factorial """
-    if a > 100:
-        raise Exception('Factorial limited to N <= 100')
+    if a > 170:
+        raise Exception('Factorial limited to N <= 170')
     return math.factorial(a)
 
 

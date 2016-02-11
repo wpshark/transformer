@@ -16,8 +16,9 @@ def get_default_functions():
     reference: http://www.excelfunctions.net/ExcelFunctions.html
     """
     return {
-        'MAX': Func(0, wrap_reduce(max)),
-        'MIN': Func(0, wrap_reduce(min)),
+        # Input/Output
+        'VALUE': Func(1, func_value),
+        'TEXT': Func(1, func_text),
 
         # Basic Numeric Information
         'ABS': Func(1, operator.abs),
@@ -26,7 +27,7 @@ def get_default_functions():
         'LCM': Func(-2, wrap_reduce(func_lcm)),
 
         # Basic Math Operations
-        'SUM': Func(-2, wrap_reduce(operator.add)),
+        'SUM': Func(-2, wrap_reduce(op_add)),
         'PRODUCT': Func(-2, wrap_reduce(operator.mul)),
         'SQRT': Func(1, math.sqrt),
         'POWER': Func(2, math.pow),
@@ -47,6 +48,10 @@ def get_default_functions():
         # Random Numbers
         'RAND': Func(0, random.random),
         'RANDBETWEEN': Func(2, func_randbetween),
+
+        # Basic Stats
+        'MAX': Func(0, wrap_reduce(max)),
+        'MIN': Func(0, wrap_reduce(min)),
 
         # Trig
         'PI': Func(0, lambda: math.pi),
@@ -98,7 +103,8 @@ def get_default_operators():
     return {
         'u-': Func(1, operator.neg),             # unary negation
         'u%': Func(1, lambda a: a / float(100)), # unary percentage
-        '+': Func(2, operator.add),
+        '&': Func(2, operator.concat),
+        '+': Func(2, op_add),
         '-': Func(2, operator.sub),
         '/': Func(2, operator.truediv),
         '*': Func(2, operator.mul),
@@ -209,9 +215,8 @@ def eval_operand(n):
         return int_or_float(float(n.token.tvalue))
     if n.token.tsubtype == 'logical':
         return 1 if 'TRUE' in n.token.tvalue else 0
-    # if we want to use allow text output, this will be needed
-    # if n.token.tsubtype == 'text':
-    #     return n.token.tvalue
+    if n.token.tsubtype == 'text':
+        return n.token.tvalue
     raise Exception('Invalid Syntax: Only numeric values allowed ({} provided)'.format(n.token.tsubtype))
 
 
@@ -231,20 +236,32 @@ def wrap_varlist(f):
     return _wrap
 
 
-def func_if(test, true_value, *args):
-    """ functor for ifs """
-    false_value = args[0] if args else None
-    return true_value if test else false_value
+def func_value(a):
+    """ functor for converting a text string into a numeric value """
+    if not isinstance(a, basestring):
+        return a
+    try:
+        a = a.replace(',', '')
+        if '%' in a:
+            return evaluate(a)
+        return int_or_float(float(a))
+    except:
+        raise Exception('{} cannot be parsed into a number'.format(a))
 
 
-def func_lcm(a, b):
-    """ functor for lowest common multiple """
-    return a * b // fractions.gcd(a, b)
+def func_text(a):
+    """ functor for converting a numeric value to a string """
+    return '{}'.format(a)
 
 
 def func_sign(a):
     """ functor for sign """
     return 1 if a > 0 else -1 if a < 0 else 0
+
+
+def func_lcm(a, b):
+    """ functor for lowest common multiple """
+    return a * b // fractions.gcd(a, b)
 
 
 def func_ceil(a, factor=1):
@@ -327,6 +344,19 @@ def func_mode(*args):
 def func_geomean(*args):
     """ functor for geometric mean of a series of numbers """
     return (reduce(operator.mul, args)) ** (1.0 / len(args))
+
+
+def func_if(test, true_value, *args):
+    """ functor for ifs """
+    false_value = args[0] if args else None
+    return true_value if test else false_value
+
+
+def op_add(a, b):
+    """ operator for add """
+    if isinstance(a, basestring) or isinstance(b, basestring):
+        raise TypeError('add operation requires numeric operands')
+    return operator.add(a, b)
 
 
 class NumberFormulaTransform(BaseTransform):

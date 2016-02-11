@@ -18,7 +18,6 @@ def get_default_functions():
     return {
         # Input/Output
         'VALUE': Func(1, func_value),
-        'TEXT': Func(1, func_text),
 
         # Basic Numeric Information
         'ABS': Func(1, operator.abs),
@@ -247,11 +246,6 @@ def func_value(a):
         return int_or_float(float(a))
     except:
         raise Exception('{} cannot be parsed into a number'.format(a))
-
-
-def func_text(a):
-    """ functor for converting a numeric value to a string """
-    return '{}'.format(a)
 
 
 def func_sign(a):

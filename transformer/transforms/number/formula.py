@@ -5,6 +5,7 @@ from transformer.util import math, int_or_float
 
 import fractions
 import operator
+import random
 
 
 def get_default_functions():
@@ -37,6 +38,30 @@ def get_default_functions():
         'ROUNDDOWN': Func(-1, func_rounddown),
         'ROUNDUP': Func(-1, func_roundup),
         'TRUNC': Func(-1, func_trunc),
+
+        # Random Numbers
+        'RAND': Func(0, random.random),
+        'RANDBETWEEN': Func(2, func_randbetween),
+
+        # Trig
+        'PI': Func(0, lambda: math.pi),
+        'SQRTPI': Func(1, lambda a: math.sqrt(a) * math.pi),
+        'DEGREES': Func(1, math.degrees),
+        'RADIANS': Func(1, math.radians),
+        'COS': Func(1, math.cos),
+        'ACOS': Func(1, math.acos),
+        'COSH': Func(1, math.cosh),
+        'ACOSH': Func(1, math.acosh),
+        'SIN': Func(1, math.sin),
+        'ASIN': Func(1, math.asin),
+        'SINH': Func(1, math.sinh),
+        'ASINH': Func(1, math.asinh),
+        'TAN': Func(1, math.tan),
+        'ATAN': Func(1, math.atan),
+        'ATAN2': Func(2, math.atan2),
+        'TANH': Func(1, math.tanh),
+        'ATANH': Func(1, math.atanh),
+
 
         # Logical Functions
         'IF': Func(-2, func_if),
@@ -220,6 +245,11 @@ def func_roundup(a, places=0):
 def func_trunc(a, places=0):
     """ functor for truncate with decimals """
     return math.trunc(a * (10 ** places)) / float(10 ** places)
+
+
+def func_randbetween(a, b):
+    """ functor for random int in range """
+    return a if a == b else random.randint(min(a, b), max(a, b))
 
 
 class NumberFormulaTransform(BaseTransform):

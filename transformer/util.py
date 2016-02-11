@@ -4,6 +4,9 @@ import dateutil.parser
 import collections
 import re
 
+# because of some silliness with package naming, transformer.transforms.number.math
+# overrides the stdlib math module, so we are providing a couple copies of functions here
+import math # NOQA
 
 class APIError(Exception):
     """ Base Exception for the API """
@@ -21,7 +24,6 @@ class APIError(Exception):
         rv['message'] = self.message
         rv['status'] = self.status_code
         return rv
-
 
 def tdelta(input_):
     """
@@ -95,7 +97,6 @@ def try_parse_number(number_value, cls=float, default=0):
         return int_or_float(cls(number_value))
     except:
         return cls(default)
-
 
 def import_submodules(package_name):
     """ Import all submodules of a module, recursively

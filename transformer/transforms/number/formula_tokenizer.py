@@ -11,6 +11,9 @@
 # CVS Info:
 # $Header: T:\\cvsarchive/Excel\040export\040&\040import\040XML/ExcelXMLTransform/EWBI_Javascript_port/jsport.py,v 1.5 2006/12/07 13:41:08 rmacharg Exp $
 #
+# Retrieved from: https://github.com/dgorissen/pycel/blob/master/src/pycel/tokenizer.py
+# License: GPL (https://github.com/dgorissen/pycel/blob/master/LICENSE.txt)
+#
 # Modification History
 #
 # Date         Author Comment

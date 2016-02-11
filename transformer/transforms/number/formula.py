@@ -74,7 +74,7 @@ def get_default_functions():
         'LOG10': Func(1, math.log10),
 
         # Factorials
-        'FACT': Func(1, math.factorial),
+        'FACT': Func(1, func_factorial),
 
         # Averages
         'AVERAGE': Func(-1, func_average),
@@ -269,6 +269,13 @@ def func_trunc(a, places=0):
 def func_randbetween(a, b):
     """ functor for random int in range """
     return a if a == b else random.randint(min(a, b), max(a, b))
+
+
+def func_factorial(a):
+    """ functor for a bounded factorial """
+    if a > 100:
+        raise Exception('Factorial limited to N <= 100')
+    return math.factorial(a)
 
 
 def func_average(*args):

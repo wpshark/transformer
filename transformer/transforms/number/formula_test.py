@@ -33,7 +33,8 @@ class TestNumberFormulaTransform(unittest.TestCase):
         self.assertEqual(True, transformer.transform(u'5 < 6'))
         self.assertEqual(True, transformer.transform(u'5 <= 6'))
 
-        self.assertEqual(4, transformer.transform(u'POW(2, 2)'))
+        self.assertEqual(4, transformer.transform(u'POWER(2, 2)'))
+        self.assertEqual(12, transformer.transform(u'ABS(-12)'))
 
         self.assertEqual(1, transformer.transform(u'AND(1,2)'))
         self.assertEqual(1, transformer.transform(u'OR(0,1)'))

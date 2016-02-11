@@ -12,15 +12,33 @@ def get_default_functions():
     return {
         'MAX': Func(0, wrap_reduce(max)),
         'MIN': Func(0, wrap_reduce(min)),
-        'MOD': Func(2, operator.mod),
-        'SQRT': Func(1, math.sqrt),
-        'POW': Func(2, math.pow),
+
+        # Basic Numeric Information
         'ABS': Func(1, operator.abs),
+        'SIGN': Func(1, func_sign),
         'GCD': Func(-2, wrap_reduce(fractions.gcd)),
         'LCM': Func(-2, wrap_reduce(func_lcm)),
-        'CEILING': Func(-1, math.ceil),
-        'FLOOR': Func(-1, math.floor),
+
+        # Basic Math Operations
+        'SUM': Func(-2, wrap_reduce(operator.add)),
+        'PRODUCT': Func(-2, wrap_reduce(operator.mul)),
+        'SQRT': Func(1, math.sqrt),
+        'POWER': Func(2, math.pow),
+        'QUOTIENT': Func(2, operator.div),
+        'MOD': Func(2, operator.mod),
+
+        # Basic Rounding Functions
+        'CEILING': Func(-1, func_ceil), # ceiling with factor
+        'FLOOR': Func(-1, func_floor),  # floor with factor
+        'EVEN': Func(1, func_even),
+        'INT': Func(1, int),
+        'ODD': Func(1, func_odd),
         'ROUND': Func(-1, round),
+        'ROUNDDOWN': Func(-1, func_rounddown),
+        'ROUNDUP': Func(-1, func_roundup),
+        'TRUNC': Func(-1, func_trunc),
+
+        # Logical Functions
         'IF': Func(-2, func_if),
         'AND': Func(-1, wrap_varlist(all)),
         'OR': Func(-1, wrap_varlist(any)),
@@ -160,6 +178,48 @@ def func_if(test, true_value, *args):
 def func_lcm(a, b):
     """ functor for lowest common multiple """
     return a * b // fractions.gcd(a, b)
+
+
+def func_sign(a):
+    """ functor for sign """
+    return 1 if a > 0 else -1 if a < 0 else 0
+
+
+def func_ceil(a, factor=1):
+    """ functor for ceiling with factor factor """
+    return factor * math.ceil(float(a) / factor)
+
+
+def func_floor(a, factor=1):
+    """ functor for floor with factor factor """
+    return factor * math.floor(float(a) / factor)
+
+
+def func_even(a):
+    """ functor for rounding up to next even integer """
+    return func_ceil(a, 2)
+
+
+def func_odd(a):
+    """ functor for rounding up to next odd integer """
+    if a % 2 == 1:
+        return a
+    return func_ceil(a, 2) + 1
+
+
+def func_rounddown(a, places=0):
+    """ functor for round down with decimal places """
+    return math.floor(a * (10 ** places)) / float(10 ** places)
+
+
+def func_roundup(a, places=0):
+    """ functor for round up with decimal places """
+    return math.ceil(a * (10 ** places)) / float(10 ** places)
+
+
+def func_trunc(a, places=0):
+    """ functor for truncate with decimals """
+    return math.trunc(a * (10 ** places)) / float(10 ** places)
 
 
 class NumberFormulaTransform(BaseTransform):

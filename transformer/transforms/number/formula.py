@@ -122,7 +122,12 @@ def evaluate(formula, functions=None, operators=None):
         operators = get_default_operators()
 
     # first, parse the formula into reverse polish notation
-    rpn = shunting_yard(formula)
+    try:
+        rpn = shunting_yard(formula)
+    except IndexError as e:
+        raise Exception('Syntax Error'.format(e))
+    except Exception as e:
+        raise Exception('Syntax Error: {}'.format(e))
 
     # check the nodes to make sure they are valid
     for i, n in enumerate(rpn):
@@ -133,6 +138,8 @@ def evaluate(formula, functions=None, operators=None):
         if isinstance(n, FunctionNode) and key not in functions:
             raise Exception('Unknown Function: {}'.format(n))
         if isinstance(n, OperatorNode) and key not in operators and 'u{}'.format(key) not in operators:
+            if not key or not key.strip():
+                raise Exception('Syntax Error')
             raise Exception('Unknown Operation: {}'.format(n))
 
     # evaluate the reverse polish notation
@@ -149,7 +156,11 @@ def evaluate(formula, functions=None, operators=None):
             if func.n > 0 and num != func.n:
                 raise Exception('Invalid Formula: {} requires {} arguments ({} provided)'.format(str(n), func.n, num))
             stack, args = stack[:-num], stack[-num:]
-            stack.append(func.f(*args))
+
+            try:
+                stack.append(func.f(*args))
+            except Exception as e:
+                raise Exception('Function Error ({}): {}'.format(str(n).upper(), e))
 
         if isinstance(n, OperatorNode):
             num = 2 if n.token.ttype.endswith('infix') else 1
@@ -162,7 +173,13 @@ def evaluate(formula, functions=None, operators=None):
             if op.n > 0 and num != op.n:
                 raise Exception('Invalid Formula: {} requires {} arguments ({} provided)'.format(str(n), op.n, num))
             stack, args = stack[:-num], stack[-num:]
-            stack.append(op.f(*args))
+
+            try:
+                stack.append(op.f(*args))
+            except TypeError as e:
+                raise Exception('Operation Error: {}'.format(str(n)))
+            except Exception as e:
+                raise Exception('Operation Error ({}): {}'.format(str(n), e))
 
     # if there's any stack left...the formula is invalid
     # all formulas should reduce to a single value

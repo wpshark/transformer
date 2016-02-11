@@ -3,6 +3,7 @@ from transformer.transforms.base import BaseTransform
 from transformer.transforms.number.formula_tokenizer import shunting_yard, FunctionNode, OperatorNode, OperandNode, RangeNode
 from transformer.util import math, int_or_float
 
+import collections
 import fractions
 import operator
 import random
@@ -62,6 +63,20 @@ def get_default_functions():
         'TANH': Func(1, math.tanh),
         'ATANH': Func(1, math.atanh),
 
+        # Exponents and Logarithms
+        'EXP': Func(1, math.exp),
+        'LN': Func(1, math.log),
+        'LOG': Func(2, math.log),
+        'LOG10': Func(1, math.log10),
+
+        # Factorials
+        'FACT': Func(1, math.factorial),
+
+        # Averages
+        'AVERAGE': Func(-1, func_average),
+        'MEDIAN': Func(-1, func_median),
+        'MODE': Func(-1, func_mode),
+        'GEOMEAN': Func(-1, func_geomean),
 
         # Logical Functions
         'IF': Func(-2, func_if),
@@ -250,6 +265,32 @@ def func_trunc(a, places=0):
 def func_randbetween(a, b):
     """ functor for random int in range """
     return a if a == b else random.randint(min(a, b), max(a, b))
+
+
+def func_average(*args):
+    """ functor for average of a series of numbers """
+    return reduce(operator.add, args) / float(len(args))
+
+
+def func_median(*args):
+    """ functor for median of a series of numbers """
+    data = sorted(args)
+    n = len(data)
+    if n % 2 == 1:
+        return data[n // 2]
+    else:
+        i = n // 2
+        return (data[i - 1] + data[i]) / 2.0
+
+
+def func_mode(*args):
+    """ functor for mode of a series of numbers """
+    return collections.Counter(iter(args)).most_common(1)[0][0]
+
+
+def func_geomean(*args):
+    """ functor for geometric mean of a series of numbers """
+    return (reduce(operator.mul, args)) ** (1.0 / len(args))
 
 
 class NumberFormulaTransform(BaseTransform):

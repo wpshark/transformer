@@ -126,6 +126,7 @@ def get_default_operators():
 def evaluate(formula, functions=None, operators=None):
     """
     evaluate an excel-style formula using the functions and operators provided
+    or use the default functions and operators if none are provided
 
     """
     if functions is None:
@@ -177,7 +178,7 @@ def evaluate(formula, functions=None, operators=None):
         if isinstance(n, OperatorNode):
             num = 2 if n.token.ttype.endswith('infix') else 1
             key = str(n).upper()
-            if num == 1:
+            if num == 1: # unary operator has a special key to differentiate between the infix operator
                 key = 'u{}'.format(key)
             op = operators.get(key)
             if op.n < 0 and num < -op.n:
@@ -403,7 +404,6 @@ def func_isnumber(*args):
             if isinstance(arg, int) or isinstance(arg, long) or isinstance(arg, float):
                 return True
     return False
-
 
 
 def op_add(a, b):

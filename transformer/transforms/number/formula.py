@@ -92,8 +92,15 @@ def get_default_functions():
         'AND': Func(-1, wrap_varlist(all)),
         'OR': Func(-1, wrap_varlist(any)),
         'NOT': Func(1, operator.not_),
-        'TRUE': Func(0, lambda: 1),
-        'FALSE': Func(0, lambda: 0),
+        'TRUE': Func(0, lambda: True),
+        'FALSE': Func(0, lambda: False),
+        'ISBLANK': Func(0, func_isblank),
+        'ISLOGICAL': Func(0, func_islogical),
+        'ISTEXT': Func(0, func_istext),
+        'ISNONTEXT': Func(0, func_isnontext),
+        'ISNUMBER': Func(0, func_isnumber),
+        'ISODD': Func(1, lambda a: a % 2 != 0),
+        'ISEVEN': Func(1, lambda a: a % 2 == 0),
     }
 
 
@@ -213,7 +220,7 @@ def eval_operand(n):
     if n.token.tsubtype == 'number':
         return int_or_float(float(n.token.tvalue))
     if n.token.tsubtype == 'logical':
-        return 1 if 'TRUE' in n.token.tvalue else 0
+        return True if 'TRUE' in n.token.tvalue else False
     if n.token.tsubtype == 'text':
         return n.token.tvalue
     raise Exception('Invalid Syntax: Only numeric values allowed ({} provided)'.format(n.token.tsubtype))
@@ -344,6 +351,59 @@ def func_if(test, true_value, *args):
     """ functor for ifs """
     false_value = args[0] if args else None
     return true_value if test else false_value
+
+
+def func_isblank(*args):
+    """
+    functor for isblank.
+
+    returns true if no args are provided or if all args are falsey
+
+    """
+    if args:
+        for arg in args:
+            if arg == '':
+                continue
+            if arg is None:
+                continue
+            if arg == 0:
+                return False
+            if arg:
+                return False
+    return True
+
+
+def func_islogical(*args):
+    """ functor for islogical """
+    if args:
+        for arg in args:
+            if isinstance(arg, bool):
+                return True
+    return False
+
+
+def func_istext(*args):
+    """ functor for istext """
+    if args:
+        for arg in args:
+            if isinstance(arg, basestring):
+                return True
+    return False
+
+
+def func_isnontext(*args):
+    """ functor for isnontext """
+    return not func_istext(*args)
+
+
+def func_isnumber(*args):
+    """ functor for isnumber """
+    if args:
+        for arg in args:
+            if isinstance(arg, int) or isinstance(arg, long) or isinstance(arg, float):
+                return True
+    return False
+
 
 
 def op_add(a, b):

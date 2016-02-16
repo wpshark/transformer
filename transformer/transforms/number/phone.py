@@ -27,6 +27,8 @@ class PhoneNumberFormattingTransform(BaseTransform):
             format_int = int(format_string)
             if format_int in (4, 5): # we should be using international format for these...
                 format_int = 1
+            if format_int in (6,): # we should be using national format for these...
+                format_int = 2
         except:
             format_int = None
 
@@ -48,6 +50,10 @@ class PhoneNumberFormattingTransform(BaseTransform):
         if format_string == '5':
             output = re.sub('-', ' ', output)
 
+        # if we're using National, No Parens, remove the parens
+        if format_string == '6':
+            output = output.replace('(', '').replace(')', '')
+
         return output
 
 
@@ -59,6 +65,7 @@ class PhoneNumberFormattingTransform(BaseTransform):
             '3': '+1-555-800-1212 (RFC3966)',
             '4': '555-800-1212 (International, No Country Code)',
             '5': '+1 555 800 1212 (International, No Hyphens)',
+            '6': '555 800-1212 (National, No Parenthesis)',
         }
 
         return [

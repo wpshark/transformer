@@ -40,7 +40,7 @@ class StringSplitTransform(BaseTransform):
                 'type': 'unicode',
                 'required': False,
                 'key': 'segment',
-                'label': 'String segment to return after splitting',
+                'label': 'String segment to return after splitting. (Default: First)',
                 'choices': '0|First,1|Second,-1|Last,-2|Second to Last',
             },
         ]

@@ -3,6 +3,7 @@ import arrow
 from transformer.registry import register
 from transformer.util import try_parse_date, tdelta
 from transformer.transforms.base import BaseTransform
+from transformer.transforms.date.formatting import PREDEFINED_DATE_FORMATS
 
 class DateManipulateTransform(BaseTransform):
 
@@ -24,6 +25,10 @@ class DateManipulateTransform(BaseTransform):
         return arrow.get(dt).to('utc').replace(**delta).format(to_format)
 
     def fields(self, *args, **kwargs):
+        dt = arrow.get(try_parse_date('Mon Jan 22 15:04:05 -0800 2006')).to('utc')
+
+        format_choices = ','.join(['{}|{} ({})'.format(f, f, dt.format(f)) for f in PREDEFINED_DATE_FORMATS])
+
         return [
             {
                 'type': 'unicode',
@@ -38,6 +43,7 @@ class DateManipulateTransform(BaseTransform):
                 'type': 'unicode',
                 'required': True,
                 'key': 'to_format',
+                'choices': format_choices,
                 'help_text': 'Provide the format that the date should be converted to. For date format help, see: https://zapier.com/help/formatter/#date-time'
             }
         ]

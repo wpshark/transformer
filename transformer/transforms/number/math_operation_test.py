@@ -1,9 +1,9 @@
 import unittest
-import math
+import math_operation
 
 class TestNumberMathTransform(unittest.TestCase):
-    def test_math(self):
-        transformer = math.NumberMathTransform()
+    def test_math_operation(self):
+        transformer = math_operation.NumberMathTransform()
         self.assertEqual(6, transformer.transform_many([1, 2, 3], options={'operation': 'mul'}))
         self.assertEqual(6, transformer.transform_many([1, 2, 3], options={'operation': 'add'}))
         self.assertEqual(-4, transformer.transform_many([1, 2, 3], options={'operation': 'sub'}))

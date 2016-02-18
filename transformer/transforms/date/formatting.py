@@ -4,6 +4,22 @@ from transformer.registry import register
 from transformer.util import try_parse_date
 from transformer.transforms.base import BaseTransform
 
+PREDEFINED_DATE_FORMATS = [
+    'ddd MMM DDD HH:mm:ss Z YYYY',
+    'MMMM DD YYYY HH:mm:ss',
+    'MMMM DD YYYY',
+    'MMM DD YYYY',
+    'YYYY-MM-DDTHH:mm:ssZ',
+    'YYYY-MM-DD HH:mm:ss Z',
+    'YYYY-MM-DD',
+    'MM-DD-YYYY',
+    'MM/DD/YYYY',
+    'MM/DD/YY',
+    'DD-MM-YYYY',
+    'DD/MM/YYYY',
+    'DD/MM/YY'
+]
+
 class DateFormattingTransform(BaseTransform):
 
     category = 'date'
@@ -24,23 +40,7 @@ class DateFormattingTransform(BaseTransform):
     def fields(self, *args, **kwargs):
         dt = arrow.get(try_parse_date('Mon Jan 22 15:04:05 -0800 2006')).to('utc')
 
-        formats = [
-            'ddd MMM DDD HH:mm:ss Z YYYY',
-            'MMMM DD YYYY HH:mm:ss',
-            'MMMM DD YYYY',
-            'MMM DD YYYY',
-            'YYYY-MM-DDTHH:mm:ssZ',
-            'YYYY-MM-DD HH:mm:ss Z',
-            'YYYY-MM-DD',
-            'MM-DD-YYYY',
-            'MM/DD/YYYY',
-            'MM/DD/YY',
-            'DD-MM-YYYY',
-            'DD/MM/YYYY',
-            'DD/MM/YY'
-        ]
-
-        choices = ','.join(['{}|{} ({})'.format(f, f, dt.format(f)) for f in formats])
+        choices = ','.join(['{}|{} ({})'.format(f, f, dt.format(f)) for f in PREDEFINED_DATE_FORMATS])
 
         return [
             {
@@ -55,7 +55,7 @@ class DateFormattingTransform(BaseTransform):
                 'required': False,
                 'key': 'from_format',
                 'choices': choices,
-                'help_text': 'If we incorrectly interpret the incoming (input) date, set this to explicitly tell us the format. Otherwise, we will do our best to figure it out.'
+                'help_text': 'If we incorrectly interpret the incoming (input) date, set this to explicitly tell us the format. Otherwise, we will do our best to figure it out.' # NOQA
             }
         ]
 

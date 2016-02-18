@@ -414,10 +414,10 @@ def op_add(a, b):
     return operator.add(a, b)
 
 
-class NumberFormulaTransform(BaseTransform):
+class NumberExcelStyleFormulaTransform(BaseTransform):
     category = 'number'
-    name = 'formula'
-    label = 'Number Formula'
+    name = 'excel_formula'
+    label = 'Excel-Style Formula'
     help_text = 'Transform a number with an Excel-style formula.'
 
     def transform(self, formula):
@@ -429,4 +429,4 @@ class NumberFormulaTransform(BaseTransform):
         input_field['help_text'] = 'Excel-style formula to evaluate. Example: `ROUNDUP(100.1231, 2) * 100`'
         return [input_field]
 
-register(NumberFormulaTransform())
+register(NumberExcelStyleFormulaTransform())

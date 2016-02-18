@@ -1,6 +1,6 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
-from transformer.transforms.number.formula_tokenizer import shunting_yard, FunctionNode, OperatorNode, OperandNode, RangeNode
+from transformer.transforms.number.excel_formula_tokenizer import shunting_yard, FunctionNode, OperatorNode, OperandNode, RangeNode
 from transformer.util import int_or_float
 
 import collections

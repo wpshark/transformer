@@ -1,10 +1,10 @@
 import unittest
-import formula
+import excel_formula
 
 class TestNumberExcelStyleFormulaTransform(unittest.TestCase):
 
-    def test_formula(self):
-        transformer = formula.NumberExcelStyleFormulaTransform()
+    def test_excel_formula(self):
+        transformer = excel_formula.NumberExcelStyleFormulaTransform()
 
         self.assertEqual(2, transformer.transform(u'1 - -1'))
 

@@ -1,12 +1,13 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 from transformer.transforms.number.formula_tokenizer import shunting_yard, FunctionNode, OperatorNode, OperandNode, RangeNode
-from transformer.util import math, int_or_float
+from transformer.util import int_or_float
 
 import collections
 import fractions
 import operator
 import random
+import math
 
 
 def get_default_functions():

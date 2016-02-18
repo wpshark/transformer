@@ -2,12 +2,7 @@ import arrow
 import dateutil.parser
 
 import collections
-import itertools
 import re
-
-# because of some silliness with package naming, transformer.transforms.number.math
-# overrides the stdlib math module, so we are providing a couple copies of functions here
-import math # NOQA
 
 class APIError(Exception):
     """ Base Exception for the API """

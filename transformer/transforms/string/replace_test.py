@@ -20,3 +20,7 @@ class TestStringReplaceTransform(unittest.TestCase):
         self.assertEqual(transformer.transform("Abc", "A", "a"), "abc")
         self.assertEqual(transformer.transform("a, b", ",", ""), "a b")
         self.assertEqual(transformer.transform("å", "å", "b"), "b")
+        self.assertEqual(transformer.transform("hello world", "[:space:]", "-"), "hello-world")
+        self.assertEqual(transformer.transform("he llo  world", "[:space:][:space:]", "-"), "he llo-world")
+        self.assertEqual(transformer.transform("he llo  world", "[:space:]", "-"), "he-llo--world")
+        self.assertEqual(transformer.transform("he llo  world", "[:s:][:space:]", "-"), "he llo-world")

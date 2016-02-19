@@ -1,5 +1,6 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
+from transformer.util import expand_special_chargroups
 
 class StringReplaceTransform(BaseTransform):
 
@@ -12,6 +13,8 @@ class StringReplaceTransform(BaseTransform):
     verb = 'find and replace values within'
 
     def transform(self, str_input, old, new=u'', **kwargs):
+        if old:
+            old = expand_special_chargroups(old)
         return str_input.replace(old, new) if str_input and old else u''
 
     def fields(self, *args, **kwargs):
@@ -21,6 +24,7 @@ class StringReplaceTransform(BaseTransform):
                 'required': True,
                 'key': 'old',
                 'label': 'Find',
+                'help_text': 'If want to find a space, use `[:space:]`.'
             },
             {
                 'type': 'unicode',

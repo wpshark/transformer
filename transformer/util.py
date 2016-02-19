@@ -121,6 +121,26 @@ def try_parse_number(number_value, cls=float, default=0):
         return cls(default)
 
 
+def expand_special_chargroups(str_input):
+    """
+    helper to replace special character groups with their counterparts
+
+    """
+    if not isinstance(str_input, basestring):
+        return str_input
+
+    groups = [
+        ('[:space:]', ' '),
+        ('[:s:]', ' '),
+    ]
+    
+    out = str_input
+    for key, value in groups:
+        out = out.replace(key, value)
+    return out
+
+
+
 def import_submodules(package_name):
     """ Import all submodules of a module, recursively
 

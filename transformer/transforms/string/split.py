@@ -1,6 +1,6 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
-from transformer.util import try_parse_number
+from transformer.util import try_parse_number, expand_special_chargroups
 
 class StringSplitTransform(BaseTransform):
 
@@ -13,6 +13,7 @@ class StringSplitTransform(BaseTransform):
     verb = 'split'
 
     def transform(self, str_input, separator=u'', index=0, **kwargs):
+        separator = expand_special_chargroups(separator)
 
         if separator:
             segments = str_input.split(separator)

@@ -38,6 +38,14 @@ class TestStringStripTransform(unittest.TestCase):
 
             ('a, b, c, d', ', ', 'all', ['a', 'b', 'c', 'd']),
             ('a, b, c, d, ', ', ', 'all', ['a', 'b', 'c', 'd', '']),
+
+            ('hello world', '[:space:]', 0, 'hello'),
+            ('hello world', '[:space:]', 1, 'world'),
+            ('hello world', '[:space:]', -1, 'world'),
+
+            ('hello  world', '[:s:]', 0, 'hello'),
+            ('hello  world', '[:s:]', 1, ''),
+            ('hello  world', '[:s:]', -1, 'world'),
         ]
 
         for input_string, separator, index, output_string in tests:

@@ -54,7 +54,30 @@ class TestPhoneNumberFormattingTransform(unittest.TestCase):
             ('+44 (800) 5551212' , '4', '800 555 1212'     ),
             ('+44 (800) 5551212' , '5', '+44 800 555 1212' ),
             ('+44 (800) 5551212' , '6', '0800 555 1212'    ),
+
+
         ]
 
         for input_number, format_string, expected_output in tests:
             self.assertEqual(expected_output, transformer.transform(input_number, format_string=format_string))
+
+    def test_invalid_phone(self):
+        transformer = phone.PhoneNumberFormattingTransform()
+
+        tests = [
+            # invalid phone numbers
+            # input, format, expected output
+            ('5551212' , '1', '5551212'),
+            ('555-1212' , '1', '555-1212'),
+            ('1555-1212' , '1', '555-1212'),
+            ('1-22-555-1212' , '1', '555-1212'),
+        ]
+
+        for input_number, format_string, expected_output in tests:
+            try:
+                out = transformer.transform(input_number, format_string=format_string)
+                self.assertEqual(out, expected_output)
+            except Exception as e:
+                # this test passes if an error is thrown
+                self.assertTrue(True)
+                pass

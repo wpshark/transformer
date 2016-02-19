@@ -4,6 +4,7 @@ import dateutil.parser
 import collections
 import re
 
+
 class APIError(Exception):
     """ Base Exception for the API """
     status_code = 400
@@ -20,6 +21,7 @@ class APIError(Exception):
         rv['message'] = self.message
         rv['status'] = self.status_code
         return rv
+
 
 def tdelta(input_):
     """
@@ -116,6 +118,26 @@ def try_parse_number(number_value, cls=float, default=0):
         return int_or_float(cls(number_value))
     except:
         return cls(default)
+
+
+def expand_special_chargroups(str_input):
+    """
+    helper to replace special character groups with their counterparts
+
+    """
+    if not isinstance(str_input, basestring):
+        return str_input
+
+    groups = [
+        ('[:space:]', ' '),
+        ('[:s:]', ' '),
+    ]
+    
+    out = str_input
+    for key, value in groups:
+        out = out.replace(key, value)
+    return out
+
 
 def import_submodules(package_name):
     """ Import all submodules of a module, recursively

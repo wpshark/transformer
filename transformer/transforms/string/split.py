@@ -13,7 +13,7 @@ class StringSplitTransform(BaseTransform):
     verb = 'split'
 
     def transform(self, str_input, separator=u'', index=0, **kwargs):
-        segment = try_parse_number(segment, cls=int)
+        index = try_parse_number(index, cls=int)
 
         if separator:
             segments = str_input.split(separator)

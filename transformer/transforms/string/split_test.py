@@ -6,7 +6,7 @@ class TestStringStripTransform(unittest.TestCase):
         transformer = split.StringSplitTransform()
 
         tests = [
-            # input, separator, segment, output
+            # input, separator, index, output
             ('a:b', ':',  0,  'a'),
             ('a:b', ':',  1,  'b'),
             ('a:b', ':', -1, 'b'),
@@ -37,5 +37,5 @@ class TestStringStripTransform(unittest.TestCase):
             ('a, b, c, d', ', ', -1, 'd'),
         ]
 
-        for input_string, separator, segment, output_string in tests:
-            self.assertEqual(output_string, transformer.transform(input_string, separator=separator, segment=segment))
+        for input_string, separator, index, output_string in tests:
+            self.assertEqual(output_string, transformer.transform(input_string, separator=separator, index=index))

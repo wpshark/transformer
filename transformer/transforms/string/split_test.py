@@ -42,3 +42,8 @@ class TestStringStripTransform(unittest.TestCase):
 
         for input_string, separator, index, output_string in tests:
             self.assertEqual(output_string, transformer.transform(input_string, separator=separator, index=index))
+
+    def test_split_many(self):
+        transformer = split.StringSplitTransform()
+        self.assertEqual([['a', 'b'], ['c', 'd']], transformer.transform_many(['a,b', 'c,d'], dict(separator=',', index='all')))
+

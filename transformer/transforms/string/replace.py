@@ -24,7 +24,7 @@ class StringReplaceTransform(BaseTransform):
                 'required': True,
                 'key': 'old',
                 'label': 'Find',
-                'help_text': 'If want to find a space, use `[:space:]`.'
+                'help_text': 'To find a space, use `[:space:]`.'
             },
             {
                 'type': 'unicode',

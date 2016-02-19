@@ -35,6 +35,9 @@ class TestStringStripTransform(unittest.TestCase):
             ('a, b, c, d', ', ',  1, 'b'),
             ('a, b, c, d', ', ', -2, 'c'),
             ('a, b, c, d', ', ', -1, 'd'),
+
+            ('a, b, c, d', ', ', 'all', ['a', 'b', 'c', 'd']),
+            ('a, b, c, d, ', ', ', 'all', ['a', 'b', 'c', 'd', '']),
         ]
 
         for input_string, separator, index, output_string in tests:

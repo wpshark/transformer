@@ -13,13 +13,16 @@ class StringSplitTransform(BaseTransform):
     verb = 'split'
 
     def transform(self, str_input, separator=u'', index=0, **kwargs):
-        index = try_parse_number(index, cls=int)
 
         if separator:
             segments = str_input.split(separator)
         else:
             segments = str_input.split()
 
+        if index == 'all':
+            return segments
+
+        index = try_parse_number(index, cls=int)
         try:
             return segments[index]
         except:
@@ -42,7 +45,7 @@ class StringSplitTransform(BaseTransform):
                 'key': 'index',
                 'label': 'Segment Index',
                 'help_text': 'Segment to return after splitting. (Default: First)',
-                'choices': '0|First,1|Second,-1|Last,-2|Second to Last',
+                'choices': '0|First,1|Second,-1|Last,-2|Second to Last,all|All',
             },
         ]
 

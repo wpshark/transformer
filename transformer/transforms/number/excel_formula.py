@@ -111,6 +111,7 @@ def get_default_operators():
         'u-': Func(1, operator.neg),             # unary negation
         'u%': Func(1, lambda a: a / float(100)), # unary percentage
         '&': Func(2, operator.concat),
+        '^': Func(2, operator.pow),
         '+': Func(2, op_add),
         '-': Func(2, operator.sub),
         '/': Func(2, operator.truediv),

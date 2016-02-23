@@ -30,6 +30,7 @@ def get_default_functions():
         'SUM': Func(-2, wrap_reduce(op_add)),
         'PRODUCT': Func(-2, wrap_reduce(operator.mul)),
         'SQRT': Func(1, math.sqrt),
+        'POW': Func(2, math.pow),
         'POWER': Func(2, math.pow),
         'QUOTIENT': Func(2, operator.div),
         'MOD': Func(2, operator.mod),

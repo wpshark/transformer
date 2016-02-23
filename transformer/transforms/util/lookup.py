@@ -41,7 +41,7 @@ class UtilLookupTransform(BaseTransform):
                 'key': 'fallback',
                 'label': 'Fallback Value',
                 'help_text': 'The value to be used if we do not find a corresponding value in Lookup Table.'
-            },
+            }
         ]
 
 register(UtilLookupTransform())

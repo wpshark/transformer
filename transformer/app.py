@@ -15,10 +15,10 @@ from flask import Flask, jsonify, request
 # Create our Flask App
 app = Flask(__name__)
 
-sentry_dsn = os.environ.get('SENTRY_DSN')
-if sentry_dsn:
-    from raven.contrib.flask import Sentry
-    sentry = Sentry(app, dsn=sentry_dsn)
+# sentry_dsn = os.environ.get('SENTRY_DSN')
+# if sentry_dsn:
+#     from raven.contrib.flask import Sentry
+#     sentry = Sentry(app, dsn=sentry_dsn)
 
 
 # Prepare the application transform registry

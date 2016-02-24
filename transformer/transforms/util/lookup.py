@@ -12,6 +12,15 @@ class UtilLookupTransform(BaseTransform):
     noun = 'Value'
     verb = 'lookup'
 
+    def build_input_field(self):
+        return {
+            'type': 'unicode',
+            'required': True,
+            'key': 'inputs',
+            'label': 'Lookup Key',
+            'help_text': '{} you would like to {}.'.format(self.noun or 'Value', self.verb or 'transform')
+        }
+
     def transform(self, input_key, table={}, fallback=u'', **kwargs):
         if input_key and input_key in table:
             return table[input_key]

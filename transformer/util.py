@@ -2,7 +2,6 @@ import arrow
 import dateutil.parser
 
 import collections
-import itertools
 import re
 
 
@@ -138,7 +137,6 @@ def expand_special_chargroups(str_input):
     for key, value in groups:
         out = out.replace(key, value)
     return out
-
 
 
 def import_submodules(package_name):

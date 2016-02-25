@@ -1,6 +1,6 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
-from transformer.transforms.number.excel_formula_tokenizer import shunting_yard, FunctionNode, OperatorNode, OperandNode, RangeNode
+from transformer.transforms.number.spreadsheet_formula_tokenizer import shunting_yard, FunctionNode, OperatorNode, OperandNode, RangeNode
 from transformer.util import int_or_float
 
 import collections
@@ -128,7 +128,7 @@ def get_default_operators():
 
 def evaluate(formula, functions=None, operators=None):
     """
-    evaluate an excel-style formula using the functions and operators provided
+    evaluate an spreadsheet-style formula using the functions and operators provided
     or use the default functions and operators if none are provided
 
     """
@@ -416,11 +416,11 @@ def op_add(a, b):
     return operator.add(a, b)
 
 
-class NumberExcelStyleFormulaTransform(BaseTransform):
+class NumberSpreadsheetStyleFormulaTransform(BaseTransform):
     category = 'number'
-    name = 'excel_formula'
-    label = 'Excel-Style Formula'
-    help_text = 'Transform a number with an Excel-style formula.'
+    name = 'spreadsheet_formula'
+    label = 'Spreadsheet-Style Formula'
+    help_text = 'Transform a number with an spreadsheet-style formula.'
 
     def transform(self, formula):
         return evaluate(formula)
@@ -428,7 +428,7 @@ class NumberExcelStyleFormulaTransform(BaseTransform):
     def all_fields(self, *args, **kwargs):
         input_field = self.build_input_field()
         input_field['label'] = 'Formula'
-        input_field['help_text'] = 'Excel-style formula to evaluate. Example: `ROUNDUP(100.1231, 2) * 100`'
+        input_field['help_text'] = 'Spreadsheet-style formula to evaluate. Example: `ROUNDUP(100.1231, 2) * 100`. For more help and examples, see: https://zapier.com/help/formatter/#numbers'
         return [input_field]
 
-register(NumberExcelStyleFormulaTransform())
+register(NumberSpreadsheetStyleFormulaTransform())

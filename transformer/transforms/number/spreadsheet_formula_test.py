@@ -1,10 +1,10 @@
 import unittest
-import excel_formula
+import spreadsheet_formula
 
-class TestNumberExcelStyleFormulaTransform(unittest.TestCase):
+class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
 
-    def test_excel_formula(self):
-        transformer = excel_formula.NumberExcelStyleFormulaTransform()
+    def test_spreadsheet_formula(self):
+        transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
 
         self.assertEqual(2, transformer.transform(u'1 - -1'))
 
@@ -42,3 +42,5 @@ class TestNumberExcelStyleFormulaTransform(unittest.TestCase):
 
         self.assertEqual(1, transformer.transform(u'IF(TRUE, 1, 2)'))
         self.assertEqual(2, transformer.transform(u'IF(FALSE, 1, 2)'))
+
+        self.assertEqual(100, transformer.transform(u'=100'))

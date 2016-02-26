@@ -3,6 +3,7 @@ import formatting
 
 class TestDateFormattingTransform(unittest.TestCase):
     transformer = formatting.DateFormattingTransform()
+
     def test_transforming_empty_field_returns_empty_field(self):
         self.assertEqual(self.transformer.transform(
             '',
@@ -33,21 +34,18 @@ class TestDateFormattingTransform(unittest.TestCase):
         ), '2016-01-22')
 
     def test_fuzzy_to_format(self):
-        self.transformer = formatting.DateFormattingTransform()
         self.assertEqual(self.transformer.transform(
             'I ordered it on January 17, 2047 ok?',
             to_format='MM-DD-YYYY'
         ), "01-17-2047")
 
     def test_fuzzy_relative_to_format(self):
-        self.transformer = formatting.DateFormattingTransform()
         self.assertNotEqual(self.transformer.transform(
             'next friday',
             to_format='MM-DD-YYYY'
         ), "")
 
     def test_parse_timestamp(self):
-        self.transformer = formatting.DateFormattingTransform()
         self.assertEqual(self.transformer.transform(
             1453498140,
             to_format='MM-DD-YYYY'

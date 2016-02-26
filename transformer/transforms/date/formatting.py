@@ -31,6 +31,9 @@ class DateFormattingTransform(BaseTransform):
     verb = 'format'
 
     def transform(self, date_value, from_format=u'', to_format=u'', **kwargs):
+        if not date_value:
+            return date_value
+
         dt = try_parse_date(date_value, from_format=from_format)
         if not dt:
             return self.raise_exception('Date could not be parsed')

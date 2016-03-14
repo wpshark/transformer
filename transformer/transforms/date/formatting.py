@@ -5,7 +5,7 @@ from transformer.util import try_parse_date
 from transformer.transforms.base import BaseTransform
 
 PREDEFINED_DATE_FORMATS = [
-    'ddd MMM DDD HH:mm:ss Z YYYY',
+    'ddd MMM DD HH:mm:ss Z YYYY',
     'MMMM DD YYYY HH:mm:ss',
     'MMMM DD YYYY',
     'MMM DD YYYY',

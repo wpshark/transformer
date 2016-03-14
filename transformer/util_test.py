@@ -89,7 +89,7 @@ class TestApp(unittest.TestCase):
                 # test with a separator, ala '5 days'
                 input_string = '{} {}'.format(v, suffix)
                 self.assertEqual(v, util.tdelta(input_string).get(key), '{} != {}'.format(input_string, v))
-                
+
                 # test with other text
                 input_string = 'hello {} {} world'.format(v, suffix)
                 self.assertEqual(v, util.tdelta(input_string).get(key), '{} != {}'.format(input_string, v))
@@ -97,3 +97,21 @@ class TestApp(unittest.TestCase):
                 # test with a + prefix, ala '+5d' or '+-10 days'
                 input_string = '+{}{}'.format(v, suffix)
                 self.assertEqual(v, util.tdelta(input_string).get(key), '{} != {}'.format(input_string, v))
+
+
+    def test_expand_chargroups(self):
+        tests = [
+            ('[:space:]', ' '),
+            ('[:s:]', ' '),
+            ('[:newline:]', '\n'),
+            ('[:n:]', '\n'),
+            ('[:return:]', '\r'),
+            ('[:r:]', '\r'),
+            ('[:r:][:n:]', '\r\n'),
+        ]
+
+        for group, expected in tests:
+            text = 'hello brave {} new world'
+            self.assertEqual(util.expand_special_chargroups(group), expected)
+            self.assertEqual(util.expand_special_chargroups(group + group), expected + expected)
+            self.assertEqual(util.expand_special_chargroups(text.format(group)), text.format(expected))

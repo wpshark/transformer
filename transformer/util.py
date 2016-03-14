@@ -131,8 +131,12 @@ def expand_special_chargroups(str_input):
     groups = [
         ('[:space:]', ' '),
         ('[:s:]', ' '),
+        ('[:newline:]', '\n'),
+        ('[:n:]', '\n'),
+        ('[:return:]', '\r'),
+        ('[:r:]', '\r'),
     ]
-    
+
     out = str_input
     for key, value in groups:
         out = out.replace(key, value)

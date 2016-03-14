@@ -128,7 +128,7 @@ def get_default_operators():
 
 def evaluate(formula, functions=None, operators=None):
     """
-    evaluate an spreadsheet-style formula using the functions and operators provided
+    evaluate a spreadsheet-style formula using the functions and operators provided
     or use the default functions and operators if none are provided
 
     """
@@ -420,7 +420,7 @@ class NumberSpreadsheetStyleFormulaTransform(BaseTransform):
     category = 'number'
     name = 'spreadsheet_formula'
     label = 'Spreadsheet-Style Formula'
-    help_text = 'Transform a number with an spreadsheet-style formula.'
+    help_text = 'Transform a number with a spreadsheet-style formula.'
 
     def transform(self, formula):
         return evaluate(formula)
@@ -428,9 +428,12 @@ class NumberSpreadsheetStyleFormulaTransform(BaseTransform):
     def all_fields(self, *args, **kwargs):
         input_field = self.build_input_field()
         input_field['label'] = 'Formula'
-        input_field['help_text'] = 'Spreadsheet-style formula to evaluate. Example: `ROUNDUP(100.1231, 2) * 100`. For more help and examples, see: https://zapier.com/help/formatter/#numbers'
+        input_field['help_text'] = (
+            'Spreadsheet-style formula to evaluate. Example: `ROUNDUP(100.1231, 2) * 100`. '
+            'For more help and examples, see: https://zapier.com/help/formatter/#numbers'
+        )
         return [
-            self.build_help_field(),            
+            self.build_help_field(),
             input_field
         ]
 

@@ -62,6 +62,7 @@ class BaseTransform(object):
         user, you can override this method to have complete control.
         """
         return [
+            self.build_help_field(),
             self.build_input_field(),
         ] + self.fields(*args, **kwargs)
 
@@ -82,6 +83,17 @@ class BaseTransform(object):
             'category': self.category,
             'help_text': self.help_text,
             'type': 'transform'
+        }
+
+    def build_help_field(self):
+        '''
+        Returns the definition for the default "help" field.
+        '''
+
+        return {
+            'key': 'transform_help',
+            'type': 'copy',
+            'help_text': self.help_text
         }
 
     def build_input_field(self):

@@ -57,6 +57,7 @@ class NumberMathTransform(BaseTransform):
 
     def all_fields(self, **kwargs):
         return [
+            self.build_help_field(),
             {
                 'type': 'unicode',
                 'required': True,

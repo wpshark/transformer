@@ -62,7 +62,7 @@ def transform():
         raise APIError('Missing request body', 400)
 
     if u'inputs' not in data:
-        raise APIError('Missing input data', 400)
+        data[u'inputs'] = ''
 
     # Each of these gets popped off so that we don't pass it along in the
     # options to the transform function

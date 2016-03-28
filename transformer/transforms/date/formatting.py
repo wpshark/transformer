@@ -56,7 +56,7 @@ class DateFormattingTransform(BaseTransform):
 
         choices = ','.join(['{}|{} ({})'.format(f, f, dt.format(f)) for f in PREDEFINED_DATE_FORMATS])
 
-        timezones = list(sorted(pytz.all_timezones))
+        timezones = list(sorted(pytz.common_timezones, key=lambda v: '-' + v if v.startswith('US') else v))
 
         return [
             {

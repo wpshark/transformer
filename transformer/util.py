@@ -117,6 +117,8 @@ def try_parse_number(number_value, cls=float, default=0):
     try:
         return int_or_float(cls(number_value))
     except:
+        if default is None:
+            return default
         return cls(default)
 
 

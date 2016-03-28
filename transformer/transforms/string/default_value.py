@@ -26,5 +26,10 @@ class StringDefaultValueTransform(BaseTransform):
             }
         ]
 
+    def build_input_field(self):
+        field = super(StringDefaultValueTransform, self).build_input_field()
+        field['required'] = False
+        return field
+
 
 register(StringDefaultValueTransform())

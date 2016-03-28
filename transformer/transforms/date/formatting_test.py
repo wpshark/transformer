@@ -39,6 +39,18 @@ class TestDateFormattingTransform(unittest.TestCase):
             to_format='MM-DD-YYYY'
         ), "01-17-2047")
 
+        self.assertEqual(self.transformer.transform(
+            'I ordered it on January 17, 2047 at 5PM ok?',
+            to_format='MM-DD-YYYY HH:mm Z'
+        ), "01-17-2047 17:00 -0000")
+
+        self.assertEqual(self.transformer.transform(
+            'I ordered it on January 17, 2047 at 5PM ok?',
+            to_format='MM-DD-YYYY HH:mm Z',
+            from_timezone='US/Eastern',
+            to_timezone='US/Central'
+        ), "01-17-2047 16:00 -0600")
+
     def test_fuzzy_relative_to_format(self):
         self.assertNotEqual(self.transformer.transform(
             'next friday',
@@ -82,3 +94,99 @@ class TestDateFormattingTransform(unittest.TestCase):
             to_format='YYYY-MM-DD',
             from_format='MMDDYYYY'
         ), '2016-01-02')
+
+    def test_change_timezone(self):
+        # if no *input* timezone specified in the string, and no to_timezone is provided, both are assumed to be UTC
+        self.assertEqual(self.transformer.transform(
+            '22/01/2016 12:11:10',
+            to_format='YYYY-MM-DD HH:mm:ss Z',
+            from_format='MM/DD/YYYY HH:mm:ss',
+        ), '2016-01-22 12:11:10 -0000')
+
+        # if a timezone is specified in the string, and no to_timezone is provided, it assumed to be UTC
+        self.assertEqual(self.transformer.transform(
+            '22/01/2016 12:11:10 -0500',
+            to_format='YYYY-MM-DD HH:mm:ss Z',
+            from_format='MM/DD/YYYY HH:mm:ss',
+        ), '2016-01-22 17:11:10 -0000')
+
+        # if a timezone specified in the string, and a to_timezone is provided, convert between each
+        self.assertEqual(self.transformer.transform(
+            '22/01/2016 12:11:10 -0500',
+            to_format='YYYY-MM-DD HH:mm:ss Z',
+            from_format='MM/DD/YYYY HH:mm:ss',
+            to_timezone='US/Central'
+        ), '2016-01-22 11:11:10 -0600')
+
+        # if both timezones are the same, no conversion occurs
+        for Z, timezone in (
+            ('-0500', 'US/Eastern'),
+            ('-0500', '-05:00'),
+            ('-0600', 'US/Central'),
+            ('-0600', '-06:00'),
+            ('-0700', 'US/Mountain'),
+            ('-0700', '-07:00'),
+            ('-0800', 'US/Pacific'),
+            ('-0800', '-08:00')
+        ):
+            self.assertEqual(self.transformer.transform(
+                '22/01/2016 12:11:10',
+                to_format='YYYY-MM-DD HH:mm:ss Z',
+                from_format='MM/DD/YYYY HH:mm:ss',
+                from_timezone=timezone,
+                to_timezone=timezone,
+            ), '2016-01-22 12:11:10 {}'.format(Z))
+
+        # if no *input* timezone specified in the string, it is assumed to be UTC unless specified
+        self.assertEqual(self.transformer.transform(
+            '22/01/2016 12:11:10',
+            to_format='YYYY-MM-DD HH:mm:ss Z',
+            from_format='MM/DD/YYYY HH:mm:ss',
+            to_timezone='US/Pacific'
+        ), '2016-01-22 04:11:10 -0800')
+
+        # if no *input* timezone specified in the string check to make sure a specified one is used
+        self.assertEqual(self.transformer.transform(
+            '22/01/2016 12:11:10',
+            to_format='YYYY-MM-DD HH:mm:ss Z',
+            from_format='MM/DD/YYYY HH:mm:ss',
+            from_timezone='US/Eastern',
+            to_timezone='US/Pacific'
+        ), '2016-01-22 09:11:10 -0800')
+
+        # if an *input* timezone *is* specified in the string check to make sure a specified one is *not* used
+        self.assertEqual(self.transformer.transform(
+            '22/01/2016 12:11:10 -05:00',
+            to_format='YYYY-MM-DD HH:mm:ss Z',
+            from_format='MM/DD/YYYY HH:mm:ss',
+            from_timezone='US/Central', # <-- this is IGNORED because the input string has a timezone specified
+            to_timezone='US/Pacific'
+        ), '2016-01-22 09:11:10 -0800')
+
+        # if an *input* timezone *is* specified in the string check to make sure it stays used even if no from_timezone is provided
+        self.assertEqual(self.transformer.transform(
+            '22/01/2016 12:11:10 -05:00',
+            to_format='YYYY-MM-DD HH:mm:ss Z',
+            from_format='MM/DD/YYYY HH:mm:ss',
+            to_timezone='US/Pacific'
+        ), '2016-01-22 09:11:10 -0800')
+
+    def test_all_timezones(self):
+        import pytz
+
+        prev = None
+        for tz in pytz.all_timezones:
+            # just make sure that the timezone conversion utc -> tz works...
+            output = self.transformer.transform('22/01/2016 12:11:10 -05:00', to_format='YYYY-MM-DD HH:mm:ss Z', from_format='MM/DD/YYYY HH:mm:ss', to_timezone=tz) # NOQA
+            self.assertTrue(output.startswith('2016-01-22') or output.startswith('2016-01-23'))
+
+            if prev:
+                # just make sure that the timezone conversion prev -> tz works...
+                output = self.transformer.transform('22/01/2016 12:11:10', to_format='YYYY-MM-DD HH:mm:ss Z', from_format='MM/DD/YYYY HH:mm:ss', from_timezone=prev, to_timezone=tz) # NOQA
+                self.assertTrue(output.startswith('2016-01-21') or output.startswith('2016-01-22') or output.startswith('2016-01-23'))
+
+                # just make sure that the timezone conversion tz -> prev works...
+                output = self.transformer.transform('22/01/2016 12:11:10', to_format='YYYY-MM-DD HH:mm:ss Z', from_format='MM/DD/YYYY HH:mm:ss', from_timezone=tz, to_timezone=prev) # NOQA
+                self.assertTrue(output.startswith('2016-01-21') or output.startswith('2016-01-22') or output.startswith('2016-01-23'))
+
+            prev = tz

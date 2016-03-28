@@ -32,9 +32,9 @@ class TestApp(unittest.TestCase):
 
     def test_no_input(self):
         response = self.app.post('/transform', data=json.dumps({'transform': 'string.upper_case'}))
-        self.assertEqual(400, response.status_code)
-        output = json.loads(response.data)
-        self.assertIn('Missing input', output['message'])
+        self.assertEqual(200, response.status_code)
+        output = json.loads(response.data)['outputs']
+        self.assertEqual('', output)
 
     def test_invalid_transform(self):
         response = self.app.post('/transform', data=json.dumps({'transform': 'does-not-exist', 'inputs': []}))

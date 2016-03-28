@@ -38,7 +38,7 @@ def fields():
     """ Returns a list of fields for a given transform """
     data = request.args
     if not data or u'transform' not in data:
-        raise APIError('Missing transform', 400)
+        return jsonify(fields=[])
 
     transform = registry.lookup(data['transform'], category=data.get(u'category'))
     if not transform:

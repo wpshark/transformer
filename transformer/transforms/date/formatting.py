@@ -78,19 +78,19 @@ class DateFormattingTransform(BaseTransform):
             {
                 'type': 'unicode',
                 'required': False,
+                'key': 'from_format',
+                'choices': choices,
+                'help_text': 'If we incorrectly interpret the incoming (input) date, set this to explicitly tell us the format. Otherwise, we will do our best to figure it out.' # NOQA
+            },
+            {
+                'type': 'unicode',
+                'required': False,
                 'key': 'from_timezone',
                 'label': 'From Timezone',
                 'choices': timezones,
                 'default': 'UTC',
                 'help_text': 'If no timezone is provided in the incoming (input) data, set this to explicitly tell us which to use. (Default: UTC)' # NOQA
             },
-            {
-                'type': 'unicode',
-                'required': False,
-                'key': 'from_format',
-                'choices': choices,
-                'help_text': 'If we incorrectly interpret the incoming (input) date, set this to explicitly tell us the format. Otherwise, we will do our best to figure it out.' # NOQA
-            }
         ]
 
 register(DateFormattingTransform())

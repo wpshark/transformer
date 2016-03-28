@@ -38,7 +38,7 @@ class StringSplitTransform(BaseTransform):
                 'required': False,
                 'key': 'separator',
                 'label': 'Separator',
-                'help_text': 'Character or word separator to split the text on. (Default: `[:space:]`)'
+                'help_text': 'Character or word separator to split the text on. (Default: `[:space:]`) For supported special characters, see: https://zapier.com/help/formatter/#special-characters)' # NOQA
             },
             {
                 'type': 'unicode',

@@ -24,3 +24,5 @@ class TestStringReplaceTransform(unittest.TestCase):
         self.assertEqual(transformer.transform("he llo  world", "[:space:][:space:]", "-"), "he llo-world")
         self.assertEqual(transformer.transform("he llo  world", "[:space:]", "-"), "he-llo--world")
         self.assertEqual(transformer.transform("he llo  world", "[:s:][:space:]", "-"), "he llo-world")
+        self.assertEqual(transformer.transform("a\ta", "[:tab:]", "[:space:]"), "a a")
+        self.assertEqual(transformer.transform("a a", "[:space:]", "[:newline:]"), "a\na")

@@ -131,6 +131,8 @@ def expand_special_chargroups(str_input):
     groups = [
         ('[:space:]', ' '),
         ('[:s:]', ' '),
+        ('[:tab:]', '\t'),
+        ('[:t:]', '\t'),
         ('[:newline:]', '\n'),
         ('[:n:]', '\n'),
         ('[:return:]', '\r'),

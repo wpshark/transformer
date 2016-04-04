@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import unittest
 import spreadsheet_formula
 
@@ -44,3 +46,7 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
         self.assertEqual(2, transformer.transform(u'IF(FALSE, 1, 2)'))
 
         self.assertEqual(100, transformer.transform(u'=100'))
+
+    def test_unicode_strings(self):
+        transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
+        self.assertEqual(u'χϩί', transformer.transform(u'="χϩί"'))

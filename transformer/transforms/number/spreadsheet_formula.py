@@ -147,7 +147,7 @@ def evaluate(formula, functions=None, operators=None):
 
     # check the nodes to make sure they are valid
     for i, n in enumerate(rpn):
-        key = str(n).upper()
+        key = n.string().upper()
         if isinstance(n, RangeNode):
             if n.token.tsubtype not in ('logical', 'text'):
                 raise Exception('Invalid Syntax: Only numeric values are allowed')
@@ -166,36 +166,36 @@ def evaluate(formula, functions=None, operators=None):
 
         if isinstance(n, FunctionNode):
             num = n.num_args
-            func = functions.get(str(n).upper())
+            func = functions.get(n.string().upper())
             if func.n < 0 and num < -func.n:
-                raise Exception('Invalid Formula: {} requires at least {} arguments'.format(str(n), -func.n))
+                raise Exception('Invalid Formula: {} requires at least {} arguments'.format(n.string(), -func.n))
             if func.n > 0 and num != func.n:
-                raise Exception('Invalid Formula: {} requires {} arguments ({} provided)'.format(str(n), func.n, num))
+                raise Exception('Invalid Formula: {} requires {} arguments ({} provided)'.format(n.string(), func.n, num))
             stack, args = stack[:-num], stack[-num:]
 
             try:
                 stack.append(func.f(*args))
             except Exception as e:
-                raise Exception('Function Error ({}): {}'.format(str(n).upper(), e))
+                raise Exception('Function Error ({}): {}'.format(n.string().upper(), e))
 
         if isinstance(n, OperatorNode):
             num = 2 if n.token.ttype.endswith('infix') else 1
-            key = str(n).upper()
+            key = n.string().upper()
             if num == 1: # unary operator has a special key to differentiate between the infix operator
                 key = 'u{}'.format(key)
             op = operators.get(key)
             if op.n < 0 and num < -op.n:
-                raise Exception('Invalid Formula: {} requires at least {} arguments'.format(str(n), -op.n))
+                raise Exception('Invalid Formula: {} requires at least {} arguments'.format(n.string(), -op.n))
             if op.n > 0 and num != op.n:
-                raise Exception('Invalid Formula: {} requires {} arguments ({} provided)'.format(str(n), op.n, num))
+                raise Exception('Invalid Formula: {} requires {} arguments ({} provided)'.format(n.string(), op.n, num))
             stack, args = stack[:-num], stack[-num:]
 
             try:
                 stack.append(op.f(*args))
             except TypeError as e:
-                raise Exception('Operation Error: {}'.format(str(n)))
+                raise Exception('Operation Error: {}'.format(n.string()))
             except Exception as e:
-                raise Exception('Operation Error ({}): {}'.format(str(n), e))
+                raise Exception('Operation Error ({}): {}'.format(n.string(), e))
 
     # if there's any stack left...the formula is invalid
     # all formulas should reduce to a single value

@@ -576,6 +576,8 @@ class ASTNode(object):
     def __init__(self,token):
         super(ASTNode,self).__init__()
         self.token = token
+    def string(self):
+        return u'{}'.format(self.token.tvalue)
     def __str__(self):
         return self.token.tvalue
 

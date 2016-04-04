@@ -50,3 +50,5 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
     def test_unicode_strings(self):
         transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
         self.assertEqual(u'χϩί', transformer.transform(u'="χϩί"'))
+        self.assertEqual(True, transformer.transform(u'="χϩί"="χϩί"'))
+        self.assertEqual(u'yes', transformer.transform(u'=IF("χϩί"="χϩί", "yes", "no")'))

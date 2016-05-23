@@ -15,10 +15,10 @@ class DateManipulateTransform(BaseTransform):
     noun = 'Date'
     verb = 'manipulate'
 
-    def transform(self, date_value, expression=u'', to_format=u'', **kwargs):
+    def transform(self, date_value, expression=u'', from_format=u'', to_format=u'', **kwargs):
         delta = tdelta(expression)
 
-        dt = try_parse_date(date_value)
+        dt = try_parse_date(date_value, from_format=from_format)
         if not dt:
             return self.raise_exception('Date could not be parsed')
 
@@ -45,7 +45,14 @@ class DateManipulateTransform(BaseTransform):
                 'key': 'to_format',
                 'choices': format_choices,
                 'help_text': 'Provide the format that the date should be converted to. For date format help, see: https://zapier.com/help/formatter/#date-time'
-            }
+            },
+            {
+                'type': 'unicode',
+                'required': False,
+                'key': 'from_format',
+                'choices': format_choices,
+                'help_text': 'If we incorrectly interpret the incoming (input) date, set this to explicitly tell us the format. Otherwise, we will do our best to figure it out.' # NOQA
+            },
         ]
 
 register(DateManipulateTransform())

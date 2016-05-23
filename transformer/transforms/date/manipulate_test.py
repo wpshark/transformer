@@ -45,3 +45,24 @@ class TestDateManipulateTransform(unittest.TestCase):
             expression='+1d +1h +1m',
             to_format='MMMM DD, YYYY HH:mm'
         ), "February 10, 2016 19:39")
+
+        # this will fail, because the day/month is ambiguous
+        self.assertNotEqual(transformer.transform(
+            '12-08-2016',
+            expression='+1 month',
+            to_format='DD-MM-YYYY',
+        ), '12-09-2016')
+
+        self.assertEqual(transformer.transform(
+            '12-08-2016',
+            expression='+1 month',
+            to_format='DD-MM-YYYY',
+            from_format='DD-MM-YYYY'
+        ), '12-09-2016')
+
+        self.assertEqual(transformer.transform(
+            '23-08-2016',
+            expression='+1 month',
+            to_format='DD-MM-YYYY',
+            from_format='DD-MM-YYYY'
+        ), '23-09-2016')

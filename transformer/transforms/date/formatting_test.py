@@ -1,4 +1,7 @@
 import unittest
+import datetime
+from mock import patch
+
 import formatting
 
 class TestDateFormattingTransform(unittest.TestCase):
@@ -52,10 +55,34 @@ class TestDateFormattingTransform(unittest.TestCase):
         ), "01-17-2047 16:00 -0600")
 
     def test_fuzzy_relative_to_format(self):
-        self.assertNotEqual(self.transformer.transform(
-            'next friday',
-            to_format='MM-DD-YYYY'
-        ), "")
+        self.time = datetime.datetime(2016, 6, 17)
+        class fakedatetime(datetime.datetime):
+            @classmethod
+            def now(cls):
+                return self.time
+            @classmethod
+            def today(cls):
+                return self.time
+        patcher = patch('datetime.datetime', fakedatetime)
+        patcher.start()
+
+        tests = [
+            ('sunday', '06-26-2016'),
+            ('monday', '06-20-2016'),
+            ('tuesday', '06-21-2016'),
+            ('wednesday', '06-22-2016'),
+            ('thursday', '06-23-2016'),
+            ('friday', '06-24-2016'),
+            ('saturday', '06-25-2016'),
+        ]
+
+        for day, date in tests:
+            self.assertEqual(self.transformer.transform(
+                'next %s' % day,
+                to_format='MM-DD-YYYY'
+            ), date)
+
+        patcher.stop()
 
     def test_parse_timestamp(self):
         self.assertEqual(self.transformer.transform(

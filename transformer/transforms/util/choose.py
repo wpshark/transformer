@@ -1,5 +1,6 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
+from transformer.util import try_parse_number
 
 import random
 
@@ -9,7 +10,7 @@ class UtilChooseTransform(BaseTransform):
     category = 'util'
     name = 'choose'
     label = 'Pick from list'
-    help_text = 'Pick the first, last, or random value that is not empty.'
+    help_text = 'Pick the first, last, random, or n-th value that is not empty.'
 
     noun = 'Values'
     verb = 'choose from'
@@ -33,15 +34,21 @@ class UtilChooseTransform(BaseTransform):
         if options is None:
             options = {}
 
-        op = options.get('operation')
-        if not op or op not in self._operations:
-            self.raise_exception('Invalid Operation')
-
         default = options.get('default')
 
-        op_func = self._operations[op]
+        op = options.get('operation', None)
+        if op is None or op == '':
+            self.raise_exception('Missing Operation')
 
-        return op_func(inputs, default=default)
+        if op in self._operations:
+            op_func = self._operations[op]
+            return op_func(inputs, default=default)
+
+        i = try_parse_number(op, cls=int, default=None)
+        if i is None:
+            return default
+
+        return self.choose_nth(i, inputs, default=default)
 
 
     def all_fields(self, **kwargs):
@@ -64,21 +71,18 @@ class UtilChooseTransform(BaseTransform):
         ]
 
 
+    def truthy_inputs(self, inputs):
+        """ return only truthy inputs """
+        return [v for v in inputs if not isinstance(v, basestring) or v]
+
+
     def choose_first(self, inputs, default=None):
         """
         choose the first _truthy_ string value or the first non-string value
         or the default value if there is neither.
 
         """
-        first = default
-        for v in inputs:
-            # if this value is a string and is falsy (i.e., empty) skip it
-            if isinstance(v, basestring) and not v:
-                continue
-            # otherwise, we have a valid first value...use it
-            first = v
-            break
-        return first
+        return self.choose_nth(0, inputs, default=default)
 
 
     def choose_last(self, inputs, default=None):
@@ -87,7 +91,20 @@ class UtilChooseTransform(BaseTransform):
         or the default value if there is none.
 
         """
-        return self.choose_first(reversed(inputs), default=default)
+        return self.choose_nth(-1, inputs, default=default)
+
+
+    def choose_nth(self, n, inputs, default=None):
+        """
+        choose the n-th _truthy_ string value or the n-th non-string value
+        or the default value if there is neither.
+
+        """
+        try:
+            return self.truthy_inputs(inputs)[n]
+        except:
+            pass
+        return default
 
 
     def choose_random(self, inputs, default=None):
@@ -96,7 +113,7 @@ class UtilChooseTransform(BaseTransform):
         or the default value if there is neither.
 
         """
-        truthy = [v for v in inputs if not isinstance(v, basestring) or v]
+        truthy = self.truthy_inputs(inputs)
         if not truthy:
             return default
         return random.choice(truthy)

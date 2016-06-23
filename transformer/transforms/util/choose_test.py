@@ -55,6 +55,17 @@ class TestUtilChooseTransform(unittest.TestCase):
 
         self.assertEqual(2, transformer.transform_many(['', 2, 3, ''], options={'operation': 'first', 'default': 0}))
         self.assertEqual(3, transformer.transform_many(['', 2, 3, ''], options={'operation': 'last', 'default': 0}))
+        self.assertEqual(2, transformer.transform_many(['', 2, 3, ''], options={'operation': '0', 'default': 0}))
+        self.assertEqual(3, transformer.transform_many(['', 2, 3, ''], options={'operation': '-1', 'default': 0}))
 
         self.assertEqual('a', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': 'first', 'default': 0}))
         self.assertEqual('b', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': 'last', 'default': 0}))
+
+        self.assertEqual(2, transformer.transform_many(['a', 2, 3, 'b'], options={'operation': '1', 'default': 0}))
+        self.assertEqual('a', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': '0', 'default': 0}))
+        self.assertEqual('b', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': '-1', 'default': 0}))
+        self.assertEqual('a', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': 0, 'default': 0}))
+        self.assertEqual('b', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': -1, 'default': 0}))
+
+        # invalid op == default
+        self.assertEqual(0, transformer.transform_many(['a', 2, 3, 'b'], options={'operation': 'asdf', 'default': 0}))

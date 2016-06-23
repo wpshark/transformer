@@ -1,9 +1,13 @@
 import arrow
 import dateutil.parser
+import pytz
+import parsedatetime
 
 import collections
+import datetime
 import re
 
+RELATIVE_KEYWORDS = ('next', 'last', 'yesterday', 'tomorrow', 'from', 'before')
 
 class APIError(Exception):
     """ Base Exception for the API """
@@ -66,6 +70,25 @@ def tdelta(input_):
     return delta
 
 
+def shift_date(dt, delta):
+    """
+    shift a datetime object by the delta amount generated from `tdelta`
+
+    we use dateutil.relativedelta for years, months, weeks and days
+    we use datetime.timedelta for hours, minutes, and seconds
+
+    """
+    from dateutil.relativedelta import relativedelta
+    from datetime import timedelta
+
+    relative_large = {k: v for k, v in delta.items() if k not in ('hours', 'minutes', 'seconds')}
+    relative_small = {k: v for k, v in delta.items() if k in ('hours', 'minutes', 'seconds')}
+
+    dt = dt + relativedelta(**relative_large)
+    dt = dt + timedelta(**relative_small)
+    return dt
+
+
 def try_parse_date(date_value, from_format=None):
     """
     try to parse a int or string value into a datetime format
@@ -85,13 +108,21 @@ def try_parse_date(date_value, from_format=None):
         except:
             pass
 
+        # try parsedatetime first if any of the relative keywords appear
+        if isinstance(date_value, basestring) and any(k in date_value for k in RELATIVE_KEYWORDS):
+            cal = parsedatetime.Calendar()
+            dt, _ = cal.parseDT(datetimeString=date_value, sourceTime=datetime.datetime.now(), tzinfo=pytz.timezone('UTC'))
+            if dt:
+                return dt
+
+        # try using arrow
         dt = arrow.get(date_value)
         if dt:
             return dt
     except:
         pass
 
-    # otherwise, use the fuzzy parser
+    # otherwise, use the fuzzy dateutil parser
     return dateutil.parser.parse(date_value, fuzzy=True)
 
 

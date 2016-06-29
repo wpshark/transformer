@@ -17,7 +17,10 @@ class StringTruncateTransform(BaseTransform):
         if not str_input or max_length <= 0:
             return u''
 
-        short_text = str_input[offset:max_length]
+        if offset < 0:
+            short_text = str_input[offset:][:max_length]
+        else:
+            short_text = str_input[offset:offset + max_length]
 
         if append_ellipsis:
             short_text = short_text[0:-3] + u'...'

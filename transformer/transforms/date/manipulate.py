@@ -16,6 +16,9 @@ class DateManipulateTransform(BaseTransform):
     verb = 'manipulate'
 
     def transform(self, date_value, expression=u'', from_format=u'', to_format=u'', **kwargs):
+        if date_value is None:
+            date_value = ''
+
         delta = tdelta(expression)
 
         dt = try_parse_date(date_value, from_format=from_format)

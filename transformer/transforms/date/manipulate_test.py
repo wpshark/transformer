@@ -44,6 +44,13 @@ class TestDateManipulateTransform(unittest.TestCase):
         ), now.strftime('%d-%m-%Y'))
 
         self.assertEqual(transformer.transform(
+            None,
+            expression='',
+            to_format='DD-MM-YYYY',
+            from_format='DD-MM-YYYY'
+        ), now.strftime('%d-%m-%Y'))
+
+        self.assertEqual(transformer.transform(
             '1455043091',
             expression='',
             to_format='MMMM DD, YYYY HH:mm'

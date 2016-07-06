@@ -49,6 +49,45 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
 
     def test_unicode_strings(self):
         transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
+
         self.assertEqual(u'χϩί', transformer.transform(u'="χϩί"'))
         self.assertEqual(True, transformer.transform(u'="χϩί"="χϩί"'))
         self.assertEqual(u'yes', transformer.transform(u'=IF("χϩί"="χϩί", "yes", "no")'))
+
+    def test_invalid_formula(self):
+        transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
+
+        try:
+            transformer.transform(u'1 . -1')
+            self.assertTrue(False)
+        except Exception:
+            # this test passes if an error is thrown
+            self.assertTrue(True)
+            pass
+
+        try:
+            transformer.transform(u'ABND(0,1)')
+            self.assertTrue(False)
+        except Exception:
+            # this test passes if an error is thrown
+            self.assertTrue(True)
+            pass
+
+    def test_empty_formula(self):
+        transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
+
+        try:
+            transformer.transform(None)
+            self.assertTrue(False)
+        except Exception:
+            # this test passes if an error is thrown
+            self.assertTrue(True)
+            pass
+
+        try:
+            transformer.transform('')
+            self.assertTrue(False)
+        except Exception:
+            # this test passes if an error is thrown
+            self.assertTrue(True)
+            pass

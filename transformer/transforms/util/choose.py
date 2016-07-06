@@ -31,7 +31,7 @@ class UtilChooseTransform(BaseTransform):
         if not inputs:
             if options is not None and options.get('default') is not None:
                 return options.get('default')
-            return ''
+            return u''
 
         if not isinstance(inputs, list):
             self.raise_exception('Choose requires a list of inputs')

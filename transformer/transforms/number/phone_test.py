@@ -81,7 +81,6 @@ class TestPhoneNumberFormattingTransform(unittest.TestCase):
             except Exception:
                 # this test passes if an error is thrown
                 self.assertTrue(True)
-                pass
 
     def test_empty_phone(self):
         transformer = phone.PhoneNumberFormattingTransform()

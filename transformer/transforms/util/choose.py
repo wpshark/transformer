@@ -28,6 +28,11 @@ class UtilChooseTransform(BaseTransform):
         accepting list inputs which we use to perform the choose operation.
 
         """
+        if not inputs:
+            if options is not None and options.get('default') is not None:
+                return options.get('default')
+            return ''
+
         if not isinstance(inputs, list):
             self.raise_exception('Choose requires a list of inputs')
 

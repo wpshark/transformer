@@ -14,6 +14,12 @@ class TestDateFormattingTransform(unittest.TestCase):
             to_format='YYYY-MM-DD'
         ), '')
 
+        self.assertEqual(self.transformer.transform(
+            None,
+            from_format='MM/DD/YYYY',
+            to_format='YYYY-MM-DD'
+        ), '')
+
     def test_from_to_format(self):
         # Try an ambiguous date with a month then days format
         self.assertEqual(self.transformer.transform(

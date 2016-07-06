@@ -6,9 +6,12 @@ class TestUtilChooseTransform(unittest.TestCase):
 
     def test_choose_empty(self):
         transformer = choose.UtilChooseTransform()
+
         self.assertEqual(0, transformer.transform_many([], options={'operation': 'first', 'default': 0}))
         self.assertEqual(0, transformer.transform_many([], options={'operation': 'last', 'default': 0}))
         self.assertEqual(0, transformer.transform_many([], options={'operation': 'random', 'default': 0}))
+
+        self.assertEqual(0, transformer.transform_many([None], options={'operation': 'first', 'default': 0}))
 
         self.assertEqual(0, transformer.transform_many([0], options={'operation': 'first', 'default': 1}))
         self.assertEqual(0, transformer.transform_many([0], options={'operation': 'last', 'default': 1}))
@@ -69,3 +72,13 @@ class TestUtilChooseTransform(unittest.TestCase):
 
         # invalid op == default
         self.assertEqual(0, transformer.transform_many(['a', 2, 3, 'b'], options={'operation': 'asdf', 'default': 0}))
+
+    def test_choose_invalid(self):
+        transformer = choose.UtilChooseTransform()
+
+        try:
+            transformer.transform_many(None, options={'operation': 'last', 'default': 0})
+        except Exception:
+            # this test passes if an error is thrown
+            self.assertTrue(True)
+            pass

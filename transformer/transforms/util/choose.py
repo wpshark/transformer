@@ -73,7 +73,7 @@ class UtilChooseTransform(BaseTransform):
 
     def truthy_inputs(self, inputs):
         """ return only truthy inputs """
-        return [v for v in inputs if not isinstance(v, basestring) or v]
+        return [v for v in inputs if (not isinstance(v, basestring) and v is not None) or v]
 
 
     def choose_first(self, inputs, default=None):

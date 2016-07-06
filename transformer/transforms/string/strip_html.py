@@ -13,6 +13,9 @@ class StringStripHtmlTransform(BaseTransform):
     verb = 'convert to plain text'
 
     def transform(self, str_input, **kwargs):
+        if not str_input:
+            return u''
+
         soup = BeautifulSoup(str_input, 'html.parser')
         return soup.get_text()
 

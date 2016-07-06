@@ -26,3 +26,4 @@ class TestNumberFormattingTransform(unittest.TestCase):
         self.assertEqual(transformer.transform(None, u'.', 0), u'')
         self.assertEqual(transformer.transform(u'0', u'.', 0), u'0')
         self.assertEqual(transformer.transform('-1234', u'.', 0), u'-1,234') # Negative numbers
+        self.assertEqual(transformer.transform(u'Something', u'.', 0), u'Something')

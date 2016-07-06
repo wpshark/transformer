@@ -13,3 +13,4 @@ class TestNumberCurrencyTransform(unittest.TestCase):
         self.assertEqual(u'\u20ac1.234,10', transformer.transform(1234.1, currency='EUR', currency_format=u'¤#,##0.00', currency_locale='es-ES'))
         self.assertEqual(u'CA$1.234,10', transformer.transform(1234.1, currency='CAD', currency_format=u'¤#,##0.00', currency_locale='es-ES'))
         self.assertEqual(u'CA$1,234.10', transformer.transform(1234.1, currency='CAD', currency_format=u'¤#,##0.00', currency_locale='en-US'))
+        self.assertEqual(u'CA$1,234.10', transformer.transform(u'CA$1,234.10', currency='CAD', currency_format=u'¤#,##0.00', currency_locale='en-US'))

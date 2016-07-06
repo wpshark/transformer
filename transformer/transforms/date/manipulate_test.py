@@ -1,8 +1,10 @@
 import unittest
 import manipulate
+import datetime
 
 class TestDateManipulateTransform(unittest.TestCase):
     def test_basic_manipulate(self):
+        now = datetime.datetime.now()
         transformer = manipulate.DateManipulateTransform()
         self.assertEqual(transformer.transform(
             '2016-01-01',
@@ -33,6 +35,13 @@ class TestDateManipulateTransform(unittest.TestCase):
             expression='',
             to_format='MMMM DD, YYYY'
         ), "February 01, 2016")
+
+        self.assertEqual(transformer.transform(
+            '',
+            expression='',
+            to_format='DD-MM-YYYY',
+            from_format='DD-MM-YYYY'
+        ), now.strftime('%d-%m-%Y'))
 
         self.assertEqual(transformer.transform(
             '1455043091',

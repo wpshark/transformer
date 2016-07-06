@@ -15,7 +15,7 @@ class UtilLookupTransform(BaseTransform):
     def build_input_field(self):
         return {
             'type': 'unicode',
-            'required': True,
+            'required': False,
             'key': 'inputs',
             'label': 'Lookup Key',
             'help_text': '{} you would like to {}.'.format(self.noun or 'Value', self.verb or 'transform')

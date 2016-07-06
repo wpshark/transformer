@@ -427,6 +427,7 @@ class NumberSpreadsheetStyleFormulaTransform(BaseTransform):
 
     def all_fields(self, *args, **kwargs):
         input_field = self.build_input_field()
+        input_field['required'] = True
         input_field['label'] = 'Formula'
         input_field['help_text'] = (
             'Spreadsheet-style formula to evaluate. Example: `ROUNDUP(100.1231, 2) * 100`. '

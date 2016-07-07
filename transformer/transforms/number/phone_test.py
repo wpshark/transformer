@@ -1,8 +1,6 @@
 import unittest
 import phone
 
-from transformer.util import APIError
-
 class TestPhoneNumberFormattingTransform(unittest.TestCase):
     def test_phone(self):
         transformer = phone.PhoneNumberFormattingTransform()
@@ -76,8 +74,8 @@ class TestPhoneNumberFormattingTransform(unittest.TestCase):
         ]
 
         for input_number, format_string, expected_output in tests:
-            with self.assertRaises(APIError):
-                transformer.transform(input_number, format_string=format_string)
+            out = transformer.transform(input_number, format_string=format_string)
+            self.assertEqual(out, input_number)
 
     def test_empty_phone(self):
         transformer = phone.PhoneNumberFormattingTransform()

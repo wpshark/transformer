@@ -26,7 +26,7 @@ class PhoneNumberFormattingTransform(BaseTransform):
             return phone_string
 
         if not phonenumbers.is_possible_number(number) or not phonenumbers.is_valid_number(number):
-            return self.raise_exception('Phone number is not valid')
+            return phone_string
 
         try:
             format_int = int(format_string)

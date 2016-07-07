@@ -3,6 +3,7 @@ from transformer.transforms.base import BaseTransform
 
 import re
 import phonenumbers
+from phonenumbers import NumberParseException
 
 class PhoneNumberFormattingTransform(BaseTransform):
 
@@ -18,10 +19,14 @@ class PhoneNumberFormattingTransform(BaseTransform):
         if phone_string is None:
             return u''
 
-        number = phonenumbers.parse(phone_string, default_region)
+        try:
+            number = phonenumbers.parse(phone_string, default_region)
+        except NumberParseException:
+            # Return original input if we can't do anything with it
+            return phone_string
 
         if not phonenumbers.is_possible_number(number) or not phonenumbers.is_valid_number(number):
-            return self.raise_exception('Phone number is not valid')
+            return phone_string
 
         try:
             format_int = int(format_string)

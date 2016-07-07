@@ -49,6 +49,25 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
 
     def test_unicode_strings(self):
         transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
+
         self.assertEqual(u'χϩί', transformer.transform(u'="χϩί"'))
         self.assertEqual(True, transformer.transform(u'="χϩί"="χϩί"'))
         self.assertEqual(u'yes', transformer.transform(u'=IF("χϩί"="χϩί", "yes", "no")'))
+
+    def test_invalid_formula(self):
+        transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
+
+        with self.assertRaises(Exception):
+            transformer.transform(u'1 . -1')
+
+        with self.assertRaises(Exception):
+            transformer.transform(u'ABND(0,1)')
+
+    def test_empty_formula(self):
+        transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
+
+        with self.assertRaises(Exception):
+            transformer.transform(None)
+
+        with self.assertRaises(Exception):
+            transformer.transform('')

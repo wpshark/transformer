@@ -103,7 +103,7 @@ class BaseTransform(object):
 
         return {
             'type': 'unicode',
-            'required': True,
+            'required': False,
             'key': 'inputs',
             'label': 'Input',
             'help_text': '{} you would like to {}.'.format(self.noun or 'Value', self.verb or 'transform')

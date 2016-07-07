@@ -4,6 +4,7 @@ import truncate
 class TestStringTruncateTransform(unittest.TestCase):
     def test_truncate(self):
         transformer = truncate.StringTruncateTransform()
+
         self.assertEqual(transformer.transform(None), "")
         self.assertEqual(transformer.transform("", max_length=5), "")
         self.assertEqual(transformer.transform("abc", max_length=5), "abc")
@@ -13,7 +14,9 @@ class TestStringTruncateTransform(unittest.TestCase):
 
     def test_truncate_with_offset(self):
         transformer = truncate.StringTruncateTransform()
+
         self.assertEqual(transformer.transform("", max_length=5, offset=1), "")
+        self.assertEqual(transformer.transform(None, max_length=5, offset=1), "")
         self.assertEqual(transformer.transform("abc", max_length=5, offset=1), "bc")
         self.assertEqual(transformer.transform("abcdef", max_length=3, offset=1), "bcd")
         self.assertEqual(transformer.transform("abcde", max_length=5, offset=-1), "e")
@@ -23,6 +26,9 @@ class TestStringTruncateTransform(unittest.TestCase):
 
     def test_truncate_with_ellipsis(self):
         transformer = truncate.StringTruncateTransform()
+
+        self.assertEqual(transformer.transform("", max_length=2, append_ellipsis=True), "")
+        self.assertEqual(transformer.transform(None, max_length=2, append_ellipsis=True), "")
         self.assertEqual(transformer.transform("abcdefg", max_length=6, append_ellipsis=True), "abc...")
         self.assertEqual(transformer.transform("abcdef", max_length=6, append_ellipsis=True), "abc...")
         self.assertEqual(transformer.transform("abc", max_length=2, append_ellipsis=True), "...")

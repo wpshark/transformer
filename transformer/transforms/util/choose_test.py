@@ -6,9 +6,14 @@ class TestUtilChooseTransform(unittest.TestCase):
 
     def test_choose_empty(self):
         transformer = choose.UtilChooseTransform()
+
         self.assertEqual(0, transformer.transform_many([], options={'operation': 'first', 'default': 0}))
         self.assertEqual(0, transformer.transform_many([], options={'operation': 'last', 'default': 0}))
         self.assertEqual(0, transformer.transform_many([], options={'operation': 'random', 'default': 0}))
+
+        self.assertEqual(0, transformer.transform_many([None], options={'operation': 'first', 'default': 0}))
+        self.assertEqual(0, transformer.transform_many(None, options={'operation': 'first', 'default': 0}))
+        self.assertEqual('', transformer.transform_many(None, options={'operation': 'first'}))
 
         self.assertEqual(0, transformer.transform_many([0], options={'operation': 'first', 'default': 1}))
         self.assertEqual(0, transformer.transform_many([0], options={'operation': 'last', 'default': 1}))

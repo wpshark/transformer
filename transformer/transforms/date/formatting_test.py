@@ -14,6 +14,12 @@ class TestDateFormattingTransform(unittest.TestCase):
             to_format='YYYY-MM-DD'
         ), '')
 
+        self.assertEqual(self.transformer.transform(
+            None,
+            from_format='MM/DD/YYYY',
+            to_format='YYYY-MM-DD'
+        ), '')
+
     def test_from_to_format(self):
         # Try an ambiguous date with a month then days format
         self.assertEqual(self.transformer.transform(
@@ -53,6 +59,13 @@ class TestDateFormattingTransform(unittest.TestCase):
             from_timezone='US/Eastern',
             to_timezone='US/Central'
         ), "01-17-2047 16:00 -0600")
+
+        # If the string has no date info, you get today
+        now = datetime.datetime.now()
+        self.assertEqual(self.transformer.transform(
+            'This has nothing to do with dates',
+            to_format='MM-DD-YYYY',
+        ), now.strftime('%m-%d-%Y'))
 
     def test_fuzzy_relative_to_format(self):
         self.time = datetime.datetime(2016, 6, 17)

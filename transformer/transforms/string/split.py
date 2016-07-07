@@ -13,6 +13,9 @@ class StringSplitTransform(BaseTransform):
     verb = 'split'
 
     def transform(self, str_input, separator=u'', index=0, **kwargs):
+        if not str_input:
+            return u''
+
         separator = expand_special_chargroups(separator)
 
         if separator:

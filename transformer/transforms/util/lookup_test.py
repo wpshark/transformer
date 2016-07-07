@@ -16,3 +16,5 @@ class TestUtilLookupTransform(unittest.TestCase):
         self.assertEquals(transformer.transform(u'', table={'a': 1, u'b': 2, '': 10}, fallback=u'cat'), u'cat')
 
         self.assertEquals(transformer.transform(u'nothing'), u'')
+        self.assertEquals(transformer.transform(u'something', fallback=u'something'), u'something')
+        self.assertEquals(transformer.transform(None), u'')

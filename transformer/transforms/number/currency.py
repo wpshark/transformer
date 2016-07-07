@@ -16,7 +16,15 @@ class NumberCurrencyTransform(BaseTransform):
     verb = 'format as a currency'
 
     def transform(self, currency_input, currency=u'USD', currency_locale=u'en_US', currency_format=u'¤#,##0.00 ¤¤'):
-        m = money.Money(currency_input, currency)
+        if currency_input is None:
+            return u''
+
+        try:
+            m = money.Money(currency_input, currency)
+        except ValueError:
+            # Return original input if we can't do anything with it
+            return currency_input
+
         currency_locale = currency_locale.replace('-', '_') # make sure to use the babel locale format
         return m.format(currency_locale, currency_format)
 

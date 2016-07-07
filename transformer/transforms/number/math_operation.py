@@ -29,6 +29,9 @@ class NumberMathTransform(BaseTransform):
         accepting list inputs which we use to perform math operations.
 
         """
+        if not inputs:
+            return 0
+
         if not isinstance(inputs, list):
             self.raise_exception('Math Operations require a list of inputs')
 

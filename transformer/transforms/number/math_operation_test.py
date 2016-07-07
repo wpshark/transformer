@@ -14,3 +14,4 @@ class TestNumberMathTransform(unittest.TestCase):
         self.assertEqual(0, transformer.transform_many(['Something'], options={'operation': 'add'}))
         self.assertEqual(0, transformer.transform_many([None, 'Something'], options={'operation': 'add'}))
         self.assertEqual(1, transformer.transform_many(['Something', None, 1], options={'operation': 'add'}))
+        self.assertEqual(0, transformer.transform_many(None, options={'operation': 'add'}))

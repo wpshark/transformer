@@ -57,37 +57,17 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
     def test_invalid_formula(self):
         transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
 
-        try:
+        with self.assertRaises(Exception):
             transformer.transform(u'1 . -1')
-            self.assertTrue(False)
-        except Exception:
-            # this test passes if an error is thrown
-            self.assertTrue(True)
-            pass
 
-        try:
+        with self.assertRaises(Exception):
             transformer.transform(u'ABND(0,1)')
-            self.assertTrue(False)
-        except Exception:
-            # this test passes if an error is thrown
-            self.assertTrue(True)
-            pass
 
     def test_empty_formula(self):
         transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
 
-        try:
+        with self.assertRaises(Exception):
             transformer.transform(None)
-            self.assertTrue(False)
-        except Exception:
-            # this test passes if an error is thrown
-            self.assertTrue(True)
-            pass
 
-        try:
+        with self.assertRaises(Exception):
             transformer.transform('')
-            self.assertTrue(False)
-        except Exception:
-            # this test passes if an error is thrown
-            self.assertTrue(True)
-            pass

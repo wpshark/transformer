@@ -1,6 +1,8 @@
 import unittest
 import phone
 
+from transformer.util import APIError
+
 class TestPhoneNumberFormattingTransform(unittest.TestCase):
     def test_phone(self):
         transformer = phone.PhoneNumberFormattingTransform()
@@ -71,16 +73,11 @@ class TestPhoneNumberFormattingTransform(unittest.TestCase):
             ('555-1212', '1', '555-1212'),
             ('1555-1212', '1', '555-1212'),
             ('1-22-555-1212', '1', '555-1212'),
-            ('Something', '1', 'Something'),
         ]
 
         for input_number, format_string, expected_output in tests:
-            try:
-                out = transformer.transform(input_number, format_string=format_string)
-                self.assertEqual(out, expected_output)
-            except Exception:
-                # this test passes if an error is thrown
-                self.assertTrue(True)
+            with self.assertRaises(APIError):
+                transformer.transform(input_number, format_string=format_string)
 
     def test_empty_phone(self):
         transformer = phone.PhoneNumberFormattingTransform()
@@ -90,3 +87,6 @@ class TestPhoneNumberFormattingTransform(unittest.TestCase):
 
         out = transformer.transform('', format_string='1')
         self.assertEqual(out, '')
+
+        out = transformer.transform('Something', format_string='1')
+        self.assertEqual(out, 'Something')

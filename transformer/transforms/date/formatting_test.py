@@ -42,6 +42,29 @@ class TestDateFormattingTransform(unittest.TestCase):
             from_format='MM/DD/YYYY'
         ), '2016-01-22')
 
+        # Unix
+        self.assertEqual(self.transformer.transform(
+            '2431375200',
+            to_format='X',
+            from_format='X'
+        ), '2431375200')
+
+        self.assertEqual(self.transformer.transform(
+            '2431375200',
+            from_format='X',
+            to_format='MM-DD-YYYY HH:mm Z',
+            from_timezone='UTC',
+            to_timezone='US/Central'
+        ), "01-17-2047 16:00 -0600")
+
+        self.assertEqual(self.transformer.transform(
+            '2431375200',
+            from_format='X',
+            to_format='MM-DD-YYYY HH:mm Z',
+            from_timezone='US/Eastern',
+            to_timezone='US/Central'
+        ), "01-17-2047 21:00 -0600")
+
     def test_fuzzy_to_format(self):
         self.assertEqual(self.transformer.transform(
             'I ordered it on January 17, 2047 ok?',
@@ -66,6 +89,15 @@ class TestDateFormattingTransform(unittest.TestCase):
             'This has nothing to do with dates',
             to_format='MM-DD-YYYY',
         ), now.strftime('%m-%d-%Y'))
+
+        self.assertEqual(self.transformer.transform(
+            'I ordered it on January 17, 2047 at 5PM ok?',
+            to_format='X',
+            from_timezone='US/Eastern',
+            to_timezone='US/Central'
+        ), '2431375200')
+
+
 
     def test_fuzzy_relative_to_format(self):
         self.time = datetime.datetime(2016, 6, 17)

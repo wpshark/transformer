@@ -19,7 +19,8 @@ PREDEFINED_DATE_FORMATS = [
     'MM/DD/YY',
     'DD-MM-YYYY',
     'DD/MM/YYYY',
-    'DD/MM/YY'
+    'DD/MM/YY',
+    'X'
 ]
 
 class DateFormattingTransform(BaseTransform):

@@ -1,5 +1,6 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
+import re
 
 class StringNumberExtractTransform(BaseTransform):
 
@@ -15,8 +16,8 @@ class StringNumberExtractTransform(BaseTransform):
         if not str_input:
             return u''
 
-        num = u''.join([x for x in str_input if x in u'1234567890-., '])
-        return num.strip()
+        match = re.search(r'[-+]?[\d,]+[\.]?\d*', str_input)
+        return match.group(0) if match else u''
 
 
 register(StringNumberExtractTransform())

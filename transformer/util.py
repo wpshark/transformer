@@ -123,7 +123,12 @@ def try_parse_date(date_value, from_format=None):
         pass
 
     # otherwise, use the fuzzy dateutil parser
-    return dateutil.parser.parse(date_value, fuzzy=True)
+    try:
+        return dateutil.parser.parse(date_value, fuzzy=True)
+    except:
+        # `dateutil.parser.parse` raises an exception on certain input, but returns "today" on other inputs
+        # so we instead just return a datetime object representing "today" on those exceptions.
+        return datetime.datetime(*datetime.datetime.utcnow().utctimetuple()[:3])
 
 
 def int_or_float(v):

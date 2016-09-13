@@ -91,6 +91,11 @@ class TestDateFormattingTransform(unittest.TestCase):
         ), now.strftime('%m-%d-%Y'))
 
         self.assertEqual(self.transformer.transform(
+            '10/29 or 10/30',
+            to_format='MM-DD-YYYY',
+        ), now.strftime('%m-%d-%Y'))
+
+        self.assertEqual(self.transformer.transform(
             'I ordered it on January 17, 2047 at 5PM ok?',
             to_format='X',
             from_timezone='US/Eastern',

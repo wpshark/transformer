@@ -14,7 +14,7 @@ class StringEmailExtractTransform(BaseTransform):
 
     def transform(self, str_input, **kwargs):
         if isinstance(str_input, basestring):
-            match = re.search(r'[\w\.-]+@[\w\.-]+\.[\w\.-]+', str_input)
+            match = re.search(r"[a-zA-Z0-9_\".+-]+@((\[?[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\]?)|([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+))", str_input, re.U)
             return match.group(0) if match else u''
         else:
             return u''

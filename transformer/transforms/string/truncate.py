@@ -17,6 +17,10 @@ class StringTruncateTransform(BaseTransform):
         if not str_input or max_length <= 0:
             return u''
 
+        # Don't append the ellipsis if we're already within the limits
+        if (len(str_input) - offset) <= max_length:
+            append_ellipsis = False
+
         if offset < 0:
             short_text = str_input[offset:][:max_length]
         else:
@@ -47,7 +51,7 @@ class StringTruncateTransform(BaseTransform):
                 'required': False,
                 'key': 'append_ellipsis',
                 'label': 'Append Ellipsis?',
-                'help_text': 'Will shorten text by three characters and append "..." to the end.'
+                'help_text': 'Will shorten text by three characters and append "..." to the end, if necessary.'
             }
         ]
 

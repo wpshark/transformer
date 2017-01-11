@@ -2,6 +2,7 @@
 import unittest
 import email_extract
 
+
 class TestStringEmailExtractTransform(unittest.TestCase):
     def test_emailextract(self):
         transformer = email_extract.StringEmailExtractTransform()
@@ -12,10 +13,24 @@ class TestStringEmailExtractTransform(unittest.TestCase):
         self.assertEqual(transformer.transform("my email is broken thomas@hils .com"), "")
         self.assertEqual(transformer.transform("my email is broken thomas+hils@gmail.com"), "thomas+hils@gmail.com")
 
+        self.assertEqual(transformer.transform("some quoted \"email@gmail.com\" text"), "email@gmail.com")
+        self.assertEqual(transformer.transform("some quoted \\\"email@gmail.com\\\" text"), "email@gmail.com")
+
+        message = "something \"58jv9nv79038tn0@zapzap.com\" on Monday November 28"
+        self.assertEqual(transformer.transform(message), "58jv9nv79038tn0@zapzap.com")
+
+        message = "something \"58jv9nv79038tn0@zapzap.com\" on Monday November 28"
+        self.assertEqual(transformer.transform(message), "58jv9nv79038tn0@zapzap.com")
+
+        message = "something \"58jv9nv79038tn0@zapzap.com\" on Monday November 28"
+        self.assertEqual(transformer.transform(message), "58jv9nv79038tn0@zapzap.com")
+
     def test_emailvalidation(self):
         valid_emails = [
             u"email@example.com",
             u"firstname.lastname@example.com",
+            u"firstname..lastname@example.com",
+            u"firstname..lastname..awesome@example.com",
             u"email@subdomain.example.com",
             u"firstname+lastname@example.com",
             u"email@123.123.123.123",
@@ -30,6 +45,12 @@ class TestStringEmailExtractTransform(unittest.TestCase):
             u"firstname-lastname@example.com",
         ]
 
+        possibly_valid_emails = [
+            (u"firstname...lastname@example.com", "lastname@example.com"),
+            (u".firstname@example.com", "firstname@example.com"),
+            (u"done. firstname@example.com", "firstname@example.com")
+        ]
+
         invalid_emails = [
             u"plainaddress",
             u"#@%^%#$@#$@#.com",
@@ -38,6 +59,11 @@ class TestStringEmailExtractTransform(unittest.TestCase):
             u"あいうえお@example.com",
             u"email@example",
             u"\"(),:;<>[\]@example.com",
+            u"firstname.@example.com",
+            u".firstname.@example.com",
+            u"\".firstname\"@example.com",
+            u"\"firstname.\"@example.com",
+            u"\".firstname.\"@example.com",
         ]
 
         transformer = email_extract.StringEmailExtractTransform()
@@ -45,6 +71,10 @@ class TestStringEmailExtractTransform(unittest.TestCase):
         for email in valid_emails:
             self.assertEqual(transformer.transform(email), email)
             self.assertEqual(transformer.transform("123--- %s ---456" % email), email)
+
+        for email, expected in possibly_valid_emails:
+            self.assertEqual(transformer.transform(email), expected)
+            self.assertEqual(transformer.transform("123--- %s ---456" % email), expected)
 
         for email in invalid_emails:
             self.assertEqual(transformer.transform(email), "")

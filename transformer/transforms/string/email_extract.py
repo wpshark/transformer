@@ -1,6 +1,8 @@
+# -*- coding: utf8 -*-
 import re
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
+
 
 class StringEmailExtractTransform(BaseTransform):
 
@@ -13,8 +15,28 @@ class StringEmailExtractTransform(BaseTransform):
     verb = 'find and copy an email address from'
 
     def transform(self, str_input, **kwargs):
+        """
+        The local-part of the email address may use any of these ASCII characters:
+            Uppercase and lowercase English letters (a–z, A–Z)
+            Digits 0 to 9
+            Characters ! # $ % & ' * + - / = ? ^ _ ` { | } ~
+            Character . (dot, period, full stop) provided that it is not the first or last character,
+            and provided also that it does not appear two or more times consecutively (e.g. John..Doe@example.com).
+        """
         if isinstance(str_input, basestring):
-            match = re.search(r"[a-zA-Z0-9_\".+-]+@((\[?[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\]?)|([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+))", str_input, re.U)
+            match = re.search(r"""
+                (
+                    "( (?!\.) ( [a-zA-Z0-9!#$%&'*/=?^_`{|}~+-] | (?<!\.)\.{1,2} )+ (?<!\.) )"
+                     |
+                     ( (?!\.) ( [a-zA-Z0-9!#$%&'*/=?^_`{|}~+-] | (?<!\.)\.{1,2} )+ (?<!\.) )
+                )
+                @
+                (
+                    (\[?[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\]?)
+                    |
+                    ([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)
+                )
+            """, str_input, re.U | re.VERBOSE)
             return match.group(0) if match else u''
         else:
             return u''

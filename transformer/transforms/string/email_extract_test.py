@@ -29,8 +29,6 @@ class TestStringEmailExtractTransform(unittest.TestCase):
         valid_emails = [
             u"email@example.com",
             u"firstname.lastname@example.com",
-            u"firstname..lastname@example.com",
-            u"firstname..lastname..awesome@example.com",
             u"email@subdomain.example.com",
             u"firstname+lastname@example.com",
             u"email@123.123.123.123",
@@ -43,12 +41,18 @@ class TestStringEmailExtractTransform(unittest.TestCase):
             u"email@example.museum",
             u"email@example.co.jp",
             u"firstname-lastname@example.com",
+            u"\".firstname\"@example.com",
+            u"\"firstname.\"@example.com",
+            u"\".firstname.\"@example.com",
+            u"\"first..name\"@example.com",
         ]
 
         possibly_valid_emails = [
-            (u"firstname...lastname@example.com", "lastname@example.com"),
-            (u".firstname@example.com", "firstname@example.com"),
-            (u"done. firstname@example.com", "firstname@example.com")
+            (u"firstname...lastname@example.com", u"lastname@example.com"),
+            (u"firstname..lastname@example.com", u"lastname@example.com"),
+            (u"firstname..lastname..awesome@example.com", u"awesome@example.com"),
+            (u".firstname@example.com", u"firstname@example.com"),
+            (u"done. firstname@example.com", u"firstname@example.com")
         ]
 
         invalid_emails = [
@@ -61,9 +65,6 @@ class TestStringEmailExtractTransform(unittest.TestCase):
             u"\"(),:;<>[\]@example.com",
             u"firstname.@example.com",
             u".firstname.@example.com",
-            u"\".firstname\"@example.com",
-            u"\"firstname.\"@example.com",
-            u"\".firstname.\"@example.com",
         ]
 
         transformer = email_extract.StringEmailExtractTransform()

@@ -17,18 +17,23 @@ class StringEmailExtractTransform(BaseTransform):
     def transform(self, str_input, **kwargs):
         """
         The local-part of the email address may use any of these ASCII characters:
+
             Uppercase and lowercase English letters (a–z, A–Z)
             Digits 0 to 9
             Characters ! # $ % & ' * + - / = ? ^ _ ` { | } ~
-            Character . (dot, period, full stop) provided that it is not the first or last character,
+            Character . provided that it is not the first or last character,
             and provided also that it does not appear two or more times consecutively (e.g. John..Doe@example.com).
+
+            These rules change for quoted strings "as..df"@example.com which allows any
+            combination of printable ASCII characters except backslash and doublequote.
+
         """
         if isinstance(str_input, basestring):
             match = re.search(r"""
                 (
-                    "( (?!\.) ( [a-zA-Z0-9!#$%&'*/=?^_`{|}~+-] | (?<!\.)\.{1,2} )+ (?<!\.) )"
+                    "( [a-zA-Z0-9!#$%&'*/=?^_`{|}~+.,)(><-]+ )"
                      |
-                     ( (?!\.) ( [a-zA-Z0-9!#$%&'*/=?^_`{|}~+-] | (?<!\.)\.{1,2} )+ (?<!\.) )
+                     ( (?!\.) ( [a-zA-Z0-9!#$%&'*/=?^_`{|}~+-] | (?<!\.)\. )+ (?<!\.) )
                 )
                 @
                 (

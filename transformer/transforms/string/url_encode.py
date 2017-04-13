@@ -13,9 +13,12 @@ class StringURLEncodeTransform(BaseTransform):
     noun = 'Text'
     verb = 'encode'
 
-    def transform(self, str_input, use_plus=False, **kwargs):
+    def transform(self, str_input, use_plus=False, encoding='utf-8', **kwargs):
         if not str_input:
             return u''
+
+        if isinstance(str_input, unicode):
+            str_input = str_input.encode(encoding)
 
         if use_plus:
             encoded_text = urllib.quote_plus(str_input)

@@ -1,13 +1,14 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 from transformer.transforms.number.spreadsheet_formula_tokenizer import shunting_yard, FunctionNode, OperatorNode, OperandNode, RangeNode
-from transformer.util import int_or_float
+from transformer.util import int_or_decimal
 
 import collections
 import fractions
 import operator
 import random
 import math
+from decimal import Decimal, ROUND_HALF_UP
 
 
 def get_default_functions():
@@ -41,7 +42,7 @@ def get_default_functions():
         'EVEN': Func(1, func_even),
         'INT': Func(1, int),
         'ODD': Func(1, func_odd),
-        'ROUND': Func(-1, round),
+        'ROUND': Func(-1, func_round),
         'ROUNDDOWN': Func(-1, func_rounddown),
         'ROUNDUP': Func(-1, func_roundup),
         'TRUNC': Func(-1, func_trunc),
@@ -222,7 +223,7 @@ def eval_operand(n):
     if not isinstance(n, OperandNode):
         return None
     if n.token.tsubtype == 'number':
-        return int_or_float(float(n.token.tvalue))
+        return int_or_decimal(n.token.tvalue)
     if n.token.tsubtype == 'logical':
         return True if 'TRUE' in n.token.tvalue else False
     if n.token.tsubtype == 'text':
@@ -254,7 +255,7 @@ def func_value(a):
         a = a.replace(',', '')
         if '%' in a:
             return evaluate(a)
-        return int_or_float(float(a))
+        return int_or_decimal(float(a))
     except:
         raise Exception('{} cannot be parsed into a number'.format(a))
 
@@ -290,6 +291,10 @@ def func_odd(a):
         return a
     return func_ceil(a, 2) + 1
 
+
+def func_round(a, places=0):
+    """ functor for rounding using standard rules """
+    return a.quantize(Decimal(10) ** -places, rounding=ROUND_HALF_UP)
 
 def func_rounddown(a, places=0):
     """ functor for round down with decimal places """

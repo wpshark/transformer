@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+from decimal import Decimal
+
 import spreadsheet_formula
 
 class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
@@ -46,6 +48,9 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
         self.assertEqual(2, transformer.transform(u'IF(FALSE, 1, 2)'))
 
         self.assertEqual(100, transformer.transform(u'=100'))
+
+        # ROUND returns a Decimal object
+        self.assertEqual(Decimal('8.39'), transformer.transform(u'ROUND(8.385, 2)'))
 
     def test_unicode_strings(self):
         transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()

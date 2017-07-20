@@ -6,6 +6,7 @@ import parsedatetime
 import collections
 import datetime
 import re
+from decimal import Decimal
 
 RELATIVE_KEYWORDS = ('next', 'last', 'yesterday', 'tomorrow', 'from', 'before')
 
@@ -131,17 +132,17 @@ def try_parse_date(date_value, from_format=None):
         return datetime.datetime(*datetime.datetime.utcnow().utctimetuple()[:3])
 
 
-def int_or_float(v):
+def int_or_decimal(v):
     """
-    returns an int if the value is a long or int or a float that can be
-    represented by an int...otherwise returns a float
-
+    returns an int if the value is a long or int.
+    otherwise returns a `decimal.Decimal`.
     """
     if isinstance(v, int) or isinstance(v, long):
         return v
-    if v.is_integer():
+    try:
         return long(v)
-    return float(v)
+    except ValueError:
+        return Decimal(v)
 
 
 def try_parse_number(number_value, cls=float, default=0):
@@ -151,7 +152,7 @@ def try_parse_number(number_value, cls=float, default=0):
     if isinstance(number_value, int) or isinstance(number_value, long) or isinstance(number_value, float):
         return number_value
     try:
-        return int_or_float(cls(number_value))
+        return int_or_decimal(cls(number_value))
     except:
         if default is None:
             return default

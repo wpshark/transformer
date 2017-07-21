@@ -1,7 +1,6 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 from transformer.transforms.number.spreadsheet_formula_tokenizer import shunting_yard, FunctionNode, OperatorNode, OperandNode, RangeNode
-from transformer.util import int_or_decimal
 
 import collections
 import fractions
@@ -111,7 +110,7 @@ def get_default_operators():
     """ generate a mapping of default operators allowed for evaluation """
     return {
         'u-': Func(1, operator.neg),             # unary negation
-        'u%': Func(1, lambda a: a / float(100)), # unary percentage
+        'u%': Func(1, lambda a: a / Decimal(100)), # unary percentage
         '&': Func(2, operator.concat),
         '^': Func(2, operator.pow),
         '+': Func(2, op_add),
@@ -194,6 +193,7 @@ def evaluate(formula, functions=None, operators=None):
             try:
                 stack.append(op.f(*args))
             except TypeError as e:
+                raise
                 raise Exception('Operation Error: {}'.format(n.string()))
             except Exception as e:
                 raise Exception('Operation Error ({}): {}'.format(n.string(), e))
@@ -223,7 +223,7 @@ def eval_operand(n):
     if not isinstance(n, OperandNode):
         return None
     if n.token.tsubtype == 'number':
-        return int_or_decimal(n.token.tvalue)
+        return Decimal(n.token.tvalue)
     if n.token.tsubtype == 'logical':
         return True if 'TRUE' in n.token.tvalue else False
     if n.token.tsubtype == 'text':
@@ -255,7 +255,7 @@ def func_value(a):
         a = a.replace(',', '')
         if '%' in a:
             return evaluate(a)
-        return int_or_decimal(float(a))
+        return Decimal(a)
     except:
         raise Exception('{} cannot be parsed into a number'.format(a))
 

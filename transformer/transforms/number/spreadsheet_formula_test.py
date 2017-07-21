@@ -15,14 +15,17 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
         self.assertEqual(6, transformer.transform(u'1 + 2 + 3'))
         self.assertEqual(-4, transformer.transform(u'1 - 2 - 3'))
         self.assertEqual(6, transformer.transform(u'1 * 2 * 3'))
-        self.assertEqual(0.16666666666666666, transformer.transform(u'1 / 2 / 3'))
+        self.assertEqual(
+            Decimal('0.1666666666666666666666666667'),
+            transformer.transform(u'1 / 2 / 3'),
+        )
 
         self.assertEqual(1, transformer.transform(u'(1 + 2) / 3 + MIN(0, 10)'))
 
         self.assertEqual(1, transformer.transform(u'MOD(1, 2)'))
         self.assertEqual(0, transformer.transform(u'MOD(2, 2)'))
 
-        self.assertEqual(0.01, transformer.transform(u'1%'))
+        self.assertEqual(Decimal('0.01'), transformer.transform(u'1%'))
 
         self.assertEqual(True, transformer.transform(u'MOD(2, 2) = 0'))
         self.assertEqual(True, transformer.transform(u'MOD(2, 2) <> 1'))
@@ -51,6 +54,13 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
 
         # ROUND returns a Decimal object
         self.assertEqual(Decimal('8.39'), transformer.transform(u'ROUND(8.385, 2)'))
+
+        self.assertEqual(
+            Decimal('4078.715'),
+            transformer.transform(
+                u'=(135743*(0.5/100))+(135743*(0/100))+2050+1350',
+            ),
+        )
 
     def test_unicode_strings(self):
         transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()

@@ -193,7 +193,6 @@ def evaluate(formula, functions=None, operators=None):
             try:
                 stack.append(op.f(*args))
             except TypeError as e:
-                raise
                 raise Exception('Operation Error: {}'.format(n.string()))
             except Exception as e:
                 raise Exception('Operation Error ({}): {}'.format(n.string(), e))

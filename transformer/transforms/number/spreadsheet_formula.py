@@ -278,24 +278,24 @@ def func_lcm(a, b):
 
 def func_ceil(a, factor=1):
     """ functor for ceiling with factor factor """
-    return int(factor * Decimal(math.ceil(Decimal(a) / factor)))
+    return factor * Decimal(math.ceil(Decimal(a) / factor))
 
 
 def func_floor(a, factor=1):
     """ functor for floor with factor factor """
-    return int(factor * Decimal(math.floor(Decimal(a) / factor)))
+    return factor * Decimal(math.floor(Decimal(a) / factor))
 
 
 def func_even(a):
     """ functor for rounding up to next even integer """
-    return func_ceil(a, 2)
+    return int(func_ceil(a, 2))
 
 
 def func_odd(a):
     """ functor for rounding up to next odd integer """
     if a % 2 == 1:
         return a
-    return func_ceil(a, 2) + 1
+    return int(func_ceil(a, 2)) + 1
 
 
 def func_round(a, places=0):

@@ -51,6 +51,10 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
             'MEDIAN(50, 1.5, 10)',
             'MEDIAN(50, 1.5)',
             'GEOMEAN(50, 1.5, 10)',
+            'CEILING(-2.5)',
+            'CEILING(-2.5, .25)',
+            'FLOOR(4.3)',
+            'FLOOR(-2.5, .25)',
         ]
         for operation in operations:
             transformed = self.transform(operation)
@@ -60,10 +64,6 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
 
     def test_int_output(self):
         operations = [
-            'CEILING(-2.5)',
-            'CEILING(-2.5, .25)',
-            'FLOOR(4.3)',
-            'FLOOR(-2.5, .25)',
             'EVEN(-4.3)',
             'INT(4.5)',
             'ODD(4.3)',

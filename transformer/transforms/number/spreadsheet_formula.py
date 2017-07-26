@@ -300,16 +300,16 @@ def func_odd(a):
 
 def func_round(a, places=0):
     """ functor for rounding using standard rules """
-    return a.quantize(Decimal(10) ** -places, rounding=ROUND_HALF_UP)
+    return Decimal(a).quantize(Decimal(10) ** -places, rounding=ROUND_HALF_UP)
 
 def func_rounddown(a, places=0):
     """ functor for round down with decimal places """
-    return a.quantize(Decimal(10) ** -places, rounding=ROUND_DOWN)
+    return Decimal(a).quantize(Decimal(10) ** -places, rounding=ROUND_DOWN)
 
 
 def func_roundup(a, places=0):
     """ functor for round up with decimal places """
-    return a.quantize(Decimal(10) ** -places, rounding=ROUND_UP)
+    return Decimal(a).quantize(Decimal(10) ** -places, rounding=ROUND_UP)
 
 
 def func_trunc(a, places=0):

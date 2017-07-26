@@ -278,12 +278,12 @@ def func_lcm(a, b):
 
 def func_ceil(a, factor=1):
     """ functor for ceiling with factor factor """
-    return int(factor * math.ceil(Decimal(a) / factor))
+    return int(factor * Decimal(math.ceil(Decimal(a) / factor)))
 
 
 def func_floor(a, factor=1):
     """ functor for floor with factor factor """
-    return int(factor * math.floor(Decimal(a) / factor))
+    return int(factor * Decimal(math.floor(Decimal(a) / factor)))
 
 
 def func_even(a):

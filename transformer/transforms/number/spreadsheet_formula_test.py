@@ -6,6 +6,71 @@ from decimal import Decimal
 import spreadsheet_formula
 
 class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
+    transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
+
+    def transform(self, *args):
+        return self.transformer.transform(*args)
+
+    def test_decimal_output(self):
+        operations = [
+            'ABS(-5.5)',
+            'PRODUCT(-2.5, -2.5)',
+            'SQRT(20)',
+            'POW(-2.5, 5)',
+            'POWER(-2.5, 5)',
+            'ROUND(2.5555, 2)',
+            'ROUNDDOWN(2.5555, 2)',
+            'ROUNDUP(2.5555, 2)',
+            'RAND()',
+            'RANDBETWEEN(1, 5)',
+            'PI()',
+            'SQRTPI(2)',
+            'DEGREES(3.14)',
+            'RADIANS(180)',
+            'COS(180)',
+            'ACOS(0.5)',
+            'COSH(0.5)',
+            'ACOSH(1)',
+            'SIN(180)',
+            'ASIN(0.5)',
+            'SINH(0.5)',
+            'ASINH(1)',
+            'TAN(180)',
+            'ATAN(0.5)',
+            'ATAN2(0.5, 2)',
+            'TANH(0.5)',
+            'ATANH(0.5)',
+            'EXP(0.5)',
+            'LN(0.5)',
+            'LOG(0.5, 5)',
+            'LOG10(100)',
+            'AVERAGE(50, 1.5, 10)',
+            'MEDIAN(50, 1.5, 10)',
+            'MEDIAN(50, 1.5)',
+            'GEOMEAN(50, 1.5, 10)',
+        ]
+        for operation in operations:
+            transformed = self.transform(operation)
+            self.assertIsInstance(
+                transformed, Decimal, '%s: %r is not an instance of Decimal.' % (operation, transformed)
+            )
+
+    def test_int_output(self):
+        operations = [
+            'CEILING(-2.5)',
+            'FLOOR(4.3)',
+            'EVEN(-4.3)',
+            'INT(4.5)',
+            'ODD(4.3)',
+            'TRUNC(4.3)',
+            'FACT(5)',
+            'FACTDOUBLE(5)',
+        ]
+        for operation in operations:
+            transformed = self.transform(operation)
+            self.assertIsInstance(
+                transformed, (int, long), '%s: %r is not an instance of int.' % (operation, transformed)
+            )
 
     def test_spreadsheet_formula(self):
         transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()

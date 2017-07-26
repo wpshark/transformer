@@ -7,7 +7,7 @@ import fractions
 import operator
 import random
 import math
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP, ROUND_DOWN, ROUND_UP
 
 
 def get_default_functions():
@@ -29,9 +29,9 @@ def get_default_functions():
         # Basic Math Operations
         'SUM': Func(-2, wrap_reduce(op_add)),
         'PRODUCT': Func(-2, wrap_reduce(operator.mul)),
-        'SQRT': Func(1, math.sqrt),
-        'POW': Func(2, math.pow),
-        'POWER': Func(2, math.pow),
+        'SQRT': Func(1, wrap_decimal(math.sqrt)),
+        'POW': Func(2, wrap_decimal(math.pow)),
+        'POWER': Func(2, wrap_decimal(math.pow)),
         'QUOTIENT': Func(2, operator.div),
         'MOD': Func(2, operator.mod),
 
@@ -47,7 +47,7 @@ def get_default_functions():
         'TRUNC': Func(-1, func_trunc),
 
         # Random Numbers
-        'RAND': Func(0, random.random),
+        'RAND': Func(0, wrap_decimal(random.random)),
         'RANDBETWEEN': Func(2, func_randbetween),
 
         # Basic Stats
@@ -55,29 +55,29 @@ def get_default_functions():
         'MIN': Func(0, wrap_reduce(min)),
 
         # Trig
-        'PI': Func(0, lambda: math.pi),
-        'SQRTPI': Func(1, lambda a: math.sqrt(a) * math.pi),
-        'DEGREES': Func(1, math.degrees),
-        'RADIANS': Func(1, math.radians),
-        'COS': Func(1, math.cos),
-        'ACOS': Func(1, math.acos),
-        'COSH': Func(1, math.cosh),
-        'ACOSH': Func(1, math.acosh),
-        'SIN': Func(1, math.sin),
-        'ASIN': Func(1, math.asin),
-        'SINH': Func(1, math.sinh),
-        'ASINH': Func(1, math.asinh),
-        'TAN': Func(1, math.tan),
-        'ATAN': Func(1, math.atan),
-        'ATAN2': Func(2, math.atan2),
-        'TANH': Func(1, math.tanh),
-        'ATANH': Func(1, math.atanh),
+        'PI': Func(0, lambda: Decimal(math.pi)),
+        'SQRTPI': Func(1, lambda a: Decimal(math.sqrt(a) * math.pi)),
+        'DEGREES': Func(1, wrap_decimal(math.degrees)),
+        'RADIANS': Func(1, wrap_decimal(math.radians)),
+        'COS': Func(1, wrap_decimal(math.cos)),
+        'ACOS': Func(1, wrap_decimal(math.acos)),
+        'COSH': Func(1, wrap_decimal(math.cosh)),
+        'ACOSH': Func(1, wrap_decimal(math.acosh)),
+        'SIN': Func(1, wrap_decimal(math.sin)),
+        'ASIN': Func(1, wrap_decimal(math.asin)),
+        'SINH': Func(1, wrap_decimal(math.sinh)),
+        'ASINH': Func(1, wrap_decimal(math.asinh)),
+        'TAN': Func(1, wrap_decimal(math.tan)),
+        'ATAN': Func(1, wrap_decimal(math.atan)),
+        'ATAN2': Func(2, wrap_decimal(math.atan2)),
+        'TANH': Func(1, wrap_decimal(math.tanh)),
+        'ATANH': Func(1, wrap_decimal(math.atanh)),
 
         # Exponents and Logarithms
-        'EXP': Func(1, math.exp),
-        'LN': Func(1, math.log),
-        'LOG': Func(2, math.log),
-        'LOG10': Func(1, math.log10),
+        'EXP': Func(1, wrap_decimal(math.exp)),
+        'LN': Func(1, wrap_decimal(math.log)),
+        'LOG': Func(2, wrap_decimal(math.log)),
+        'LOG10': Func(1, wrap_decimal(math.log10)),
 
         # Factorials
         'FACT': Func(1, func_factorial),
@@ -246,6 +246,13 @@ def wrap_varlist(f):
     return _wrap
 
 
+def wrap_decimal(f):
+    """ wrap a function returning a numeric to make sure it returns a Decimal """
+    def _wrap(*args):
+        return Decimal(f(*args))
+    return _wrap
+
+
 def func_value(a):
     """ functor for converting a text string into a numeric value """
     if not isinstance(a, basestring):
@@ -271,12 +278,12 @@ def func_lcm(a, b):
 
 def func_ceil(a, factor=1):
     """ functor for ceiling with factor factor """
-    return factor * math.ceil(float(a) / factor)
+    return int(factor * math.ceil(Decimal(a) / factor))
 
 
 def func_floor(a, factor=1):
     """ functor for floor with factor factor """
-    return factor * math.floor(float(a) / factor)
+    return int(factor * math.floor(Decimal(a) / factor))
 
 
 def func_even(a):
@@ -297,22 +304,22 @@ def func_round(a, places=0):
 
 def func_rounddown(a, places=0):
     """ functor for round down with decimal places """
-    return math.floor(a * (10 ** places)) / float(10 ** places)
+    return a.quantize(Decimal(10) ** -places, rounding=ROUND_DOWN)
 
 
 def func_roundup(a, places=0):
     """ functor for round up with decimal places """
-    return math.ceil(a * (10 ** places)) / float(10 ** places)
+    return a.quantize(Decimal(10) ** -places, rounding=ROUND_UP)
 
 
 def func_trunc(a, places=0):
     """ functor for truncate with decimals """
-    return math.trunc(a * (10 ** places)) / float(10 ** places)
+    return int(math.trunc(a * (10 ** places)) / Decimal(10 ** places))
 
 
 def func_randbetween(a, b):
     """ functor for random int in range """
-    return a if a == b else random.randint(min(a, b), max(a, b))
+    return a if a == b else Decimal(random.randint(min(a, b), max(a, b)))
 
 
 def func_factorial(a):
@@ -331,7 +338,7 @@ def func_double_factorial(a):
 
 def func_average(*args):
     """ functor for average of a series of numbers """
-    return reduce(operator.add, args) / float(len(args))
+    return reduce(operator.add, args) / Decimal(len(args))
 
 
 def func_median(*args):
@@ -342,7 +349,7 @@ def func_median(*args):
         return data[n // 2]
     else:
         i = n // 2
-        return (data[i - 1] + data[i]) / 2.0
+        return (data[i - 1] + data[i]) / Decimal(2)
 
 
 def func_mode(*args):
@@ -352,7 +359,7 @@ def func_mode(*args):
 
 def func_geomean(*args):
     """ functor for geometric mean of a series of numbers """
-    return (reduce(operator.mul, args)) ** (1.0 / len(args))
+    return (reduce(operator.mul, args)) ** (Decimal(1) / len(args))
 
 
 def func_if(test, true_value, *args):

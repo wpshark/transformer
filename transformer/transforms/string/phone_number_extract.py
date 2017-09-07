@@ -11,7 +11,7 @@ URL_REGEX = r"""(?:(?:\+?([1-9]|[0-9][0-9]|[0-9][0-9][0-9])\s*(?:[.-]\s*)?)?(?:\
 class StringPhoneExtractTransform(BaseTransform):
 
     category = 'string'
-    name = 'url_extract'
+    name = 'phone_extract'
     label = 'Extract Phone Number'
     help_text = 'Find and copy a complete out of a text field. Finds the first phone number only.'
 

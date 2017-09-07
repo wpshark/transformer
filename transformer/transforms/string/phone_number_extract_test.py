@@ -3,7 +3,7 @@ import phone_number_extract
 
 class TestStringPhoneExtractTransform(unittest.TestCase):
     def test_phoneextract(self):
-        transformer = url_extract.StringPhoneExtractTransform()
+        transformer = phone_number_extract.StringPhoneExtractTransform()
         self.assertEqual(transformer.transform(""), "")
         self.assertEqual(transformer.transform(None), "")
         self.assertEqual(transformer.transform("This is a test without a phone number"), "")

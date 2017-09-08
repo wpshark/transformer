@@ -13,7 +13,7 @@ class StringPhoneExtractTransform(BaseTransform):
     category = 'string'
     name = 'phone_extract'
     label = 'Extract Phone Number'
-    help_text = 'Find and copy a complete out of a text field. Finds the first phone number only.'
+    help_text = 'Find and copy a complete phone number out of a text field. Finds the first phone number only.'
 
     noun = 'Text'
     verb = 'find and copy a phone number from'

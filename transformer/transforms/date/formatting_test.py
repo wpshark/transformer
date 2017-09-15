@@ -85,6 +85,7 @@ class TestDateFormattingTransform(unittest.TestCase):
 
         # If the string has no date info, you get today
         now = datetime.datetime.now()
+
         self.assertEqual(self.transformer.transform(
             'This has nothing to do with dates',
             to_format='MM-DD-YYYY',
@@ -93,6 +94,8 @@ class TestDateFormattingTransform(unittest.TestCase):
         self.assertEqual(self.transformer.transform(
             '10/29 or 10/30',
             to_format='MM-DD-YYYY',
+            from_timezone='US/Eastern',
+            to_timezone='US/Central'
         ), now.strftime('%m-%d-%Y'))
 
         self.assertEqual(self.transformer.transform(
@@ -102,14 +105,14 @@ class TestDateFormattingTransform(unittest.TestCase):
             to_timezone='US/Central'
         ), '2431375200')
 
-
-
     def test_fuzzy_relative_to_format(self):
         self.time = datetime.datetime(2016, 6, 17)
+
         class fakedatetime(datetime.datetime):
             @classmethod
             def now(cls):
                 return self.time
+
             @classmethod
             def today(cls):
                 return self.time

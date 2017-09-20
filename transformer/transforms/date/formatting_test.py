@@ -4,6 +4,24 @@ from mock import patch
 
 import formatting
 
+
+def make_fakedatetime(time):
+    class fakedatetime(datetime.datetime):
+        @classmethod
+        def now(cls):
+            return time
+
+        @classmethod
+        def today(cls):
+            return time
+
+        @classmethod
+        def utcnow(cls):
+            return time
+
+    return fakedatetime
+
+
 class TestDateFormattingTransform(unittest.TestCase):
     transformer = formatting.DateFormattingTransform()
 
@@ -84,58 +102,55 @@ class TestDateFormattingTransform(unittest.TestCase):
         ), "01-17-2047 16:00 -0600")
 
         # If the string has no date info, you get today
-        now = datetime.datetime.now()
+        with patch('datetime.datetime', make_fakedatetime(datetime.datetime(2016, 6, 17))):
+            yesterday = datetime.datetime(2016, 6, 16)
+            now = datetime.datetime.today()
 
-        self.assertEqual(self.transformer.transform(
-            'This has nothing to do with dates',
-            to_format='MM-DD-YYYY',
-        ), now.strftime('%m-%d-%Y'))
+            self.assertEqual(self.transformer.transform(
+                'This has nothing to do with dates',
+                to_format='MM-DD-YYYY',
+            ), now.strftime('%m-%d-%Y'))
 
-        self.assertEqual(self.transformer.transform(
-            '10/29 or 10/30',
-            to_format='MM-DD-YYYY',
-            from_timezone='US/Eastern',
-            to_timezone='US/Central'
-        ), now.strftime('%m-%d-%Y'))
+            # test today in UTC
+            self.assertEqual(self.transformer.transform(
+                '10/29 or 10/30',
+                to_format='MM-DD-YYYY',
+                from_timezone='UTC',
+                to_timezone='UTC'
+            ), now.strftime('%m-%d-%Y'))
 
-        self.assertEqual(self.transformer.transform(
-            'I ordered it on January 17, 2047 at 5PM ok?',
-            to_format='X',
-            from_timezone='US/Eastern',
-            to_timezone='US/Central'
-        ), '2431375200')
+            # test "yesterday" in US/Eastern
+            self.assertEqual(self.transformer.transform(
+                '10/29 or 10/30',
+                to_format='MM-DD-YYYY',
+                from_timezone='UTC',
+                to_timezone='US/Eastern'
+            ), yesterday.strftime('%m-%d-%Y'))
+
+            self.assertEqual(self.transformer.transform(
+                'I ordered it on January 17, 2047 at 5PM ok?',
+                to_format='X',
+                from_timezone='US/Eastern',
+                to_timezone='US/Central'
+            ), '2431375200')
 
     def test_fuzzy_relative_to_format(self):
-        self.time = datetime.datetime(2016, 6, 17)
+        with patch('datetime.datetime', make_fakedatetime(datetime.datetime(2016, 6, 17))):
+            tests = [
+                ('sunday', '06-26-2016'),
+                ('monday', '06-20-2016'),
+                ('tuesday', '06-21-2016'),
+                ('wednesday', '06-22-2016'),
+                ('thursday', '06-23-2016'),
+                ('friday', '06-24-2016'),
+                ('saturday', '06-25-2016'),
+            ]
 
-        class fakedatetime(datetime.datetime):
-            @classmethod
-            def now(cls):
-                return self.time
-
-            @classmethod
-            def today(cls):
-                return self.time
-        patcher = patch('datetime.datetime', fakedatetime)
-        patcher.start()
-
-        tests = [
-            ('sunday', '06-26-2016'),
-            ('monday', '06-20-2016'),
-            ('tuesday', '06-21-2016'),
-            ('wednesday', '06-22-2016'),
-            ('thursday', '06-23-2016'),
-            ('friday', '06-24-2016'),
-            ('saturday', '06-25-2016'),
-        ]
-
-        for day, date in tests:
-            self.assertEqual(self.transformer.transform(
-                'next %s' % day,
-                to_format='MM-DD-YYYY'
-            ), date)
-
-        patcher.stop()
+            for day, date in tests:
+                self.assertEqual(self.transformer.transform(
+                    'next %s' % day,
+                    to_format='MM-DD-YYYY'
+                ), date)
 
     def test_parse_timestamp(self):
         self.assertEqual(self.transformer.transform(
@@ -239,11 +254,12 @@ class TestDateFormattingTransform(unittest.TestCase):
             '22/01/2016 12:11:10 -05:00',
             to_format='YYYY-MM-DD HH:mm:ss Z',
             from_format='MM/DD/YYYY HH:mm:ss',
-            from_timezone='US/Central', # <-- this is IGNORED because the input string has a timezone specified
+            from_timezone='US/Central',  # <-- this is IGNORED because the input string has a timezone specified
             to_timezone='US/Pacific'
         ), '2016-01-22 09:11:10 -0800')
 
-        # if an *input* timezone *is* specified in the string check to make sure it stays used even if no from_timezone is provided
+        # if an *input* timezone *is* specified in the string check to make
+        # sure it stays used even if no from_timezone is provided
         self.assertEqual(self.transformer.transform(
             '22/01/2016 12:11:10 -05:00',
             to_format='YYYY-MM-DD HH:mm:ss Z',
@@ -257,16 +273,22 @@ class TestDateFormattingTransform(unittest.TestCase):
         prev = None
         for tz in pytz.all_timezones:
             # just make sure that the timezone conversion utc -> tz works...
-            output = self.transformer.transform('22/01/2016 12:11:10 -05:00', to_format='YYYY-MM-DD HH:mm:ss Z', from_format='MM/DD/YYYY HH:mm:ss', to_timezone=tz) # NOQA
+            output = self.transformer.transform('22/01/2016 12:11:10 -05:00', to_format='YYYY-MM-DD HH:mm:ss Z', from_format='MM/DD/YYYY HH:mm:ss', to_timezone=tz)  # NOQA
             self.assertTrue(output.startswith('2016-01-22') or output.startswith('2016-01-23'))
 
             if prev:
                 # just make sure that the timezone conversion prev -> tz works...
-                output = self.transformer.transform('22/01/2016 12:11:10', to_format='YYYY-MM-DD HH:mm:ss Z', from_format='MM/DD/YYYY HH:mm:ss', from_timezone=prev, to_timezone=tz) # NOQA
-                self.assertTrue(output.startswith('2016-01-21') or output.startswith('2016-01-22') or output.startswith('2016-01-23'))
+                output = self.transformer.transform('22/01/2016 12:11:10', to_format='YYYY-MM-DD HH:mm:ss Z', from_format='MM/DD/YYYY HH:mm:ss', from_timezone=prev, to_timezone=tz)  # NOQA
+                self.assertTrue(
+                    output.startswith('2016-01-21') or
+                    output.startswith('2016-01-22') or
+                    output.startswith('2016-01-23'))
 
                 # just make sure that the timezone conversion tz -> prev works...
-                output = self.transformer.transform('22/01/2016 12:11:10', to_format='YYYY-MM-DD HH:mm:ss Z', from_format='MM/DD/YYYY HH:mm:ss', from_timezone=tz, to_timezone=prev) # NOQA
-                self.assertTrue(output.startswith('2016-01-21') or output.startswith('2016-01-22') or output.startswith('2016-01-23'))
+                output = self.transformer.transform('22/01/2016 12:11:10', to_format='YYYY-MM-DD HH:mm:ss Z', from_format='MM/DD/YYYY HH:mm:ss', from_timezone=tz, to_timezone=prev)  # NOQA
+                self.assertTrue(
+                    output.startswith('2016-01-21') or
+                    output.startswith('2016-01-22') or
+                    output.startswith('2016-01-23'))
 
             prev = tz

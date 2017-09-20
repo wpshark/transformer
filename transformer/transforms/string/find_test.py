@@ -1,6 +1,8 @@
 import unittest
 import find
 
+from transformer.util import APIError
+
 
 class TestStringFindTransform(unittest.TestCase):
     def test_find(self):
@@ -32,6 +34,19 @@ class TestStringFindTransform(unittest.TestCase):
             ("baa", "a", 2, 2),
             ("baa hello", "hello", 1, 4),
             ("baa hello", "hello", 5, -1),
+            ("baa hello", "hello", "1", 4),
         ]
         for s, f, offset, expected_pos in tests:
             self.assertEqual(transformer.transform(s, find=f, offset=offset), expected_pos)
+
+    def test_find_offset_invalid(self):
+        transformer = find.StringFindTransform()
+
+        with self.assertRaises(APIError):
+            transformer.transform("test", find="", offset=None)
+
+        with self.assertRaises(APIError):
+            transformer.transform("test", find="", offset=1.1)
+
+        with self.assertRaises(APIError):
+            transformer.transform("test", find="", offset="0a1")

@@ -21,7 +21,7 @@ class StringFindTransform(BaseTransform):
         if isinstance(offset, basestring):
             offset = try_parse_number(offset, cls=int, default=None)
 
-        if offset is None or not isinstance(offset, (int, long)):
+        if not isinstance(offset, (int, long)):
             self.raise_exception('offset must be a number')
 
         if str_input and find:

@@ -7,9 +7,9 @@ import parsedatetime
 import collections
 import datetime
 import re
-from decimal import Decimal
 
 RELATIVE_KEYWORDS = ('next', 'last', 'yesterday', 'tomorrow', 'from', 'before')
+
 
 class APIError(Exception):
     """ Base Exception for the API """
@@ -117,7 +117,8 @@ def try_parse_date(date_value, from_format=None):
                 return dt
 
         try:
-            # Assume that a sufficiently large timestamp is actually in millisecond resolution, but with the decimal point missing
+            # Assume that a sufficiently large timestamp is actually in
+            # millisecond resolution, but with the decimal point missing
             date_value = float(date_value)
             if date_value >= (1 << 32) - 1:
                 date_value /= 1000.0
@@ -127,7 +128,10 @@ def try_parse_date(date_value, from_format=None):
         # try parsedatetime first if any of the relative keywords appear
         if isinstance(date_value, basestring) and any(k in date_value for k in RELATIVE_KEYWORDS):
             cal = parsedatetime.Calendar()
-            dt, _ = cal.parseDT(datetimeString=date_value, sourceTime=datetime.datetime.now(), tzinfo=pytz.timezone('UTC'))
+            dt, _ = cal.parseDT(
+                datetimeString=date_value,
+                sourceTime=datetime.datetime.now(),
+                tzinfo=pytz.timezone('UTC'))
             if dt:
                 return dt
 
@@ -157,7 +161,6 @@ def int_or_float(v):
     if v.is_integer():
         return long(v)
     return float(v)
-
 
 
 def try_parse_number(number_value, cls=float, default=0):

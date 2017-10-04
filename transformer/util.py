@@ -1,4 +1,5 @@
 import arrow
+import bs4
 import dateutil.parser
 import pytz
 import parsedatetime
@@ -26,6 +27,20 @@ class APIError(Exception):
         rv['message'] = self.message
         rv['status'] = self.status_code
         return rv
+
+
+def to_unicode_or_bust(obj, encoding='utf-8'):
+    """
+    Convert a string object to unicode or raise an exception
+
+    """
+    try:
+        if isinstance(obj, basestring):
+            if not isinstance(obj, unicode):
+                obj = unicode(obj, encoding)
+        return obj
+    except:
+        return bs4.UnicodeDammit(obj, is_html=False).unicode_markup
 
 
 def tdelta(input_):

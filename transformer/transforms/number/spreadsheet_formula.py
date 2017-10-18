@@ -136,6 +136,8 @@ def evaluate(formula, functions=None, operators=None):
         functions = get_default_functions()
     if operators is None:
         operators = get_default_operators()
+    
+    formula = formula.strip()
 
     # first, parse the formula into reverse polish notation
     try:

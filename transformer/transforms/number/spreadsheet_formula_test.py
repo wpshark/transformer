@@ -76,6 +76,12 @@ class TestNumberSpreadsheetStyleFormulaTransform(unittest.TestCase):
             self.assertIsInstance(
                 transformed, (int, long), '%s: %r is not an instance of int.' % (operation, transformed)
             )
+    
+    def test_strip(self):
+        transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()
+        transformer.transform('IF(AND("Mon" = "Sun", 00<20), "today at 8pm", "2am") ')
+        transformer.transform(' IF(AND("Mon" = "Sun", 00<20), "today at 8pm", "2am")')
+        transformer.transform(' IF(AND("Mon" = "Sun", 00<20), "today at 8pm", "2am") ')
 
     def test_spreadsheet_formula(self):
         transformer = spreadsheet_formula.NumberSpreadsheetStyleFormulaTransform()

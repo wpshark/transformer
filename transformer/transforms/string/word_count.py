@@ -13,11 +13,9 @@ class StringWordCountTransform(BaseTransform):
 
     def transform(self, str_input, **kwargs):
         if not str_input:
-            return 0;
+            return 0
 
-        num_words = len(str_input.split())
         # splits on space, tab, newline, return, formfeed
-
-        return num_words
+        return len(str_input.split())
 
 register(StringWordCountTransform())

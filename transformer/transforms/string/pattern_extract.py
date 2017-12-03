@@ -6,19 +6,19 @@ class StringPatternExtractTransform(BaseTransform):
 
     category = 'string'
     name = 're_extract'
-    label = 'Extract pattern'
+    label = 'Extract Pattern'
     help_text = 'Find a pattern out of a text field. Returns all groups from the first match only.'
 
     noun = 'Text'
     verb = 'find a pattern from'
 
     def transform(self, str_input, pattern, **kwargs):
-        if not str_input:
-            return u''
-
         result = {
             '_matched': False,
         }
+
+        if not str_input:
+            return result
         
         match = re.search(re.compile(pattern), str_input)
 
@@ -43,7 +43,7 @@ class StringPatternExtractTransform(BaseTransform):
             {
                 'type': 'unicode',
                 'required': True,
-                'key': 'old',
+                'key': 'pattern',
                 'label': 'Pattern',
                 'help_text': 'Enter a [Python Regular Expression](https://developers.google.com/edu/python/regular-expressions) to find the first match for.'
             },

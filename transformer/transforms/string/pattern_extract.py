@@ -45,7 +45,7 @@ class StringPatternExtractTransform(BaseTransform):
                 'required': True,
                 'key': 'pattern',
                 'label': 'Pattern',
-                'help_text': 'Enter a [Python Regular Expression](https://developers.google.com/edu/python/regular-expressions) to find the first match for.'
+                'help_text': 'Enter a [Python Regular Expression](https://developers.google.com/edu/python/regular-expressions) to find the first match for, e.g. `f[o]+ (bar)`.'
             },
         ]
 

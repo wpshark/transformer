@@ -9,4 +9,4 @@ class TestStringStripHtmlTransform(unittest.TestCase):
         self.assertEqual(transformer.transform('<b>Bold</b>'), 'Bold')
         self.assertEqual(transformer.transform('< 3 donuts and > 4 pies'), '< 3 donuts and > 4 pies')
         self.assertEqual(transformer.transform('4 is &lt; 5'), u'4 is < 5')
-        self.assertEqual(transformer.transform('<p>hello</p> <style>p { color: red }</style><script>alert("hi")</script>'), 'hello ')
+        self.assertEqual(transformer.transform('<p>hello</p> <!-- todo --> <style>p { color: red }</style> <script>alert("hi")</script>'), 'hello   ')

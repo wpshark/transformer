@@ -7,7 +7,7 @@ class StringPatternExtractTransform(BaseTransform):
     category = 'string'
     name = 're_extract'
     label = 'Extract Pattern'
-    help_text = 'Find a pattern out of a text field. Returns all groups from the first match only.'
+    help_text = 'Find and copy a pattern out of a text field using a regular expression. Finds the first match only. Returns all matched (named) groups, start and end position.'
 
     noun = 'Text'
     verb = 'find a pattern from'

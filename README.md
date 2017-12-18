@@ -31,7 +31,7 @@ pip install -r requirements.txt
 
 ```
 . env27/bin/activate
-DEBUG=true PORT=8080 python transformer/app.py
+DEBUG=true PORT=8888 python transformer/app.py
 ```
 
 ## Test Locally

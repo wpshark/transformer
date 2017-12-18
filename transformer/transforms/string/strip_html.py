@@ -17,6 +17,10 @@ class StringStripHtmlTransform(BaseTransform):
             return u''
 
         soup = BeautifulSoup(str_input, 'html.parser')
+
+        for elem in soup.findAll(['script', 'style']):
+            elem.extract()
+
         return soup.get_text()
 
 register(StringStripHtmlTransform())

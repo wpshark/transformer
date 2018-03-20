@@ -75,7 +75,7 @@ class PhoneNumberFormattingTransform(BaseTransform):
             '4': '555-800-1212 (International, No Country Code)',
             '5': '+1 555 800 1212 (International, No Hyphens)',
             '6': '555 800-1212 (National, No Parenthesis)',
-            '7': '15558001212 (No Symbols, National)',
+            '7': '5558001212 (No Symbols, National)',
             '8': '15558001212 (No Symbols, International)',
         }
 

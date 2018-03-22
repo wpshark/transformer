@@ -31,8 +31,13 @@ class StringPatternExtractTransform(BaseTransform):
             '_end': match.end(),
         })
         
-        for idx, val in enumerate(match.groups()):
+        groups = match.groups()
+        for idx, val in enumerate(groups):
             result[idx] = val
+
+        if len(groups) < 1:
+            result[0] = str_input[match.start():match.end()]
+
         
         result.update(match.groupdict())
 

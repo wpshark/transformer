@@ -39,7 +39,7 @@ class PhoneNumberFormattingTransform(BaseTransform):
 
         output = phonenumbers.format_number(number, format_int)
 
-        # if we're using the national format, ensure that the first group of numbers is always grouped by parens
+        # if we're using the national format, ensure that the first group of numbers is always grouped by parenthesis
         if format_string == '2':
             output = re.sub('^(\d+)\s', '(\\1) ', output)
 
@@ -79,6 +79,17 @@ class PhoneNumberFormattingTransform(BaseTransform):
             '8': '15558001212 (No Symbols, International)',
         }
 
+        available_countries = {
+            'US': 'United States',
+            'CA': 'Canada',
+            'GB': 'United Kingdom',
+            'FR': 'France',
+            'ES': 'Spain',
+            'DE': 'Germany',
+            'PT': 'Portugal',
+            'BR': 'Brazil',
+        }
+
         return [
             {
                 'key': 'format_string',
@@ -87,9 +98,17 @@ class PhoneNumberFormattingTransform(BaseTransform):
                 'help_text': 'The format the phone number will be converted to.',
                 'required': True,
                 'choices': available_formats,
-            }
+            },
+            {
+                'key': 'default_region',
+                'type': 'unicode',
+                'label': 'Phone Country',
+                'help_text': 'The 2-letter ISO code for the country of the phone.',
+                'required': False,
+                'default': 'US',
+                'choices': available_countries,
+            },
         ]
-
 
 
 register(PhoneNumberFormattingTransform())

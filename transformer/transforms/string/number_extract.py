@@ -16,7 +16,7 @@ class StringNumberExtractTransform(BaseTransform):
         if not str_input:
             return u''
 
-        match = re.search(r'[-+]?[\d,]+[\.]?\d*', str_input)
+        match = re.search(r'[+-]?[0-9]+(?:,[0-9]+)*(?:\.[0-9]+)?', str_input)
         return match.group(0) if match else u''
 
 

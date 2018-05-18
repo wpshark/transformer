@@ -1,77 +1,50 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
-from transformer.util import try_parse_number
+from transformer.util import try_parse_number, expand_special_chargroups
 
 import random
 
 
-class UtilChooseTransform(BaseTransform):
+class UtilFlattenLineItem(BaseTransform):
 
     category = 'util'
     name = 'flatten'
     label = 'Flatten line-item'
-    help_text = 'Take an array/line-item as input and output a comma delimted string.'
+    help_text = 'Take an array/line-item as input and output as a string.'
 
-    noun = 'Values'
-    verb = 'choose from'
+    noun = 'Line-item'
+    verb = 'Flatten'
 
-    def __init__(self):
-        self._operations = {
-            'first': self.choose_first,
-            'last': self.choose_last,
-            'random': self.choose_random
-        }
-
-    def transform_many(self, inputs, options=None, **kwargs):
+    def transform_many(self, str_input, separator=u'', **kwargs):
         """
         Override the standard behavior of the transform_many by only
         accepting list inputs which we use to perform the choose operation.
 
         """
         if not inputs:
-            if options is not None and options.get('default') is not None:
-                return options.get('default')
             return u''
 
         if not isinstance(inputs, list):
-            self.raise_exception('Choose requires a list of inputs')
+            self.raise_exception('Flatten requires a line-item as input')
 
-        if options is None:
-            options = {}
+        separator = expand_special_chargroups(separator)
 
-        default = options.get('default')
+        if separator:
+            segments = separator.join(str_input)
+        else:
+            segments = ','.join(str_input)
 
-        op = options.get('operation', None)
-        if op is None or op == '':
-            self.raise_exception('Missing Operation')
-
-        if op in self._operations:
-            op_func = self._operations[op]
-            return op_func(inputs, default=default)
-
-        i = try_parse_number(op, cls=int, default=None)
-        if i is None:
-            return default
-
-        return self.choose_nth(i, inputs, default=default)
+        return segments
 
 
-    def all_fields(self, **kwargs):
+    def fields(self, *args, **kwargs):
         return [
-            self.build_help_field(),
-            {
-                'type': 'unicode',
-                'required': True,
-                'key': 'operation',
-                'choices': 'first|Choose First,last|Choose Last,random|Choose Random',
-                'help_text': 'Value to choose.'
-            },
-            self.build_list_input_field(),
             {
                 'type': 'unicode',
                 'required': False,
-                'key': 'default',
-                'help_text': 'Optional default value to use if no item could be choosen.'
+                'key': 'separator',
+                'label': 'Separator',
+                'help_text': 'Character to seperate flattened line-item with. (Default: `,`) For supported special characters, see: https://zapier.com/help/formatter/#special-characters)' # NOQA
             },
         ]
 
@@ -124,4 +97,4 @@ class UtilChooseTransform(BaseTransform):
         return random.choice(truthy)
 
 
-register(UtilChooseTransform())
+register(UtilFlattenLineItem())

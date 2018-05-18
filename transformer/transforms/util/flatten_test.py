@@ -1,76 +1,36 @@
 import unittest
-import choose
+import flatten
 
 
-class TestUtilChooseTransform(unittest.TestCase):
+class TestUtilFlattenTransform(unittest.TestCase):
+    
+ def test_flatten(self):
+        transformer = flatten.UtilFlattenTransform()
+        
+        tests = [
+                 # input, separator, output
+                 (['a','b','c','d'], ',', 0, 'a'),
+                 ('a:b', ':', 1, 'b'),
+                 ('a:b', ':', -1, 'b'),
 
-    def test_choose_empty(self):
-        transformer = choose.UtilChooseTransform()
 
-        self.assertEqual(0, transformer.transform_many([], options={'operation': 'first', 'default': 0}))
-        self.assertEqual(0, transformer.transform_many([], options={'operation': 'last', 'default': 0}))
-        self.assertEqual(0, transformer.transform_many([], options={'operation': 'random', 'default': 0}))
+  def test_flatten_empty(self):
+    transformer = flatten.UtilFlattenTransform()
+    
+    self.assertEqual('', transformer.transform_many(separator=','))
+    self.assertEqual(None, transformer.transform_many(separator=','))
 
-        self.assertEqual(0, transformer.transform_many([None], options={'operation': 'first', 'default': 0}))
-        self.assertEqual(0, transformer.transform_many(None, options={'operation': 'first', 'default': 0}))
-        self.assertEqual('', transformer.transform_many(None, options={'operation': 'first'}))
+  def test_flatten_many(self):
+        transformer = flatten.UtilFlattenTransform()
+        
+        self.assertEqual([['a', 'b'], ['c', 'd']], transformer.transform_many(['a,b', 'c,d'], dict(separator=',')))
 
-        self.assertEqual(0, transformer.transform_many([0], options={'operation': 'first', 'default': 1}))
-        self.assertEqual(0, transformer.transform_many([0], options={'operation': 'last', 'default': 1}))
-        self.assertEqual(0, transformer.transform_many([0], options={'operation': 'random', 'default': 1}))
-
-        self.assertEqual(0, transformer.transform_many([0, 0], options={'operation': 'first', 'default': 1}))
-        self.assertEqual(0, transformer.transform_many([0, 0], options={'operation': 'last', 'default': 1}))
-        self.assertEqual(0, transformer.transform_many([0, 0], options={'operation': 'random', 'default': 1}))
-
-        self.assertEqual(0, transformer.transform_many([''], options={'operation': 'first', 'default': 0}))
-        self.assertEqual(0, transformer.transform_many([''], options={'operation': 'last', 'default': 0}))
-        self.assertEqual(0, transformer.transform_many([''], options={'operation': 'random', 'default': 0}))
-
-        self.assertEqual(0, transformer.transform_many(['', ''], options={'operation': 'first', 'default': 0}))
-        self.assertEqual(0, transformer.transform_many(['', ''], options={'operation': 'last', 'default': 0}))
-        self.assertEqual(0, transformer.transform_many(['', ''], options={'operation': 'random', 'default': 0}))
-
-    def test_choose_full(self):
-        transformer = choose.UtilChooseTransform()
-
-        self.assertEqual(1, transformer.transform_many([1, 2, 3], options={'operation': 'first', 'default': 0}))
-        self.assertEqual(3, transformer.transform_many([1, 2, 3], options={'operation': 'last', 'default': 0}))
-
-        self.assertNotEqual(0, transformer.transform_many([1, 2, 3], options={'operation': 'random', 'default': 0}))
-        self.assertNotEqual('', transformer.transform_many(['', 1, 2, 3, 'a'], options={'operation': 'random', 'default': ''}))
-
-        self.assertEqual(1, transformer.transform_many([1, '', ''], options={'operation': 'first', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many([1, '', ''], options={'operation': 'last', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many([1, '', ''], options={'operation': 'random', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many([1, '', ''], options={'operation': 'random', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many([1, '', ''], options={'operation': 'random', 'default': 0}))
-
-        self.assertEqual(1, transformer.transform_many(['', 1, ''], options={'operation': 'first', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many(['', 1, ''], options={'operation': 'last', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many(['', 1, ''], options={'operation': 'random', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many(['', 1, ''], options={'operation': 'random', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many(['', 1, ''], options={'operation': 'random', 'default': 0}))
-
-        self.assertEqual(1, transformer.transform_many(['', '', 1], options={'operation': 'first', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many(['', '', 1], options={'operation': 'last', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many(['', '', 1], options={'operation': 'random', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many(['', '', 1], options={'operation': 'random', 'default': 0}))
-        self.assertEqual(1, transformer.transform_many(['', '', 1], options={'operation': 'random', 'default': 0}))
-
-        self.assertEqual(2, transformer.transform_many(['', 2, 3, ''], options={'operation': 'first', 'default': 0}))
-        self.assertEqual(3, transformer.transform_many(['', 2, 3, ''], options={'operation': 'last', 'default': 0}))
-        self.assertEqual(2, transformer.transform_many(['', 2, 3, ''], options={'operation': '0', 'default': 0}))
-        self.assertEqual(3, transformer.transform_many(['', 2, 3, ''], options={'operation': '-1', 'default': 0}))
-
-        self.assertEqual('a', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': 'first', 'default': 0}))
-        self.assertEqual('b', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': 'last', 'default': 0}))
-
-        self.assertEqual(2, transformer.transform_many(['a', 2, 3, 'b'], options={'operation': '1', 'default': 0}))
-        self.assertEqual('a', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': '0', 'default': 0}))
-        self.assertEqual('b', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': '-1', 'default': 0}))
-        self.assertEqual('a', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': 0, 'default': 0}))
-        self.assertEqual('b', transformer.transform_many(['a', 2, 3, 'b'], options={'operation': -1, 'default': 0}))
-
-        # invalid op == default
-        self.assertEqual(0, transformer.transform_many(['a', 2, 3, 'b'], options={'operation': 'asdf', 'default': 0}))
+  def test_flatten_many_empty(self):
+    transformer = flatten.UtilFlattenTransform()
+    
+        self.assertEqual(['','c','d']], transformer.transform_many(['', 'c,d'], dict(separator=',')))
+        self.assertEqual(['','','c','d'], transformer.transform_many(['', '', 'c,d'], dict(separator=',')))
+        self.assertEqual(['', ''], transformer.transform_many(['', ''], dict(separator=',')))
+        self.assertEqual(['', ['c', 'd']], transformer.transform_many([None, 'c,d'], dict(separator=',')))
+        self.assertEqual(['', '', ['c', 'd']], transformer.transform_many([None, None, 'c,d'], dict(separator=',',)))
+        self.assertEqual(['', ''], transformer.transform_many([None, None], dict(separator=',',)))

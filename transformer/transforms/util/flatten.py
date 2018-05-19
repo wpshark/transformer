@@ -5,7 +5,7 @@ from transformer.util import try_parse_number, expand_special_chargroups
 import random
 
 
-class UtilFlattenLineItem(BaseTransform):
+class UtilFlattenTransform(BaseTransform):
 
     category = 'util'
     name = 'flatten'
@@ -21,10 +21,15 @@ class UtilFlattenLineItem(BaseTransform):
         accepting list inputs which we use to perform the choose operation.
 
         """
-        if not inputs:
+        
+        if not str_input:
+            return u''
+        
+        if str_input[0] is None:
             return u''
 
-        if not isinstance(inputs, list):
+
+        if not isinstance(str_input, list):
             self.raise_exception('Flatten requires a line-item as input')
 
         separator = expand_special_chargroups(separator)
@@ -97,4 +102,4 @@ class UtilFlattenLineItem(BaseTransform):
         return random.choice(truthy)
 
 
-register(UtilFlattenLineItem())
+register(UtilFlattenTransform())

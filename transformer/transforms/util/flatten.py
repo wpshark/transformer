@@ -10,7 +10,7 @@ class UtilFlattenTransform(BaseTransform):
     category = 'util'
     name = 'flatten'
     label = 'Flatten line-item'
-    help_text = 'Take a line-item as input and output as a seperated string.'
+    help_text = 'Take a line-item as input and output a seperated string. [a,b,c,d] becomes `a,b,c,d`'
 
     noun = 'Line-item'
     verb = 'Flatten'

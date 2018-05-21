@@ -10,34 +10,36 @@ class UtilFlattenTransform(BaseTransform):
     category = 'util'
     name = 'flatten'
     label = 'Flatten line-item'
-    help_text = 'Take an array/line-item as input and output as a string.'
+    help_text = 'Take a line-item as input and output as a seperated string.'
 
     noun = 'Line-item'
     verb = 'Flatten'
 
-    def transform_many(self, str_input, separator=u'', **kwargs):
+    def transform_many(self, inputs, options=None, **kwargs):
         """
         Override the standard behavior of the transform_many by only
         accepting list inputs which we use to perform the choose operation.
 
         """
         
-        if not str_input:
+        if not inputs:
             return u''
         
-        if str_input[0] is None:
-            return u''
-
-
-        if not isinstance(str_input, list):
+        if not isinstance(inputs, list):
             self.raise_exception('Flatten requires a line-item as input')
+        
+        # make sure if there any empty elements are replace with ''
+        inputs = [(x if x is not None else '') for x in inputs]
+        
+        if options is None:
+            options = {}
 
-        separator = expand_special_chargroups(separator)
+        separator = expand_special_chargroups(options.get('separator'))
 
         if separator:
-            segments = separator.join(str_input)
+            segments = separator.join(inputs)
         else:
-            segments = ','.join(str_input)
+            segments = ','.join(inputs)
 
         return segments
 
@@ -52,54 +54,6 @@ class UtilFlattenTransform(BaseTransform):
                 'help_text': 'Character to seperate flattened line-item with. (Default: `,`) For supported special characters, see: https://zapier.com/help/formatter/#special-characters)' # NOQA
             },
         ]
-
-
-    def truthy_inputs(self, inputs):
-        """ return only truthy inputs """
-        return [v for v in inputs if (not isinstance(v, basestring) and v is not None) or v]
-
-
-    def choose_first(self, inputs, default=None):
-        """
-        choose the first _truthy_ string value or the first non-string value
-        or the default value if there is neither.
-
-        """
-        return self.choose_nth(0, inputs, default=default)
-
-
-    def choose_last(self, inputs, default=None):
-        """
-        choose the last _truthy_ string value or the last non-string value
-        or the default value if there is none.
-
-        """
-        return self.choose_nth(-1, inputs, default=default)
-
-
-    def choose_nth(self, n, inputs, default=None):
-        """
-        choose the n-th _truthy_ string value or the n-th non-string value
-        or the default value if there is neither.
-
-        """
-        try:
-            return self.truthy_inputs(inputs)[n]
-        except:
-            pass
-        return default
-
-
-    def choose_random(self, inputs, default=None):
-        """
-        choose a random _truthy_ string value or a random non-string value
-        or the default value if there is neither.
-
-        """
-        truthy = self.truthy_inputs(inputs)
-        if not truthy:
-            return default
-        return random.choice(truthy)
 
 
 register(UtilFlattenTransform())

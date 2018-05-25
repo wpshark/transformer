@@ -39,6 +39,9 @@ class TestStringStripTransform(unittest.TestCase):
             ('a, b, c, d', ', ', 'all', ['a', 'b', 'c', 'd']),
             ('a, b, c, d, ', ', ', 'all', ['a', 'b', 'c', 'd', '']),
 
+            ('a, b, c, d', ', ', 'fields', { 'Item 1': 'a', 'Item 2': 'b', 'Item 3': 'c', 'Item 4': 'd'}),
+            ('a, b, c, d, ', ', ', 'fields', { 'Item 1': 'a', 'Item 2': 'b', 'Item 3': 'c', 'Item 4': 'd', 'Item 5': ''}),
+
             ('hello world', '[:space:]', 0, 'hello'),
             ('hello world', '[:space:]', 1, 'world'),
             ('hello world', '[:space:]', -1, 'world'),
@@ -63,6 +66,7 @@ class TestStringStripTransform(unittest.TestCase):
         transformer = split.StringSplitTransform()
 
         self.assertEqual([['a', 'b'], ['c', 'd']], transformer.transform_many(['a,b', 'c,d'], dict(separator=',', index='all')))
+        self.assertEqual([{'Item 1':'a', 'Item 2': 'b'}, {'Item 1':'c', 'Item 2':'d'}], transformer.transform_many(['a,b', 'c,d'], dict(separator=',', index='fields')))
 
     def test_split_many_empty(self):
         transformer = split.StringSplitTransform()

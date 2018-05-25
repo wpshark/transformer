@@ -26,6 +26,9 @@ class StringSplitTransform(BaseTransform):
         if index == 'all':
             return segments
 
+        if index == 'fields':
+            return { "Item {0}".format(i + 1): s for i, s in enumerate(segments) }
+
         index = try_parse_number(index, cls=int)
         try:
             return segments[index]
@@ -49,7 +52,7 @@ class StringSplitTransform(BaseTransform):
                 'key': 'index',
                 'label': 'Segment Index',
                 'help_text': 'Segment of text to return after splitting. (Default: First)',
-                'choices': '0|First,1|Second,-1|Last,-2|Second to Last,all|All',
+                'choices': '0|First,1|Second,-1|Last,-2|Second to Last,all|All (as line items),fields|All (as separate fields)',
             },
         ]
 

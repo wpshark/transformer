@@ -27,7 +27,7 @@ class StringSplitTransform(BaseTransform):
             return segments
 
         if index == 'fields':
-            return { "Item {0}".format(i + 1): s for i, s in enumerate(segments) }
+            return { u'Item {}'.format(i + 1): s for i, s in enumerate(segments) }
 
         index = try_parse_number(index, cls=int)
         try:

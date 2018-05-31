@@ -1,20 +1,20 @@
 import unittest
-import flatten
+import convert_li_s
 
 
-class TestUtilFlattenTransform(unittest.TestCase):
+class TestUtilConvert_li_sTransform(unittest.TestCase):
 
 
-    def test_flatten_empty(self):
-        transformer = flatten.UtilFlattenTransform()
+    def test_convert_li_s_empty(self):
+        transformer = convert_li_s.UtilConvert_li_sTransform()
     
         self.assertEqual('', transformer.transform_many([],options={'separator':','}))
         self.assertEqual('', transformer.transform_many([None],options={'separator':','}))
         self.assertEqual('', transformer.transform_many([''],options={'separator':','}))
         self.assertEqual('', transformer.transform_many([""],options={'separator':','}))
   
-    def test_flatten_many_empty(self):
-        transformer = flatten.UtilFlattenTransform()
+    def test_convert_li_s_many_empty(self):
+        transformer = convert_li_s.UtilConvert_li_sTransform()
       
         self.assertEqual(',c,d', transformer.transform_many(['', 'c','d'], options={'separator':','}))
         self.assertEqual(',,c,d', transformer.transform_many(['', '', 'c,d'], options={'separator':','}))
@@ -23,13 +23,13 @@ class TestUtilFlattenTransform(unittest.TestCase):
         self.assertEqual(',,c,d', transformer.transform_many([None, None, 'c,d'], options={'separator':','}))
         self.assertEqual(',', transformer.transform_many([None, None], options={'separator':','}))
           
-    def test_flatten_one(self):
-        transformer = flatten.UtilFlattenTransform()
+    def test_convert_li_s_one(self):
+        transformer = convert_li_s.UtilConvert_li_sTransform()
         self.assertEqual('a', transformer.transform_many(['a'], options={'separator':','}))
 
 
-    def test_flatten_many(self):
-        transformer = flatten.UtilFlattenTransform()
+    def test_convert_li_s_many(self):
+        transformer = convert_li_s.UtilConvert_li_sTransform()
         self.assertEqual('a,b,c,d', transformer.transform_many(['a,b', 'c,d'], options={'separator':','}))
         self.assertEqual('a,b,c,d', transformer.transform_many(['a','b','c','d'], options={'separator':','}))
         self.assertEqual('a,b,c,d', transformer.transform_many(['a,b,c,d'], options={'separator':','}))

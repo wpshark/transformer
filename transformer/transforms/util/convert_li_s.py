@@ -5,15 +5,15 @@ from transformer.util import try_parse_number, expand_special_chargroups
 import random
 
 
-class UtilFlattenTransform(BaseTransform):
+class UtilConvert_li_sTransform(BaseTransform):
 
     category = 'util'
-    name = 'flatten'
-    label = 'Flatten line-item'
-    help_text = 'Take a line-item as input and output a seperated string. [a,b,c,d] becomes `a,b,c,d`'
+    name = 'convert_li_s'
+    label = 'Convert line-item'
+    help_text = 'Convert a line-item to a delimited string. [a,b,c,d] becomes `a,b,c,d`'
 
     noun = 'Line-item'
-    verb = 'Flatten'
+    verb = 'Convert'
 
     def transform_many(self, inputs, options=None, **kwargs):
         """
@@ -26,10 +26,10 @@ class UtilFlattenTransform(BaseTransform):
             return u''
         
         if not isinstance(inputs, list):
-            self.raise_exception('Flatten requires a line-item as input')
+            self.raise_exception('Convert requires a line-item as input')
         
-        # make sure if there any empty elements are replace with ''
-        inputs = [(x if x is not None else '') for x in inputs]
+        # make sure if there are any empty elements, they are replaced with ''
+        new_inputs = [(x if x is not None else '') for x in inputs]
         
         if options is None:
             options = {}
@@ -37,9 +37,9 @@ class UtilFlattenTransform(BaseTransform):
         separator = expand_special_chargroups(options.get('separator'))
 
         if separator:
-            segments = separator.join(inputs)
+            segments = separator.join(new_inputs)
         else:
-            segments = ','.join(inputs)
+            segments = ','.join(new_inputs)
 
         return segments
 
@@ -51,9 +51,9 @@ class UtilFlattenTransform(BaseTransform):
                 'required': False,
                 'key': 'separator',
                 'label': 'Separator',
-                'help_text': 'Character to seperate flattened line-item with. (Default: `,`) For supported special characters, see: https://zapier.com/help/formatter/#special-characters)' # NOQA
+                'help_text': 'Character to delimit line-item with. (Default: `,`) For supported special characters, see: https://zapier.com/help/formatter/#special-characters)' # NOQA
             },
         ]
 
 
-register(UtilFlattenTransform())
+register(UtilConvert_li_sTransform())

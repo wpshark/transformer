@@ -10,7 +10,7 @@ class UtilAppendTransform(BaseTransform):
     category = 'util'
     name = 'append'
     label = 'Append to line-item'
-    help_text = 'Append a text element to a line-item. e appended to [a,b,c,d] becomes [a,b,c,d,e]'
+    help_text = 'e appended to [a,b,c,d] becomes [a,b,c,d,e]'
 
     noun = 'Line-item'
     verb = 'Append'
@@ -26,11 +26,17 @@ class UtilAppendTransform(BaseTransform):
             return inputs
         
         append_text = expand_special_chargroups(options.get('append_text'))
+        #Checking for None elements: append_text = [v for v in options.get('append_text') if (not isinstance(v, basestring) and v is not None) or v]
                 
         if not isinstance(inputs, list):
             self.raise_exception('Append requires a line-item as input')
         
-        new_inputs = [(x if x is not None else '') for x in inputs]
+        if isinstance(append_text, list):
+            # append_text is a list, lets concatenate them
+            return (inputs + append_text)
+        
+        #Checking for None elements: new_inputs = [(x if x is not None else '') for x in inputs]
+        new_inputs = inputs
         # hacky way if we have one element, but it's nothing, might as well return the append string
         if (len(new_inputs) == 1 and new_inputs[0] == '') :
             return [append_text]

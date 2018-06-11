@@ -5,7 +5,7 @@ from transformer.util import try_parse_number, expand_special_chargroups
 import random
 
 
-class UtilConvert_s_liTransform(BaseTransform):
+class UtilConvertStringToLineItemTransform(BaseTransform):
 
     category = 'util'
     name = 'convert_s_li'
@@ -23,4 +23,4 @@ class UtilConvert_s_liTransform(BaseTransform):
         segments = str_input.split(',')
         return segments
 
-register(UtilConvert_s_liTransform())
+register(UtilConvertStringToLineItemTransform())

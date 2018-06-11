@@ -5,7 +5,7 @@ from transformer.util import try_parse_number, expand_special_chargroups
 import random
 
 
-class UtilConvert_li_sTransform(BaseTransform):
+class UtilConvertLineItemToStringTransform(BaseTransform):
 
     category = 'util'
     name = 'convert_li_s'
@@ -28,8 +28,9 @@ class UtilConvert_li_sTransform(BaseTransform):
         if not isinstance(inputs, list):
             self.raise_exception('Convert requires a line-item as input')
         
-        # make sure if there are any empty elements, they are replaced with ''
-        new_inputs = [(x if x is not None else '') for x in inputs]
+        # Do I need to check for empty array elements?
+        # new_inputs = [(x if x is not None else '') for x in inputs]
+        new_inputs = inputs
         
         if options is None:
             options = {}
@@ -56,4 +57,4 @@ class UtilConvert_li_sTransform(BaseTransform):
         ]
 
 
-register(UtilConvert_li_sTransform())
+register(UtilConvertLineItemToStringTransform())

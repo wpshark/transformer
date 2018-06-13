@@ -25,24 +25,25 @@ class UtilAppendTransform(BaseTransform):
         if options is None:
             return inputs
         
-        append_text = expand_special_chargroups(options.get('append_text'))
-        #Checking for None elements: append_text = [v for v in options.get('append_text') if (not isinstance(v, basestring) and v is not None) or v]
-                
         if not isinstance(inputs, list):
             self.raise_exception('Append requires a line-item as input')
         
+        #append_txt could be a list/array, so lets clean it up, and if it's not one, make it so we just use the concatenate command later
+        append_text = options.get('append_text')
         if isinstance(append_text, list):
-            # append_text is a list, lets concatenate them
-            return (inputs + append_text)
-        
-        #Checking for None elements: new_inputs = [(x if x is not None else '') for x in inputs]
-        new_inputs = inputs
+            append_text = [(x if x is not None else '') for x in append_text]
+        else:
+            append_text = [append_text]
+
+        #new_inputs = inputs
+        #inputs is a list/array, so lets clean it up before we do the append
+        new_inputs = [(v if v is not None else '') for v in inputs]
         # hacky way if we have one element, but it's nothing, might as well return the append string
         if (len(new_inputs) == 1 and new_inputs[0] == '') :
-            return [append_text]
+            return append_text
+        else:
+            return (new_inputs + append_text)
         
-        new_inputs.append(append_text)
-        return new_inputs
 
 
     def fields(self, *args, **kwargs):
@@ -52,7 +53,7 @@ class UtilAppendTransform(BaseTransform):
                 'required': False,
                 'key': 'append_text',
                 'label': 'Text to append',
-                'help_text': 'Text element that you wish to append to the end of the line-item.' # NOQA
+                'help_text': 'Text that you wish to append to the end of the line-item.' # NOQA
             },
         ]
 

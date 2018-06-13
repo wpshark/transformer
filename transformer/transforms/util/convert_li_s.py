@@ -28,13 +28,12 @@ class UtilConvertLineItemToStringTransform(BaseTransform):
         if not isinstance(inputs, list):
             self.raise_exception('Convert requires a line-item as input')
         
-        # Do I need to check for empty array elements?
-        # new_inputs = [(x if x is not None else '') for x in inputs]
-        new_inputs = inputs
-        
         if options is None:
             options = {}
-
+        
+        # Do I need to check for empty list/array elements?
+        new_inputs = [(x if x is not None else '') for x in inputs]
+        
         separator = expand_special_chargroups(options.get('separator'))
 
         if separator:

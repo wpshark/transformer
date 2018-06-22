@@ -31,15 +31,15 @@ class UtilConvertLineItemToStringTransform(BaseTransform):
         if options is None:
             options = {}
         
-        # Do I need to check for empty list/array elements?
-        new_inputs = [(x if x is not None else '') for x in inputs]
+        # Do I need to check for empty list/array elements, lets not today and see how it goes with initial release?
+        # new_inputs = [(x if x is not None else '') for x in inputs]
         
         separator = expand_special_chargroups(options.get('separator'))
 
         if separator:
-            segments = separator.join(new_inputs)
+            segments = separator.join(inputs)
         else:
-            segments = ','.join(new_inputs)
+            segments = ','.join(inputs)
 
         return segments
 

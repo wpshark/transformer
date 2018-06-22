@@ -28,21 +28,20 @@ class UtilAppendTransform(BaseTransform):
         if not isinstance(inputs, list):
             self.raise_exception('Append requires a line-item as input')
         
-        #append_txt could be a list/array, so lets clean it up, and if it's not one, make it so we just use the concatenate command later
-        append_text = options.get('append_text')
-        if isinstance(append_text, list):
-            append_text = [(x if x is not None else '') for x in append_text]
+        #append_text input could be a list/array, if it's not one, make it so we just use the concatenate command later
+        if isinstance(options.get('append_text'), list):
+            append_text = options.get('append_text')
         else:
-            append_text = [append_text]
+            append_text = [options.get('append_text')]
 
-        #new_inputs = inputs
-        #inputs is a list/array, so lets clean it up before we do the append
-        new_inputs = [(v if v is not None else '') for v in inputs]
+        # Do I need to check for empty list/array elements, lets not today and see how it goes with initial release?
+        # new_inputs = [(v if v is not None else '') for v in inputs]
+        
         # hacky way if we have one element, but it's nothing, might as well return the append string
-        if (len(new_inputs) == 1 and new_inputs[0] == '') :
+        if (len(inputs) == 1 and inputs[0] == '') :
             return append_text
         else:
-            return (new_inputs + append_text)
+            return (inputs + append_text)
         
 
 
@@ -53,7 +52,7 @@ class UtilAppendTransform(BaseTransform):
                 'required': False,
                 'key': 'append_text',
                 'label': 'Text to append',
-                'help_text': 'Text that you wish to append to the end of the line-item.' # NOQA
+                'help_text': 'Text (can be a string or a line-item) that you wish to add to the end of the line-item field.' # NOQA
             },
         ]
 

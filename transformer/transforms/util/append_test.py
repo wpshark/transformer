@@ -13,7 +13,6 @@ class TestUtilAppendTransform(unittest.TestCase):
         transformer = append.UtilAppendTransform()
     
         self.assertEqual(['e'], transformer.transform_many([],options={'append_text': 'e'}))
-        self.assertEqual(['e'], transformer.transform_many([None],options={'append_text': 'e'}))
         self.assertEqual(['e'], transformer.transform_many([''],options={'append_text': 'e'}))
         self.assertEqual(['e'], transformer.transform_many([""],options={'append_text': 'e'}))
   
@@ -23,9 +22,9 @@ class TestUtilAppendTransform(unittest.TestCase):
         self.assertEqual(['', 'c','d','e'], transformer.transform_many(['', 'c','d'], options={'append_text':'e'}))
         self.assertEqual(['', '', 'c,d','e'], transformer.transform_many(['', '', 'c,d'], options={'append_text':'e'}))
         self.assertEqual(['', '','e'], transformer.transform_many(['', ''], options={'append_text':'e'}))
-        self.assertEqual(['c,d','','e'], transformer.transform_many(['c,d',None], options={'append_text':'e'}))
-        self.assertEqual(['','','c,d','e'], transformer.transform_many([None, None, 'c,d'], options={'append_text':'e'}))
-        self.assertEqual(['','','e'], transformer.transform_many([None, None], options={'append_text':'e'}))
+        self.assertEqual(['c,d','','e'], transformer.transform_many(['c,d',''], options={'append_text':'e'}))
+        self.assertEqual(['','','c,d','e'], transformer.transform_many(['', '', 'c,d'], options={'append_text':'e'}))
+        self.assertEqual(['','','e'], transformer.transform_many(['', ''], options={'append_text':'e'}))
 
 
 

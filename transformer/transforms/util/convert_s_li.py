@@ -9,7 +9,7 @@ class UtilConvertStringToLineItemTransform(BaseTransform):
 
     category = 'util'
     name = 'convert_s_li'
-    label = 'Convert string to line-item'
+    label = 'Convert String to Line-Item'
     help_text = 'Convert a comma delimited string to a line-item. `a,b,c,d` becomes [a,b,c,d]'
 
     noun = 'String'

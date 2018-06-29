@@ -10,7 +10,6 @@ class TestUtilConvertLineItemToStringTransform(unittest.TestCase):
     
         self.assertEqual('', transformer.transform_many([],options={'separator':','}))
         self.assertEqual('', transformer.transform_many([''],options={'separator':','}))
-        self.assertEqual('', transformer.transform_many([""],options={'separator':','}))
   
     def test_convert_li_s_many_empty(self):
         transformer = convert_li_s.UtilConvertLineItemToStringTransform()

@@ -9,7 +9,7 @@ class UtilConvertLineItemToStringTransform(BaseTransform):
 
     category = 'util'
     name = 'convert_li_s'
-    label = 'Convert line-item'
+    label = 'Convert Line-Item to String'
     help_text = 'Convert a line-item to a delimited string. [a,b,c,d] becomes `a,b,c,d`'
 
     noun = 'Line-item'
@@ -30,9 +30,6 @@ class UtilConvertLineItemToStringTransform(BaseTransform):
         
         if options is None:
             options = {}
-        
-        # Do I need to check for empty list/array elements, lets not today and see how it goes with initial release?
-        # new_inputs = [(x if x is not None else '') for x in inputs]
         
         separator = expand_special_chargroups(options.get('separator'))
 

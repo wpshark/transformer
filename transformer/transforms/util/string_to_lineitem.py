@@ -5,10 +5,10 @@ from transformer.util import try_parse_number, expand_special_chargroups
 import random
 
 
-class UtilConvertStringToLineItemTransform(BaseTransform):
+class UtilStringToLineItemTransform(BaseTransform):
 
     category = 'util'
-    name = 'convert_s_li'
+    name = 'string_to_lineitem'
     label = 'Convert String to Line-Item'
     help_text = 'Convert a comma delimited string to a line-item. `a,b,c,d` becomes [a,b,c,d]'
 
@@ -23,4 +23,4 @@ class UtilConvertStringToLineItemTransform(BaseTransform):
         segments = str_input.split(',')
         return segments
 
-register(UtilConvertStringToLineItemTransform())
+register(UtilStringToLineItemTransform())

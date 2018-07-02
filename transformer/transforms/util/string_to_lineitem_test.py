@@ -1,29 +1,29 @@
 import unittest
-import convert_s_li
+import string_to_lineitem
 
-class TestConvertStringToLineItemTransform(unittest.TestCase):
+class TestUtilStringToLineItemTransform(unittest.TestCase):
 
-    def test_convert_s_li(self):
-        transformer = convert_s_li.UtilConvertStringToLineItemTransform()
+    def test_string_to_lineitem(self):
+        transformer = string_to_lineitem.UtilStringToLineItemTransform()
         
         self.assertEqual(['a','b','c','d'], transformer.transform('a,b,c,d'))
         self.assertEqual(['a','b','c','d',''], transformer.transform('a,b,c,d,'))
             
 
 
-def test_convert_s_li_empty(self):
-    transformer = convert_s_li.UtilConvertStringToLineItemTransform()
+def test_string_to_lineitem_empty(self):
+    transformer = string_to_lineitem.UtilStringToLineItemTransform()
     
     self.assertEqual('', transformer.transform(''))
     self.assertEqual('', transformer.transform(None))
 
-def test_convert_s_li_many(self):
-    transformer = convert_s_li.UtilConvertStringToLineItemTransform()
+def test_string_to_lineitem_many(self):
+    transformer = string_to_lineitem.UtilStringToLineItemTransform()
         
     self.assertEqual([['a', 'b'], ['c', 'd']], transformer.transform_many(['a,b', 'c,d']))
 
-def test_convert_s_li_many_empty(self):
-    transformer = convert_s_li.UtilConvertStringToLineItemTransform()
+def test_string_to_lineitem_many_empty(self):
+    transformer = string_to_lineitem.UtilStringToLineItemTransform()
     
     self.assertEqual(['', ['c', 'd']], transformer.transform_many(['', 'c,d']))
     self.assertEqual(['', '', ['c', 'd']], transformer.transform_many(['', '', 'c,d']))

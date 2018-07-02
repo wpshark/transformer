@@ -5,14 +5,14 @@ from transformer.util import try_parse_number, expand_special_chargroups
 import random
 
 
-class UtilConvertLineItemToStringTransform(BaseTransform):
+class UtilLineItemToStringTransform(BaseTransform):
 
     category = 'util'
-    name = 'convert_li_s'
+    name = 'lineitem_to_string'
     label = 'Convert Line-Item to String'
     help_text = 'Convert a line-item to a delimited string. [a,b,c,d] becomes `a,b,c,d`'
 
-    noun = 'Line-item'
+    noun = 'Line-Item'
     verb = 'Convert'
 
     def transform_many(self, inputs, options=None, **kwargs):
@@ -53,4 +53,4 @@ class UtilConvertLineItemToStringTransform(BaseTransform):
         ]
 
 
-register(UtilConvertLineItemToStringTransform())
+register(UtilLineItemToStringTransform())

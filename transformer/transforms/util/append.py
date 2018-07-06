@@ -6,7 +6,7 @@ class UtilAppendTransform(BaseTransform):
     category = 'util'
     name = 'append'
     label = 'Append to Line-Item'
-    help_text = '\'e\' appended to [a,b,c,d] becomes [a,b,c,d,e]'
+    help_text = '\'e\' appended to [a,b,c,d] becomes [a,b,c,d,e].'
 
     noun = 'Line-item'
     verb = 'Append'
@@ -22,7 +22,7 @@ class UtilAppendTransform(BaseTransform):
             return inputs
 
         if not isinstance(inputs, list):
-            self.raise_exception('Append requires a line-item as input')
+            self.raise_exception('Append requires a line-item as input.')
 
         append_text_input = options.get('append_text')
         is_list = isinstance(append_text_input, list)

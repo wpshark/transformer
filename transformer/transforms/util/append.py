@@ -1,16 +1,12 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
-from transformer.util import try_parse_number, expand_special_chargroups
-
-import random
-
 
 class UtilAppendTransform(BaseTransform):
 
     category = 'util'
     name = 'append'
     label = 'Append to Line-Item'
-    help_text = '`e` appended to [a,b,c,d] becomes [a,b,c,d,e]'
+    help_text = '\'e\' appended to [a,b,c,d] becomes [a,b,c,d,e]'
 
     noun = 'Line-item'
     verb = 'Append'
@@ -21,23 +17,22 @@ class UtilAppendTransform(BaseTransform):
         accepting list inputs which we use to perform the choose operation.
 
         """
-        
+
         if options is None:
             return inputs
-        
+
         if not isinstance(inputs, list):
             self.raise_exception('Append requires a line-item as input')
-        
-        #append_text input could be a list/array, if it's not one, make it so we just use the concatenate command later
+
         append_text_input = options.get('append_text')
-        append_text = append_text_input if isinstance(append_text_input, list) else [append_text_input]
+        is_list = isinstance(append_text_input, list)
+        append_text = append_text_input if is_list else [append_text_input]
 
         # hacky way if we have one element, but it's nothing, might as well return the append string
-        if (len(inputs) == 1 and not inputs[0]) :
+        if len(inputs) == 1 and not inputs[0]:
             return append_text
-        else:
-            return inputs + append_text
-        
+
+        return inputs + append_text
 
 
     def fields(self, *args, **kwargs):

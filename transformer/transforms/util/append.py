@@ -9,8 +9,8 @@ class UtilAppendTransform(BaseTransform):
 
     category = 'util'
     name = 'append'
-    label = 'Append to line-item'
-    help_text = 'e appended to [a,b,c,d] becomes [a,b,c,d,e]'
+    label = 'Append to Line-Item'
+    help_text = '`e` appended to [a,b,c,d] becomes [a,b,c,d,e]'
 
     noun = 'Line-item'
     verb = 'Append'
@@ -47,7 +47,7 @@ class UtilAppendTransform(BaseTransform):
                 'required': False,
                 'key': 'append_text',
                 'label': 'Text to append',
-                'help_text': 'Text that you wish to add to the end of the line-item field. Supports line items.' # NOQA
+                'help_text': 'Text that you wish to add to the end of the line-item field. Supports line-items.' # NOQA
             },
         ]
 

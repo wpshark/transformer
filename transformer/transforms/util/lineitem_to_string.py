@@ -9,8 +9,8 @@ class UtilLineItemToStringTransform(BaseTransform):
 
     category = 'util'
     name = 'lineitem_to_string'
-    label = 'Convert Line-Item to String'
-    help_text = 'Convert a line-item to a delimited string. [a,b,c,d] becomes `a,b,c,d`'
+    label = 'Convert Line-Item to Text'
+    help_text = 'Convert a line-item to delimited text. [a,b,c,d] becomes `a,b,c,d`'
 
     noun = 'Line-Item'
     verb = 'Convert'
@@ -48,7 +48,7 @@ class UtilLineItemToStringTransform(BaseTransform):
                 'required': False,
                 'key': 'separator',
                 'label': 'Separator',
-                'help_text': 'Character to delimit line-item with. (Default: `,`) For supported special characters, see: https://zapier.com/help/formatter/#special-characters)' # NOQA
+                'help_text': 'Character(s) to delimit line-item with. (Default: `,`) For supported special characters, see: https://zapier.com/help/formatter/#special-characters)' # NOQA
             },
         ]
 

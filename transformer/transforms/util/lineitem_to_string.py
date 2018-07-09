@@ -8,7 +8,7 @@ class UtilLineItemToStringTransform(BaseTransform):
     category = 'util'
     name = 'lineitem_to_string'
     label = 'Line-Item to Text'
-    help_text = 'Convert a line-item to delimited text. [a,b,c,d] becomes \'a,b,c,d\'.'
+    help_text = 'Convert a line-item to delimited text. [a,b,c,d] becomes \'a,b,c,d\'. More on line-items [here.](https://zapier.com/help/formatter/#how-use-line-items-formatter)'
 
     noun = 'Line-Item'
     verb = 'Convert'
@@ -24,7 +24,7 @@ class UtilLineItemToStringTransform(BaseTransform):
             return u''
 
         if not isinstance(inputs, list):
-            self.raise_exception('Line-Item to Text requires a line-item as input. More on line-items [here.](https://zapier.com/help/formatter/#how-use-line-items-formatter)')
+            self.raise_exception('Line-Item to Text requires a line-item as input.')
 
         if options is None:
             options = {}

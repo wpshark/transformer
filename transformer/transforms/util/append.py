@@ -22,7 +22,7 @@ class UtilAppendTransform(BaseTransform):
             return inputs
 
         if not isinstance(inputs, list):
-            self.raise_exception('Append requires a line-item as input.')
+            self.raise_exception('Append requires a line-item as input. More on line-items [here.](https://zapier.com/help/formatter/#how-use-line-items-formatter)')
 
         append_text_input = options.get('append_text')
         is_list = isinstance(append_text_input, list)
@@ -42,7 +42,7 @@ class UtilAppendTransform(BaseTransform):
                 'required': False,
                 'key': 'append_text',
                 'label': 'Text to append',
-                'help_text': 'Text that you wish to add to the end of the line-item field. Supports line-items.' # NOQA
+                'help_text': 'Text that you wish to add to the end of the line-item field.' # NOQA
             },
         ]
 

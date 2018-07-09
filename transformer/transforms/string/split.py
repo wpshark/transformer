@@ -52,7 +52,7 @@ class StringSplitTransform(BaseTransform):
                 'key': 'index',
                 'label': 'Segment Index',
                 'help_text': 'Segment of text to return after splitting. (Default: First)',
-                'choices': '0|First,1|Second,-1|Last,-2|Second to Last,all|All (as line items),fields|All (as separate fields)',
+                'choices': '0|First,1|Second,-1|Last,-2|Second to Last,all|All (As Line-Items),fields|All (As Separate Fields)',
             },
         ]
 

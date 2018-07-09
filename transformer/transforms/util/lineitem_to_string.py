@@ -24,7 +24,7 @@ class UtilLineItemToStringTransform(BaseTransform):
             return u''
 
         if not isinstance(inputs, list):
-            self.raise_exception('Convert requires a line-item as input.')
+            self.raise_exception('Line-Item to Text requires a line-item as input. More on line-items [here.](https://zapier.com/help/formatter/#how-use-line-items-formatter)')
 
         if options is None:
             options = {}
@@ -46,7 +46,7 @@ class UtilLineItemToStringTransform(BaseTransform):
                 'required': False,
                 'key': 'separator',
                 'label': 'Separator',
-                'help_text': 'Character(s) to delimit text with. (Default: \',\') For supported special characters, see: https://zapier.com/help/formatter/#special-characters)',  # NOQA
+                'help_text': 'Character to delimit text with. (Default: \',\') For supported special characters, see: https://zapier.com/help/formatter/#special-characters)',  # NOQA
             },
         ]
 

@@ -34,4 +34,4 @@ class TestUtilAppendTransform(unittest.TestCase):
 
     def test_append_list(self):
         transformer = append.UtilAppendTransform()
-        self.assertEqual(['a,b', 'c,d', 'e'], transformer.transform_many(['a,b','c,d'], options={'append_text':['e']}))
+        self.assertEqual(['a,b', 'c,d', 'e', 'f'], transformer.transform_many(['a,b','c,d'], options={'append_text':['e', 'f']}))

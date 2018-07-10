@@ -26,7 +26,8 @@ class UtilAppendTransform(BaseTransform):
 
         append_text_input = options.get('append_text')
         is_list = isinstance(append_text_input, list)
-        append_text = append_text_input if is_list else [append_text_input]
+        append_text = append_text_input if is_list else append_text_input.split(',')
+        # used to be [append_text_input], changing to a split here to see if we can get the values
 
         # hacky way if we have one element, but it's nothing, might as well return the append string
         if len(inputs) == 1 and not inputs[0]:
@@ -42,7 +43,7 @@ class UtilAppendTransform(BaseTransform):
                 'required': False,
                 'key': 'append_text',
                 'label': 'Text to append',
-                'help_text': 'Text that you wish to add to the end of the line-item field.' # NOQA
+                'help_text': 'Text that you wish to add to the end of the line-item field. Also supports line-items.' # NOQA
             },
         ]
 

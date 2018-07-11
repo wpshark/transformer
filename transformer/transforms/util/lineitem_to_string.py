@@ -7,8 +7,11 @@ class UtilLineItemToStringTransform(BaseTransform):
 
     category = 'util'
     name = 'lineitem_to_string'
-    label = 'Convert Line-Item to Text'
-    help_text = 'Convert a line-item to delimited text. [a,b,c,d] becomes \'a,b,c,d\'.'
+    label = 'Line-item to Text'
+    help_text = (
+        'Convert a line-item to delimited text. [a,b,c,d] becomes \'a,b,c,d\'. More on line-items '
+        '[here](https://zapier.com/help/formatter/#how-use-line-items-formatter).'
+    )
 
     noun = 'Line-Item'
     verb = 'Convert'

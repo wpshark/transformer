@@ -5,7 +5,7 @@ class UtilAppendTransform(BaseTransform):
 
     category = 'util'
     name = 'append'
-    label = 'Append to Line-Item'
+    label = 'Append to Line-item'
     help_text = (
         '\'e\' appended to [a,b,c,d] becomes [a,b,c,d,e]. More on line-items '
         '[here](https://zapier.com/help/formatter/#how-use-line-items-formatter).'

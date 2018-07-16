@@ -7,7 +7,7 @@ class StringReplaceTransform(BaseTransform):
     category = 'string'
     name = 'replace'
     label = 'Replace'
-    help_text = 'Replace any character, word or phrase in the text with another character, word or phrase'
+    help_text = 'Replace any character, word or phrase in the text with another character, word or phrase. Note that this is NOT a Replace All function; only the first character, word or phrase that is found will be replaced. For now, if you need to Replace All, you would have to do so in a Code Step.'
 
     noun = 'Text'
     verb = 'find and replace values within'

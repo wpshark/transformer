@@ -13,3 +13,4 @@ class TestStringURLExtractTransform(unittest.TestCase):
         self.assertEqual(transformer.transform("some <a href='http://www.google.com'>test</a> web address www.yahoo.com"), "http://www.google.com")
         self.assertEqual(transformer.transform("I have a URL with http://one.two.three.subdomains.com/"), "http://one.two.three.subdomains.com/")
         self.assertEqual(transformer.transform("Here's an e-mail that our regex shouldn't grab: contact@zapier.com"), "")
+        self.assertEqual(transformer.transform("Email with multiple subdomains: contact@ninja.zapier.com"), "")

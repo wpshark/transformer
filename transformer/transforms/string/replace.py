@@ -8,8 +8,7 @@ class StringReplaceTransform(BaseTransform):
     name = 'replace'
     label = 'Replace'
     help_text = (
-        'Replace any character, word or phrase in the text with another character, word or phrase.'
-        'This acts as a Replace All function.'
+        'Replace all instances of any character, word or phrase in the text with another character, word or phrase.'
     )
 
     noun = 'Text'

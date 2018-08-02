@@ -28,7 +28,6 @@ class DateDifferenceTransform(BaseTransform):
         # second input = date 2
         # we want to subtract date 1 from date 2
 
-
         delta = tdelta(expression)
 
         date_1 = try_parse_date(date_value, from_format=from_format)
@@ -38,7 +37,7 @@ class DateDifferenceTransform(BaseTransform):
             return self.raise_exception('Date could not be parsed')
         
 
-        return days_between(date_1, date_2)
+        return {'id': 'erin is great'}
 
 
     def fields(self, *args, **kwargs):

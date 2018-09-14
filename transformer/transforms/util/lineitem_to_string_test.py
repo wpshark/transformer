@@ -35,3 +35,9 @@ class TestUtilLineItemToStringTransform(unittest.TestCase):
         self.assertEqual('a b c d', transformer.transform_many(['a', 'b', 'c', 'd'], options={'separator':'[:space:]'}))
         self.assertEqual('a b c d', transformer.transform_many(['a', 'b', 'c', 'd'], options={'separator':'[:s:]'}))
         self.assertEqual('a;b;c;d', transformer.transform_many(['a', 'b', 'c', 'd'], options={'separator':';'}))
+
+    def test_lineitem_to_string_nolineitem(self):
+        transformer = lineitem_to_string.UtilLineItemToStringTransform()
+        self.assertEqual('abcd', transformer.transform_many('abcd', options={'separator':'[:space:]'}))
+
+

@@ -24,8 +24,8 @@ class UtilLineItemToStringTransform(BaseTransform):
         """
 
         if not inputs:
-        return u''
-        
+            return u''
+
         #update for Loki issue, return string is only one element
         if not isinstance(inputs, list):
             return inputs

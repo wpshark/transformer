@@ -39,5 +39,3 @@ class TestUtilLineItemToStringTransform(unittest.TestCase):
     def test_lineitem_to_string_nolineitem(self):
         transformer = lineitem_to_string.UtilLineItemToStringTransform()
         self.assertEqual('abcd', transformer.transform_many('abcd', options={'separator':'[:space:]'}))
-
-

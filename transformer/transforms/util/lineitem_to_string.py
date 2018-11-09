@@ -26,8 +26,9 @@ class UtilLineItemToStringTransform(BaseTransform):
         if not inputs:
             return u''
 
+        #update for Loki issue, return string is only one element
         if not isinstance(inputs, list):
-            self.raise_exception('Convert requires a line-item as input.')
+            return inputs
 
         if options is None:
             options = {}

@@ -8,7 +8,7 @@ class UtilStringToLineItemsTransform(BaseTransform):
     name = 'string_to_lineitems'
     label = 'Text to Line-item(s)'
     help_text = (
-        'Convert comma delimited text(s) to line-item(s). \'a,b,c,d\' becomes [a,b,c,d]. More on line-items '
+        'Convert comma delimited text to line-item(s). \'a,b,c,d\' becomes [a,b,c,d]. More on line-items '
         '[here](https://zapier.com/help/formatter/#how-use-line-items-formatter).'
     )
     

@@ -12,7 +12,6 @@ class UtilStringToLineItemsTransform(BaseTransform):
         '[here](https://zapier.com/help/formatter/#how-use-line-items-formatter).'
     )
     
-
     noun = 'Text'
     verb = 'convert'
 
@@ -33,36 +32,35 @@ class UtilStringToLineItemsTransform(BaseTransform):
 
         #initialize output and separate lists dicts
         output = {input_key: []}
-        filtered_table = {}
         separate_lists = {}
         longest_array = 0
 
         #filter out entries with no key
-        for k, v in table.iteritems():
-            if not k == u'':
-                filtered_table.update({k:v})
+        table.pop('', None)
 
-        
         #split each string value in the dict by ',' and determine the 
         #  length oflongest array
-        for k, v in filtered_table.iteritems():
+        for k, v in table.iteritems():
             separate_lists[k] = v.split(',')
             if len(separate_lists[k]) > longest_array:
                 longest_array = len(separate_lists[k])
 
         #make mini objects to add to the output object
         for num in range(0,longest_array):
+            #initialize single line item
             this_line_item = {}
-            for i, (k, v) in enumerate(filtered_table.items()):
+            for i, (k, v) in enumerate(table.items()):
+                #try to add each property from the Dict / table to the single line item. Skips if no property is available.
                 try:
                     this_line_item.update({k: separate_lists[k][num]})
                 except: 
-                    n = 0
+                    n = 0 
+            #try adding single line item object to the main output array
             try:
                 output[input_key].append(this_line_item)
             except:
                 n = 0
-
+            
         return output
 
     def fields(self, *args, **kwargs):
@@ -75,8 +73,8 @@ class UtilStringToLineItemsTransform(BaseTransform):
                 'help_text': 'Line-item property names on the left (ex: Price, Description) and comma-separated '
                     'values on the right. Each property must have a unique name. Properties without a name are '
                     'ignored. Line-items mapped into the fields on the right will be treated as comma-separated '
-                    'text and converted back to a line-item along with any other text you add. This can be used '
-                    'to append or prepend values to existing line items.'
+                    'text along with any plain text or single values you add. This can be used to append or '
+                    'prepend values to existing line-items.'
             }
         ]
 

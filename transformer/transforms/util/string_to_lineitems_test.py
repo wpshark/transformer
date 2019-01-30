@@ -36,3 +36,4 @@ class TestUtilStringToLineItemsTransform(unittest.TestCase):
             [{u'name':'one'},
             {u'name':'two'}]},
             transformer.transform('', table={u'':'a,b', u'name':'one,two'}))
+        

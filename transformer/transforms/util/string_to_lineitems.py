@@ -15,6 +15,9 @@ class UtilLineItemizerTransform(BaseTransform):
 
     noun = "Text"
     verb = "convert"
+    lineitems_group_name_error = (
+        "The 'Line-item(s) Group Name' field should only contain text or single values"
+    )
 
     def build_input_field(self):
         return {
@@ -109,6 +112,21 @@ class UtilLineItemizerTransform(BaseTransform):
                 "prepend values to existing line-items.",
             }
         ]
+
+    def transform_many(self, inputs, options):
+        """
+        Throws error if lists or dicts are mapped into the 'Line-item(s) Group Name'/'inputs' field.
+        """
+
+        options = options or {}
+
+        if isinstance(inputs, dict):
+            self.raise_exception("{}".format(self.lineitems_group_name_error))
+        elif isinstance(inputs, list):
+            self.raise_exception("{}".format(self.lineitems_group_name_error))
+        else:
+            outputs = self.transform(inputs, **options)
+        return outputs
 
 
 register(UtilLineItemizerTransform())

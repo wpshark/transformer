@@ -88,12 +88,12 @@ class UtilLineItemizerTransform(BaseTransform):
                 #  Skips if the list isn't long enough for an available property.
                 try:
                     this_line_item.update({k: v[num]})
-                except Exception as e:
+                except IndexError as e:
                     pass
             # try adding the individual line item object to the main output array. Skips if no object is available (unlikely).
             try:
                 output[input_key].append(this_line_item)
-            except Exception as e:
+            except IndexError as e:
                 pass
 
         return output

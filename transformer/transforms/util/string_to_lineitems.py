@@ -120,9 +120,7 @@ class UtilLineItemizerTransform(BaseTransform):
 
         options = options or {}
 
-        if isinstance(inputs, dict):
-            self.raise_exception("{}".format(self.lineitems_group_name_error))
-        elif isinstance(inputs, list):
+        if isinstance(inputs, (dict,list)):
             self.raise_exception("{}".format(self.lineitems_group_name_error))
         else:
             outputs = self.transform(inputs, **options)

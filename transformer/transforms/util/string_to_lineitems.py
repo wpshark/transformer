@@ -6,10 +6,12 @@ class UtilLineItemizerTransform(BaseTransform):
 
     category = "util"
     name = "line_itemizer"
-    label = "Create / Append / Prepend to Line-item(s)"
+    label = "Line Itemizer (Create/Append/Prepend)"
     # Flesh this out to describe more functions
     help_text = (
-        "Convert comma delimited text to line-item(s). 'a,b,c,d' becomes [a,b,c,d]. More on line-items "
+        "Convert comma delimited text or values to line-item(s). 'a,b,c,d' becomes [a,b,c,d]. Append "
+        "or prepend to existing line-items by mapping them into the same field as comma separated "
+        "text or single values. For details, see the Line Itemizer guide "
         "[here](https://zapier.com/help/formatter/#how-use-line-items-formatter)."
     )
 
@@ -25,7 +27,7 @@ class UtilLineItemizerTransform(BaseTransform):
             "required": False,
             "key": "inputs",
             "label": "Line-item(s) Group Name",
-            "help_text": 'Optional name for your set of line-item(s). ex: "Orders", "Sale lines", etc. Default is "Line-item(s)".',
+            "help_text": "Name your set of line-item(s). ex: 'Orders', 'Invoice Lines'. Default is 'Line-item(s)'.",
         }
 
     def transform(self, input_key, my_dict={}, **kwargs):
@@ -106,10 +108,7 @@ class UtilLineItemizerTransform(BaseTransform):
                 "key": "my_dict",
                 "label": "Line-item(s)",
                 "help_text": "Line-item property names on the left (ex: Price, Description) and comma-separated "
-                "values on the right. Each property must have a unique name. Properties without a name are "
-                "ignored. Line-items mapped into the fields on the right will be treated as comma-separated "
-                "text along with any plain text or single values you add. This can be used to append or "
-                "prepend values to existing line-items.",
+                "text or values on the right.",
             }
         ]
 
@@ -120,7 +119,7 @@ class UtilLineItemizerTransform(BaseTransform):
 
         options = options or {}
 
-        if isinstance(inputs, (dict,list)):
+        if isinstance(inputs, (dict, list)):
             self.raise_exception("{}".format(self.lineitems_group_name_error))
         else:
             outputs = self.transform(inputs, **options)

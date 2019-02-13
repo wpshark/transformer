@@ -1,10 +1,10 @@
 import unittest
-import string_to_lineitems
+import line_itemizer
 
 
 class TestUtilLineItemizerTransform(unittest.TestCase):
-    def test_string_to_lineitems(self):
-        transformer = string_to_lineitems.UtilLineItemizerTransform()
+    def test_line_itemizer(self):
+        transformer = line_itemizer.UtilLineItemizerTransform()
         self.assertEqual(
             {
                 "test lines": [
@@ -41,8 +41,8 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
             ),
         )
 
-    def test_string_to_lineitems_variable_length(self):
-        transformer = string_to_lineitems.UtilLineItemizerTransform()
+    def test_line_itemizer_variable_length(self):
+        transformer = line_itemizer.UtilLineItemizerTransform()
         self.assertEqual(
             {
                 "Line-item(s)": [
@@ -57,8 +57,8 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
             ),
         )
 
-    def test_string_to_lineitems_empty(self):
-        transformer = string_to_lineitems.UtilLineItemizerTransform()
+    def test_line_itemizer_empty(self):
+        transformer = line_itemizer.UtilLineItemizerTransform()
         self.assertEqual({"Line-item(s)": []}, transformer.transform("", my_dict={}))
         self.assertEqual(
             {

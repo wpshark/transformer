@@ -41,7 +41,7 @@ class UtilImportCSVTransform(BaseTransform):
 
         output = {input_key: [], "header": header, "dialect": str(dialect)}
         this_line_item = []
-        
+
         if header:
             # we have headers
             csvreader = csv.DictReader(response, dialect=dialect)
@@ -50,7 +50,12 @@ class UtilImportCSVTransform(BaseTransform):
             output[input_key] = this_line_item
         else:
             # we don't have headers, so need some fake LI keys, but need number of fields....
-            csvreader = csv.DictReader(response, dialect=dialect)
+            headerreader = csv.reader(response, dialect=dialect)
+            row1 = headerreader.next()
+            fieldnames = { 'Item {}'.format(i + 1): s for i, s in enumerate(row1)}
+            # now we have field names - lets hope row #1 has everything it needs
+            response.seek(0)
+            csvreader = csv.DictReader(response, fieldnames=fieldnames, dialect=dialect)
             for row in csvreader:
                 this_line_item.append(row)
             output[input_key] = this_line_item

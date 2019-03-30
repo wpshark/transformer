@@ -3,6 +3,9 @@ from transformer.transforms.base import BaseTransform
 import csv
 import urllib
 import tempfile
+import os
+
+MAX_CSV_FILE_SIZE = 25e6
 
 class UtilImportCSVTransform(BaseTransform):
 
@@ -11,13 +14,21 @@ class UtilImportCSVTransform(BaseTransform):
     label = "Import CSV File"
     # Flesh this out to describe more functions
     help_text = (
-        "Import a csv file from a public URL or file field from another Zap step"
-        "More on csv files [here] (https://zapier.com/help/formatter/#how-use-line-items-formatterv2)"
+        "Import a csv file from a public URL, File field from another Zap step, or entered text. "
+        "Limited to 500k/1000 rows "
+        "More on using csv files [here] (https://zapier.com/help/formatter/#how-process-csvs-formatter)"
     )
 
     noun = "CSV"
     verb = "import"
 
+    def build_input_field(self):
+        return {
+            "type": "file",
+            "required": True,
+            "key": "inputs",
+            "label": "CSV file",
+        }
 
     def transform(self, csv_url, options=None, **kwargs):
         # Take a file input and output a set of line-item fields, or a big string field
@@ -33,13 +44,22 @@ class UtilImportCSVTransform(BaseTransform):
         input_key = "Line-item(s)"
         url = csv_url
         response = tempfile.NamedTemporaryFile()
-        urllib.urlretrieve(url, response.name)
-        header = csv.Sniffer().has_header(response.read(1024))
+
         response.seek(0)
-        dialect = csv.Sniffer().sniff(response.read(1024))
+        urllib.urlretrieve(url, response.name)
+
+        #check size
+        response.seek(0, 2)
+        size = response.tell()
+        size_in_K = size / 1000
+
+        response.seek(0)
+        header = csv.Sniffer().has_header(response.read())
+        response.seek(0)
+        dialect = csv.Sniffer().sniff(response.read())
         response.seek(0)
 
-        output = {input_key: [], "header": header, "dialect": str(dialect)}
+        output = {input_key: [], "header": header, "size": size_in_K}
         this_line_item = []
 
         if header:
@@ -53,7 +73,7 @@ class UtilImportCSVTransform(BaseTransform):
             headerreader = csv.reader(response, dialect=dialect)
             row1 = headerreader.next()
             fieldnames = { 'Item {}'.format(i + 1): s for i, s in enumerate(row1)}
-            # now we have field names - lets hope row #1 has everything it needs
+            # now we have field names as Item 1..n - lets hope row #1 has everything it needs
             response.seek(0)
             csvreader = csv.DictReader(response, fieldnames=fieldnames, dialect=dialect)
             for row in csvreader:

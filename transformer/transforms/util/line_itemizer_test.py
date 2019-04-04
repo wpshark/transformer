@@ -133,3 +133,54 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
                 my_subtotal_toggle="No",
             ),
         )
+
+    def test_line_itemizer_numbering(self):
+        transformer = line_itemizer.UtilLineItemizerTransform()
+        self.assertEqual(
+            {
+                "test lines": [
+                    {"price": "1", "qty": "1", "number": "1"},
+                    {"price": "2", "qty": "2", "number": "2"},
+                    {"price": "3", "qty": "3", "number": "3"},
+                    {"price": "4", "qty": "4", "number": "4"},
+                ]
+            },
+            transformer.transform(
+                "test lines",
+                my_dict={"price": "1,2,3,4", "qty": "1,2,3,4"},
+                my_numbering_name="number",
+                my_numbering_toggle="Yes",
+            ),
+        )
+        self.assertEqual(
+            {
+                "test lines": [
+                    {"price": "1", "qty": "1", "number": "x"},
+                    {"price": "2", "qty": "2", "number": "y"},
+                    {"price": "3", "qty": "3", "number": "z"},
+                    {"price": "4", "qty": "4", "number": "a"},
+                ]
+            },
+            transformer.transform(
+                "test lines",
+                my_dict={"price": "1,2,3,4", "qty": "1,2,3,4", "number": "x,y,z,a"},
+                my_numbering_name="number",
+                my_numbering_toggle="Yes",
+            ),
+        )
+        self.assertEqual(
+            {
+                "test lines": [
+                    {"price": "1", "qty": "1"},
+                    {"price": "2", "qty": "2"},
+                    {"price": "3", "qty": "3"},
+                    {"price": "4", "qty": "4"},
+                ]
+            },
+            transformer.transform(
+                "test lines",
+                my_dict={"price": "1,2,3,4", "qty": "1,2,3,4"},
+                my_numbering_name="number",
+                my_numbering_toggle="No",
+            ),
+        )

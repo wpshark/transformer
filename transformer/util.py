@@ -96,15 +96,17 @@ def try_parse_date(date_value, from_format=None):
 
     """
     try:
-        if from_format:
+        # Arrow does not handle negative Unix Timestamps (pre-1970) when explicitly using the token 'X'
+        if from_format and not from_format == 'X':  
             dt = arrow.get(date_value, from_format)
             if dt:
                 return dt
 
         try:
             # Assume that a sufficiently large timestamp is actually in millisecond resolution, but with the decimal point missing
+            # Also if the timestamp is sufficiently large in the negative direction
             date_value = float(date_value)
-            if date_value >= (1 << 32) - 1:
+            if date_value >= (1 << 32) - 1 or date_value <= -1*(1 << 32) + 1:
                 date_value /= 1000.0
         except:
             pass

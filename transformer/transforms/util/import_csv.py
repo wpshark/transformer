@@ -3,7 +3,6 @@ from transformer.transforms.base import BaseTransform
 import csv
 import urllib
 import tempfile
-import os
 
 MAX_CSV_FILE_SIZE = 50000
 
@@ -41,22 +40,20 @@ class UtilImportCSVTransform(BaseTransform):
         else:
             li_output = line_items
 
-
+        # create a temp file, then load the csv into it
         url = csv_url
         response = tempfile.NamedTemporaryFile()
-
         response.seek(0)
         urllib.urlretrieve(url, response.name)
 
-        #check size
+        #check file size
         response.seek(0, 2)
         size = response.tell()
         size_in_K = size / 1000
-
         if (size > MAX_CSV_FILE_SIZE):
             self.raise_exception('CSV Import only supports file sizes < 500K.')
 
-
+        # use csv utils to see if there is a header, and get the dialect (format) of the csv
         response.seek(0)
         header = csv.Sniffer().has_header(response.read())
         response.seek(0)
@@ -64,18 +61,18 @@ class UtilImportCSVTransform(BaseTransform):
         response.seek(0)
 
         if li_output:
-            # output a line-item
+            # output line-items
             input_key = "Line-item(s)"
             if header:
             # we have headers
-                output = {input_key: [], "header": header, "size": str(size_in_K) + 'K', "line item output": li_output}
+                output = {input_key: [], "header": header, "filesize": str(size_in_K) + 'K', "line item output": li_output}
                 this_line_item = []
                 csvreader = csv.DictReader(response, dialect=dialect)
                 for row in csvreader:
                     this_line_item.append(row)
                 output[input_key] = this_line_item
             else:
-                # we don't have headers, so need some fake LI keys, but need number of fields....
+                # we don't have headers, so need some fake LI keys, but first need number of fields, so grab the first row....
                 headerreader = csv.reader(response, dialect=dialect)
                 row1 = headerreader.next()
                 fieldnames = { 'Item {}'.format(i + 1): s for i, s in enumerate(row1)}
@@ -87,9 +84,9 @@ class UtilImportCSVTransform(BaseTransform):
                 output[input_key] = this_line_item
 
         else:
-            #output is a string
+            #output is a big string
             input_key = "CSV Text"
-            output = {input_key: "", "header": header, "size": str(size_in_K) + 'K',"line item output": li_output}
+            output = {input_key: "", "header": header, "filesize": str(size_in_K) + 'K',"line item output": li_output}
             output[input_key] = response.read()
 
         response.close()
@@ -104,5 +101,6 @@ class UtilImportCSVTransform(BaseTransform):
                 "label": "Line-items",
                 "help_text": "By default, the csv will be imported into line-item fields. Select No to import into a text field instead."
             }
+
         ]
 register(UtilImportCSVTransform())

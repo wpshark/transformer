@@ -4,7 +4,7 @@ import csv
 import urllib
 import tempfile
 
-MAX_CSV_FILE_SIZE = 50000
+MAX_CSV_FILE_SIZE = 500000
 
 class UtilImportCSVTransform(BaseTransform):
 

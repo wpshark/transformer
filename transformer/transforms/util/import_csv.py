@@ -4,17 +4,19 @@ import csv
 import urllib
 import tempfile
 
-MAX_CSV_FILE_SIZE = 500000
+#Approximate size of a 1000 line CSV with 14 columns, some tezt in each
+#This takes ~3-5 seconds to turn into line-items in Zapier, and is still workable in the editor
+#So not arbitrary, but I'm sure it could be tweaked
+MAX_CSV_FILE_SIZE = 150000
 
 class UtilImportCSVTransform(BaseTransform):
 
     category = "util"
     name = "import_csv"
     label = "Import CSV File"
-    # Flesh this out to describe more functions
     help_text = (
         "Import a csv file from a public URL, File field from another Zap step, or entered text. "
-        "Limited to 500k/1000 rows. "
+        "Limited to 150k/1000 rows. "
         "More on using csv files [here] (https://zapier.com/help/formatter/#how-process-csvs-formatter)"
     )
 
@@ -49,9 +51,8 @@ class UtilImportCSVTransform(BaseTransform):
         #check file size
         response.seek(0, 2)
         size = response.tell()
-        size_in_K = size / 1000
         if (size > MAX_CSV_FILE_SIZE):
-            self.raise_exception('CSV Import only supports file sizes < 500K.')
+            self.raise_exception('CSV Import only supports file sizes < 150K.')
 
         # use csv utils to see if there is a header, and get the dialect (format) of the csv
         response.seek(0)
@@ -65,7 +66,7 @@ class UtilImportCSVTransform(BaseTransform):
             input_key = "Line-item(s)"
             if header:
             # we have headers
-                output = {input_key: [], "header": header, "filesize": str(size_in_K) + 'K', "line item output": li_output}
+                output = {input_key: [], "header": header, "line item output": li_output}
                 this_line_item = []
                 csvreader = csv.DictReader(response, dialect=dialect)
                 for row in csvreader:
@@ -86,7 +87,7 @@ class UtilImportCSVTransform(BaseTransform):
         else:
             #output is a big string
             input_key = "CSV Text"
-            output = {input_key: "", "header": header, "filesize": str(size_in_K) + 'K',"line item output": li_output}
+            output = {input_key: "", "header": header,"line item output": li_output}
             output[input_key] = response.read()
 
         response.close()
@@ -99,7 +100,7 @@ class UtilImportCSVTransform(BaseTransform):
                 "required": False,
                 "key": "line_items",
                 "label": "Line-items",
-                "help_text": "By default, the csv will be imported into line-item fields. Select No to import into a text field instead."
+                "help_text": "By default, the csv file will be imported into line-item fields. Select No to import into a text field instead."
             }
 
         ]

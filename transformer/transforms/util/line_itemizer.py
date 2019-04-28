@@ -123,8 +123,8 @@ class UtilLineItemizerTransform(BaseTransform):
                 except IndexError as e:
                     pass
             if (
-                my_price in this_line_item.keys()
-                and my_qty in this_line_item.keys()
+                my_price in this_line_item
+                and my_qty in this_line_item
                 and my_subtotal_toggle
             ):
                 # Try to create a subtotal value for this line item if:

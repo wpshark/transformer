@@ -37,10 +37,10 @@ class UtilLineItemizerTransform(BaseTransform):
         self,
         input_key,
         my_dict={},
-        my_price="Price",
-        my_qty="Quantity",
-        my_decimals="2",
-        my_subtotal_toggle=False,
+        price="Price",
+        qty="Quantity",
+        decimals="2",
+        subtotal_toggle=False,
         **kwargs
     ):
         """Take a dict input and output an array of one or more Zapier standard line-items.
@@ -54,9 +54,9 @@ class UtilLineItemizerTransform(BaseTransform):
                 "Description": "Hat,Shoes,Shirt",
                 "Quantity": "1,2,1"
             }
-            my_price = "Price"
-            my_qty = "Quantity"
-            my_decimals = "2"
+            price = "Price"
+            qty = "Quantity"
+            decimals = "2"
         Expected output (Zapier Standard Line Items with optional, calculated Subtotal property):
             {
                 Order Lines": [
@@ -91,11 +91,11 @@ class UtilLineItemizerTransform(BaseTransform):
         numbering_increment = 1
         longest_array = 0
         subtotal_name = "Subtotal"
-        price = Decimal(0)
-        qty = Decimal(0)
-        my_decimals = try_parse_number(my_decimals)
+        decimal_price = Decimal(0)
+        decimal_qty = Decimal(0)
+        decimals = try_parse_number(decimals)
         try:
-            my_places = Decimal(10) ** (-1 * int(my_decimals))
+            my_places = Decimal(10) ** (-1 * int(decimals))
         except ValueError as e:
             self.raise_exception(
                 "Please enter an integer for the 'Decimal Places for Subtotal Values' field."
@@ -123,19 +123,19 @@ class UtilLineItemizerTransform(BaseTransform):
                 except IndexError as e:
                     pass
             if (
-                my_price in this_line_item
-                and my_qty in this_line_item
-                and my_subtotal_toggle
+                price in this_line_item
+                and qty in this_line_item
+                and subtotal_toggle
             ):
                 # Try to create a subtotal value for this line item if:
                 #   Create Subtotal Property is "Yes"
                 #   There is no conflict between a Line-item property with the same name as the Subtotal field
                 #   The Specified Price and Quantity fields exist in this line item.
                 try:
-                    price = Decimal(this_line_item[my_price])
-                    qty = Decimal(this_line_item[my_qty])
+                    decimal_price = Decimal(this_line_item[price])
+                    decimal_qty = Decimal(this_line_item[qty])
                     this_line_item.update(
-                        {subtotal_name: str((price * qty).quantize(my_places))}
+                        {subtotal_name: str((decimal_price * decimal_qty).quantize(my_places))}
                     )
                 except (KeyError, ValueError, InvalidOperation) as e:
                     # These are the three error types we'd expect to happen in this block, although KeyError is minimized
@@ -171,28 +171,28 @@ class UtilLineItemizerTransform(BaseTransform):
             {
                 "type": "bool",
                 "required": False,
-                "key": "my_subtotal_toggle",
+                "key": "subtotal_toggle",
                 "label": "Create Subtotal Property?",
                 "default": "No",
             },
             {
                 "type": "unicode",
                 "required": False,
-                "key": "my_price",
+                "key": "price",
                 "label": "Price Property to use for calculating Subtotal",
                 "default": "Price",
             },
             {
                 "type": "unicode",
                 "required": False,
-                "key": "my_qty",
+                "key": "qty",
                 "label": "Quantity Property to use for calculating Subtotal",
                 "default": "Quantity",
             },
             {
                 "type": "int",
                 "required": False,
-                "key": "my_decimals",
+                "key": "decimals",
                 "label": "Decimal Places for Subtotal Values",
                 "default": "2",
                 "help_text": "Specify how many decimal places each Subtotal value should be rounded to. "

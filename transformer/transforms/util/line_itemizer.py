@@ -42,13 +42,10 @@ class UtilLineItemizerTransform(BaseTransform):
         my_subtotal_name="Subtotal",
         my_decimals="2",
         my_subtotal_toggle="No",
-        my_numbering_name="Number",
-        my_numbering_toggle="No",
         **kwargs
     ):
         """Take a dict input and output an array of one or more Zapier standard line-items.
         Subtotal value takes the values from two other fields like Price and Quantity and multiplies them
-        Number value starts at 1 and increments by 1 for each line item, providign an accessible line item number for users
 
         Example:
         User inputs some strings and a dict like this:
@@ -63,8 +60,6 @@ class UtilLineItemizerTransform(BaseTransform):
             my_subtotal_name = "Subtotal"
             my_decimals = "2"
             my_subtotal_toggle = "Yes"
-            my_numbering_name="Number",
-            my_numbering_toggle="Yes",
         Expected output (Zapier Standard Line Items with optional, calculated Subtotal property):
             {
                 Order Lines": [
@@ -72,22 +67,19 @@ class UtilLineItemizerTransform(BaseTransform):
                         "Price": "5",
                         "Description": "Hat",
                         "Quantity": "1",
-                        "Subtotal": "5",
-                        "Number": "1"
+                        "Subtotal": "5"
                     },
                     {
                         "Price": "3.5",
                         "Description": "Shoes",
                         "Quantity": "2",
-                        "Subtotal": "7",
-                        "Number": "2"
+                        "Subtotal": "7"
                     },
                     {
                         "Price": "4",
                         "Description": "Shirt",
                         "Quantity": "1",
-                        "Subtotal": "4",
-                        "Number": "3"
+                        "Subtotal": "4"
                     }
                 ]
             }
@@ -151,12 +143,6 @@ class UtilLineItemizerTransform(BaseTransform):
                 except (KeyError, ValueError, InvalidOperation) as e:
                     # These are the three error types we'd expect to happen in this block, although KeyError is minimized
                     # by the if statement
-                    pass
-            if my_numbering_toggle == "Yes" and my_numbering_name not in my_dict.keys():
-                # Create a number value that users can access in their Zaps:
-                try:
-                    this_line_item.update({my_numbering_name: str(numbering_increment)})
-                except ValueError as e:
                     pass
             # try adding the individual line item object to the main output array. Skips if no object is available (unlikely).
             try:
@@ -224,30 +210,7 @@ class UtilLineItemizerTransform(BaseTransform):
                 "default": "2",
                 "help_text": "Specify how many decimal places each Subtotal value should be rounded to. "
                 "Default is '2'.",
-            },
-            {
-                "key": "numbering_help",
-                "type": "copy",
-                "help_text": "If you want to number your line-items, Formatter can create a 'Number' property "
-                "in each line-item. Starts at 1 and increments by 1 for each line. ",
-            },
-            {
-                "type": "unicode",
-                "required": False,
-                "key": "my_numbering_toggle",
-                "label": "Create Number Property?",
-                "default": "No",
-                "choices": "Yes,No",
-            },
-            {
-                "type": "unicode",
-                "required": False,
-                "key": "my_numbering_name",
-                "label": "Number Property Name",
-                "default": "Number",
-                "help_text": "Set the Number Property Name here. Default is 'Number'. Formatter will not "
-                "overwrite a property with the same name defined in the 'Line-item Properties' fields.",
-            },
+            }
         ]
 
     def transform_many(self, inputs, options):

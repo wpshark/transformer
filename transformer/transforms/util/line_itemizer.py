@@ -39,7 +39,6 @@ class UtilLineItemizerTransform(BaseTransform):
         my_dict={},
         my_price="Price",
         my_qty="Quantity",
-        my_subtotal_name="Subtotal",
         my_decimals="2",
         my_subtotal_toggle=False,
         **kwargs
@@ -57,9 +56,7 @@ class UtilLineItemizerTransform(BaseTransform):
             }
             my_price = "Price"
             my_qty = "Quantity"
-            my_subtotal_name = "Subtotal"
             my_decimals = "2"
-            my_subtotal_toggle = "Yes"
         Expected output (Zapier Standard Line Items with optional, calculated Subtotal property):
             {
                 Order Lines": [
@@ -93,6 +90,7 @@ class UtilLineItemizerTransform(BaseTransform):
         output = {input_key: []}
         numbering_increment = 1
         longest_array = 0
+        subtotal_name = "Subtotal"
         price = Decimal(0)
         qty = Decimal(0)
         my_decimals = try_parse_number(my_decimals)
@@ -128,7 +126,6 @@ class UtilLineItemizerTransform(BaseTransform):
                 my_price in this_line_item.keys()
                 and my_qty in this_line_item.keys()
                 and my_subtotal_toggle
-                and my_subtotal_name not in my_dict
             ):
                 # Try to create a subtotal value for this line item if:
                 #   Create Subtotal Property is "Yes"
@@ -138,7 +135,7 @@ class UtilLineItemizerTransform(BaseTransform):
                     price = Decimal(this_line_item[my_price])
                     qty = Decimal(this_line_item[my_qty])
                     this_line_item.update(
-                        {my_subtotal_name: str((price * qty).quantize(my_places))}
+                        {subtotal_name: str((price * qty).quantize(my_places))}
                     )
                 except (KeyError, ValueError, InvalidOperation) as e:
                     # These are the three error types we'd expect to happen in this block, although KeyError is minimized
@@ -191,15 +188,6 @@ class UtilLineItemizerTransform(BaseTransform):
                 "key": "my_qty",
                 "label": "Quantity Property to use for calculating Subtotal",
                 "default": "Quantity",
-            },
-            {
-                "type": "unicode",
-                "required": False,
-                "key": "my_subtotal_name",
-                "label": "Subtotal Property Name",
-                "default": "Subtotal",
-                "help_text": "Set the Subtotal Property Name here. Default is 'Subtotal'. Formatter will not "
-                "overwrite a property with the same name defined in the 'Line-item Properties' fields.",
             },
             {
                 "type": "int",

@@ -41,7 +41,7 @@ class UtilLineItemizerTransform(BaseTransform):
         my_qty="Quantity",
         my_subtotal_name="Subtotal",
         my_decimals="2",
-        my_subtotal_toggle="No",
+        my_subtotal_toggle=False,
         **kwargs
     ):
         """Take a dict input and output an array of one or more Zapier standard line-items.
@@ -127,8 +127,8 @@ class UtilLineItemizerTransform(BaseTransform):
             if (
                 my_price in this_line_item.keys()
                 and my_qty in this_line_item.keys()
-                and my_subtotal_toggle == "Yes"
-                and my_subtotal_name not in my_dict.keys()
+                and my_subtotal_toggle
+                and my_subtotal_name not in my_dict
             ):
                 # Try to create a subtotal value for this line item if:
                 #   Create Subtotal Property is "Yes"
@@ -172,12 +172,11 @@ class UtilLineItemizerTransform(BaseTransform):
                 "[Learn more about the Subtotal property here](https://zapier.com/help/formatter/#create-line-items-with-subtotals-using-the-line-itemizer-utility).",
             },
             {
-                "type": "unicode",
+                "type": "bool",
                 "required": False,
                 "key": "my_subtotal_toggle",
                 "label": "Create Subtotal Property?",
                 "default": "No",
-                "choices": "Yes,No",
             },
             {
                 "type": "unicode",

@@ -92,7 +92,7 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
                 my_qty="qty",
                 my_subtotal_name="subtotal",
                 my_decimals="2",
-                my_subtotal_toggle="Yes",
+                my_subtotal_toggle=True,
             ),
         )
         self.assertEqual(
@@ -111,7 +111,7 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
                 my_qty="qty",
                 my_subtotal_name="subtotal",
                 my_decimals="2",
-                my_subtotal_toggle="Yes",
+                my_subtotal_toggle=True,
             ),
         )
         self.assertEqual(
@@ -130,6 +130,6 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
                 my_qty="qty",
                 my_subtotal_name="subtotal",
                 my_decimals="2",
-                my_subtotal_toggle="No",
+                my_subtotal_toggle=False,
             ),
         )

@@ -34,6 +34,8 @@ class UtilImportCSVTransform(BaseTransform):
 
     def transform(self, csv_url, **kwargs):
         # Take a file input and output a set of line-item fields, or a big string field
+        # note use of temp file and lots of seek(0). This was required as Python file-type objects
+        # don't support resetting the iterator back to 0.
 
         if not csv_url:
             return u''
@@ -49,19 +51,15 @@ class UtilImportCSVTransform(BaseTransform):
         if (size > MAX_CSV_FILE_SIZE):
             self.raise_exception('CSV Import only supports file sizes < 150K.')
 
-        # use csv utils to see if there is a dialect, if the file is malformed in anyway, this will fail
+        # use csv utils to see if there is a dialect, if the file is malformed in anyway, this will fail and report to the user
         response.seek(0)
-        #try:
         dialect = csv.Sniffer().sniff(response.read())
-        #except:
-            #self.raise_exception('This CSV file has a format that Formatter does not understand')
-        # worked, so let's look for a header
         response.seek(0)
         header = csv.Sniffer().has_header(response.read())
 
         response.seek(0)
 
-        output = {"Line-item(s)": [],"CSV text": "", "Header": header}
+        output = {"line_items": [],"csv_text": "", "header": header}
         # output line-items
         this_line_item = []
         if header:
@@ -69,22 +67,22 @@ class UtilImportCSVTransform(BaseTransform):
             csv_reader = csv.DictReader(response, dialect=dialect)
             for row in csv_reader:
                 this_line_item.append(row)
-            output["Line-item(s)"] = this_line_item
+            output["line_items"] = this_line_item
         else:
             # we don't have headers, so need some fake LI keys, but first need number of fields, so grab the first row....
             header_reader = csv.reader(response, dialect=dialect)
             row_1 = header_reader.next()
-            field_names = { 'Item {}'.format(i + 1): s for i, s in enumerate(row_1)}
+            field_names = { 'item_{}'.format(i + 1): s for i, s in enumerate(row_1)}
             # now we have field names as Item 1..n - lets hope row #1 has everything it needs
             response.seek(0)
             csvreader = csv.DictReader(response, fieldnames=field_names, dialect=dialect)
             for row in csvreader:
                 this_line_item.append(row)
-            output["Line-item(s)"] = this_line_item
+            output["line_items"] = this_line_item
 
         #also output a big string of the csv contents
         response.seek(0)
-        output["CSV text"] = response.read()
+        output["csv_text"] = response.read()
 
         response.close()
         return output

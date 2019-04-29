@@ -34,14 +34,7 @@ class UtilLineItemizerTransform(BaseTransform):
         }
 
     def transform(
-        self,
-        input_key,
-        my_dict={},
-        price="Price",
-        qty="Quantity",
-        decimals="2",
-        subtotal_toggle=False,
-        **kwargs
+        self, input_key, my_dict={}, decimals="2", subtotal_toggle=False, **kwargs
     ):
         """Take a dict input and output an array of one or more Zapier standard line-items.
         Subtotal value takes the values from two other fields like Price and Quantity and multiplies them
@@ -54,9 +47,8 @@ class UtilLineItemizerTransform(BaseTransform):
                 "Description": "Hat,Shoes,Shirt",
                 "Quantity": "1,2,1"
             }
-            price = "Price"
-            qty = "Quantity"
             decimals = "2"
+            subtotal_toggle=True,
         Expected output (Zapier Standard Line Items with optional, calculated Subtotal property):
             {
                 Order Lines": [
@@ -64,19 +56,19 @@ class UtilLineItemizerTransform(BaseTransform):
                         "Price": "5",
                         "Description": "Hat",
                         "Quantity": "1",
-                        "Subtotal": "5"
+                        "Subtotal": "5.00"
                     },
                     {
                         "Price": "3.5",
                         "Description": "Shoes",
                         "Quantity": "2",
-                        "Subtotal": "7"
+                        "Subtotal": "7.00
                     },
                     {
                         "Price": "4",
                         "Description": "Shirt",
                         "Quantity": "1",
-                        "Subtotal": "4"
+                        "Subtotal": "4.00"
                     }
                 ]
             }
@@ -88,9 +80,23 @@ class UtilLineItemizerTransform(BaseTransform):
 
         # initialize output and other variables
         output = {input_key: []}
-        numbering_increment = 1
         longest_array = 0
-        subtotal_name = "Subtotal"
+        subtotal = "Subtotal"
+        price = "Price"
+        qty = "Quantity"
+
+        # check for alternative cases for property names for price and quantity
+        if price not in my_dict:
+            for k in my_dict:
+                if k.lower() == "price":
+                    price = k
+        if qty not in my_dict:
+            for k in my_dict:
+                if k.lower() == "quantity":
+                    qty = k
+                elif k.lower() == "qty":
+                    qty = k
+
         decimal_price = Decimal(0)
         decimal_qty = Decimal(0)
         decimals = try_parse_number(decimals)
@@ -122,20 +128,20 @@ class UtilLineItemizerTransform(BaseTransform):
                     this_line_item.update({k: v[num]})
                 except IndexError as e:
                     pass
-            if (
-                price in this_line_item
-                and qty in this_line_item
-                and subtotal_toggle
-            ):
+            if price in this_line_item and qty in this_line_item and subtotal_toggle:
                 # Try to create a subtotal value for this line item if:
                 #   Create Subtotal Property is "Yes"
                 #   There is no conflict between a Line-item property with the same name as the Subtotal field
-                #   The Specified Price and Quantity fields exist in this line item.
+                #   The Price and Quantity fields both exist in this line item.
                 try:
                     decimal_price = Decimal(this_line_item[price])
                     decimal_qty = Decimal(this_line_item[qty])
                     this_line_item.update(
-                        {subtotal_name: str((decimal_price * decimal_qty).quantize(my_places))}
+                        {
+                            subtotal: str(
+                                (decimal_price * decimal_qty).quantize(my_places)
+                            )
+                        }
                     )
                 except (KeyError, ValueError, InvalidOperation) as e:
                     # These are the three error types we'd expect to happen in this block, although KeyError is minimized
@@ -144,7 +150,6 @@ class UtilLineItemizerTransform(BaseTransform):
             # try adding the individual line item object to the main output array. Skips if no object is available (unlikely).
             try:
                 output[input_key].append(this_line_item)
-                numbering_increment += 1
             except IndexError as e:
                 pass
 
@@ -163,9 +168,8 @@ class UtilLineItemizerTransform(BaseTransform):
             {
                 "key": "subtotal_help",
                 "type": "copy",
-                "help_text": "If you have 'Price' and 'Quantity' properties in your line items, Line Itemizer "
-                "can multiply those values together to create a corresponding 'Subtotal' property. "
-                "If they're called something else, you can specify which two properties to multiply below. "
+                "help_text": "If you have properties called 'Price' and 'Quantity' (or 'Qty') in your line-items above, "
+                "Line Itemizer can multiply those values together to create a corresponding 'Subtotal' property. "
                 "[Learn more about the Subtotal property here](https://zapier.com/help/formatter/#create-line-items-with-subtotals-using-the-line-itemizer-utility).",
             },
             {
@@ -173,21 +177,7 @@ class UtilLineItemizerTransform(BaseTransform):
                 "required": False,
                 "key": "subtotal_toggle",
                 "label": "Create Subtotal Property?",
-                "default": "No",
-            },
-            {
-                "type": "unicode",
-                "required": False,
-                "key": "price",
-                "label": "Price Property to use for calculating Subtotal",
-                "default": "Price",
-            },
-            {
-                "type": "unicode",
-                "required": False,
-                "key": "qty",
-                "label": "Quantity Property to use for calculating Subtotal",
-                "default": "Quantity",
+                "default": "no",
             },
             {
                 "type": "int",
@@ -195,9 +185,7 @@ class UtilLineItemizerTransform(BaseTransform):
                 "key": "decimals",
                 "label": "Decimal Places for Subtotal Values",
                 "default": "2",
-                "help_text": "Specify how many decimal places each Subtotal value should be rounded to. "
-                "Default is '2'.",
-            }
+            },
         ]
 
     def transform_many(self, inputs, options):

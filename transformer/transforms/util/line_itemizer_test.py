@@ -88,8 +88,6 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
             transformer.transform(
                 "test lines",
                 my_dict={"price": "1,2,3,4", "qty": "1,2,3,4"},
-                price="price",
-                qty="qty",
                 decimals="2",
                 subtotal_toggle=True,
             ),
@@ -106,8 +104,6 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
             transformer.transform(
                 "test lines",
                 my_dict={"price": "1,2,3,4", "qty": "1,2,3,4", "Subtotal": "x,y,z,a"},
-                price="price",
-                qty="qty",
                 decimals="2",
                 subtotal_toggle=True,
             ),
@@ -124,8 +120,6 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
             transformer.transform(
                 "test lines",
                 my_dict={"price": "1,2,3,4", "qty": "o,2,3,4", "Subtotal": "x,y,z,a"},
-                price="price",
-                qty="qty",
                 decimals="2",
                 subtotal_toggle=True,
             ),
@@ -142,8 +136,6 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
             transformer.transform(
                 "test lines",
                 my_dict={"price": "1,2,3,4", "qty": "1,2,3,4"},
-                price="price",
-                qty="qty",
                 decimals="2",
                 subtotal_toggle=False,
             ),

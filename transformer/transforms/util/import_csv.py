@@ -15,9 +15,10 @@ class UtilImportCSVTransform(BaseTransform):
     name = "import_csv"
     label = "Import CSV File"
     help_text = (
-        "Import a CSV file from a public URL, File field from another Zap step, or entered text. "
-        "Limited to 150k/1000 rows. "
-        "More on using csv files [here] (https://zapier.com/help/formatter/#how-process-csvs-formatter)"
+        "Import a CSV file from a public URL, File field from another Zap step, or entered text.  "
+        "Limited to 150k (around 1000 rows).  "
+        "Output is a Line-item field for each column, and a text field with CSV file contents.  "
+        "More on using csv files [here.](https://zapier.com/help/formatter/#how-process-csvs-formatter)"
     )
 
     noun = "CSV"
@@ -70,7 +71,7 @@ class UtilImportCSVTransform(BaseTransform):
                 this_line_item.append(row)
             output["Line-item(s)"] = this_line_item
         else:
-                # we don't have headers, so need some fake LI keys, but first need number of fields, so grab the first row....
+            # we don't have headers, so need some fake LI keys, but first need number of fields, so grab the first row....
             header_reader = csv.reader(response, dialect=dialect)
             row_1 = header_reader.next()
             field_names = { 'Item {}'.format(i + 1): s for i, s in enumerate(row_1)}

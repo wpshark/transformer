@@ -4,8 +4,8 @@ import csv
 import urllib
 import tempfile
 
-#Approximate size of a 1000 line CSV with 14 columns, some tezt in each
-#This takes ~3-5 seconds to turn into line-items in Zapier, and is still workable in the editor
+#Approximate size of a 1000 line CSV with 14 columns, some text in each
+#This takes ~3-5 seconds to turn into line-items in Zapier
 #So not arbitrary, but I'm sure it could be tweaked
 MAX_CSV_FILE_SIZE = 150000
 
@@ -17,8 +17,8 @@ class UtilImportCSVTransform(BaseTransform):
     help_text = (
         "Import a CSV file from a public URL, File field from another Zap step, or entered text.  "
         "Limited to 150k (around 1000 rows).  "
-        "Output is a Line-item field for each column, and a text field with CSV file contents.  "
-        "More on using csv files [here.](https://zapier.com/help/formatter/#how-process-csvs-formatter)"
+        "Output is a line-item field for each column, and a text field with CSV file contents.  "
+        "More on importing csv files [here.](https://zapier.com/help/formatter/#how-import-csv-files-formatter)"
     )
 
     noun = "CSV"
@@ -33,7 +33,7 @@ class UtilImportCSVTransform(BaseTransform):
         }
 
     def transform(self, csv_url, **kwargs):
-        # Take a file input and output a set of line-item fields, or a big string field
+        # Take a file input and output a set of line-item fields and a big string field
         # note use of temp file and lots of seek(0). This was required as Python file-type objects
         # don't support resetting the iterator back to 0.
 
@@ -51,7 +51,7 @@ class UtilImportCSVTransform(BaseTransform):
         if (size > MAX_CSV_FILE_SIZE):
             self.raise_exception('CSV Import only supports file sizes < 150K.')
 
-        # use csv utils to see if there is a dialect, if the file is malformed in anyway, this will fail and report to the user
+        # use csv utils to see if there is a dialect, if the file is malformed in anyway, this will fail and report that error to the user
         response.seek(0)
         dialect = csv.Sniffer().sniff(response.read())
         response.seek(0)
@@ -73,7 +73,7 @@ class UtilImportCSVTransform(BaseTransform):
             header_reader = csv.reader(response, dialect=dialect)
             row_1 = header_reader.next()
             field_names = { 'item_{}'.format(i + 1): s for i, s in enumerate(row_1)}
-            # now we have field names as Item 1..n - lets hope row #1 has everything it needs
+            # now we have field names as item 1..n - lets hope row #1 has everything it needs
             response.seek(0)
             csvreader = csv.DictReader(response, fieldnames=field_names, dialect=dialect)
             for row in csvreader:

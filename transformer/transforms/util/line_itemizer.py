@@ -34,7 +34,7 @@ class UtilLineItemizerTransform(BaseTransform):
         }
 
     def transform(
-        self, input_key, my_dict={}, decimals="2", subtotal_toggle=False, **kwargs
+        self, input_key, my_dict=None, decimals=2, subtotal_toggle=False, **kwargs
     ):
         """Take a dict input and output an array of one or more Zapier standard line-items.
         Subtotal value takes the values from two other fields like Price and Quantity and multiplies them
@@ -78,10 +78,12 @@ class UtilLineItemizerTransform(BaseTransform):
         if not input_key:
             input_key = "Line-item(s)"
 
-        # initialize output and other variables
+        # initialize variables
+        if my_dict is None:
+            my_dict = {}
         output = {input_key: []}
         longest_array = 0
-        subtotal = "Subtotal"
+        subtotal = "subtotal"
         price = "Price"
         qty = "Quantity"
 
@@ -97,8 +99,6 @@ class UtilLineItemizerTransform(BaseTransform):
                 elif k.lower() == "qty":
                     qty = k
 
-        decimal_price = Decimal(0)
-        decimal_qty = Decimal(0)
         decimals = try_parse_number(decimals)
         try:
             my_places = Decimal(10) ** (-1 * int(decimals))
@@ -125,7 +125,7 @@ class UtilLineItemizerTransform(BaseTransform):
                 # Try to add each property from my_dict to the individual line-item.
                 #  Skips if the list isn't long enough for an available property.
                 try:
-                    this_line_item.update({k: v[num]})
+                    this_line_item[k] = v[num]
                 except IndexError as e:
                     pass
             if price in this_line_item and qty in this_line_item and subtotal_toggle:
@@ -136,12 +136,9 @@ class UtilLineItemizerTransform(BaseTransform):
                 try:
                     decimal_price = Decimal(this_line_item[price])
                     decimal_qty = Decimal(this_line_item[qty])
-                    this_line_item.update(
-                        {
-                            subtotal: str(
-                                (decimal_price * decimal_qty).quantize(my_places)
-                            )
-                        }
+                    # must convert to string or float here, or else output will include the text "Decimal()"
+                    this_line_item[subtotal] = str(
+                        (decimal_price * decimal_qty).quantize(my_places)
                     )
                 except (KeyError, ValueError, InvalidOperation) as e:
                     # These are the three error types we'd expect to happen in this block, although KeyError is minimized

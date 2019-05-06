@@ -159,22 +159,6 @@ class TestDateFormattingTransform(unittest.TestCase):
         ), "01-22-2016")
 
         self.assertEqual(self.transformer.transform(
-            -149054400000,
-            to_format='YYYY-MM-DD',
-            from_format='X',
-            from_timezone='UTC',
-            to_timezone='Australia/Sydney'
-        ), "1965-04-12")
-
-        self.assertEqual(self.transformer.transform(
-            -149054400,
-            to_format='YYYY-MM-DD',
-            from_format='X',
-            from_timezone='UTC',
-            to_timezone='Australia/Sydney'
-        ), "1965-04-12")
-
-        self.assertEqual(self.transformer.transform(
             1453498140000,
             to_format='MM-DD-YYYY'
         ), "01-22-2016")

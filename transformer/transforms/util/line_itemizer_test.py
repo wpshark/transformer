@@ -73,3 +73,70 @@ class TestUtilLineItemizerTransform(unittest.TestCase):
             {"Line-item(s)": [{"name": "one"}, {"name": "two"}]},
             transformer.transform("", my_dict={"": "a,b", "name": "one,two"}),
         )
+
+    def test_line_itemizer_subtotals(self):
+        transformer = line_itemizer.UtilLineItemizerTransform()
+        self.assertEqual(
+            {
+                "test lines": [
+                    {"price": "1", "qty": "1", "subtotal": "1.00"},
+                    {"price": "2", "qty": "2", "subtotal": "4.00"},
+                    {"price": "3", "qty": "3", "subtotal": "9.00"},
+                    {"price": "4", "qty": "4", "subtotal": "16.00"},
+                ]
+            },
+            transformer.transform(
+                "test lines",
+                my_dict={"price": "1,2,3,4", "qty": "1,2,3,4"},
+                decimals="2",
+                subtotal_toggle=True,
+            ),
+        )
+        self.assertEqual(
+            {
+                "test lines": [
+                    {"price": "1", "qty": "1", "subtotal": "1.00"},
+                    {"price": "2", "qty": "2", "subtotal": "4.00"},
+                    {"price": "3", "qty": "3", "subtotal": "9.00"},
+                    {"price": "4", "qty": "4", "subtotal": "16.00"},
+                ]
+            },
+            transformer.transform(
+                "test lines",
+                my_dict={"price": "1,2,3,4", "qty": "1,2,3,4", "subtotal": "x,y,z,a"},
+                decimals="2",
+                subtotal_toggle=True,
+            ),
+        )
+        self.assertEqual(
+            {
+                "test lines": [
+                    {"price": "1", "qty": "o", "subtotal": "x"},
+                    {"price": "2", "qty": "2", "subtotal": "4.00"},
+                    {"price": "3", "qty": "3", "subtotal": "9.00"},
+                    {"price": "4", "qty": "4", "subtotal": "16.00"},
+                ]
+            },
+            transformer.transform(
+                "test lines",
+                my_dict={"price": "1,2,3,4", "qty": "o,2,3,4", "subtotal": "x,y,z,a"},
+                decimals="2",
+                subtotal_toggle=True,
+            ),
+        )
+        self.assertEqual(
+            {
+                "test lines": [
+                    {"price": "1", "qty": "1"},
+                    {"price": "2", "qty": "2"},
+                    {"price": "3", "qty": "3"},
+                    {"price": "4", "qty": "4"},
+                ]
+            },
+            transformer.transform(
+                "test lines",
+                my_dict={"price": "1,2,3,4", "qty": "1,2,3,4"},
+                decimals="2",
+                subtotal_toggle=False,
+            ),
+        )

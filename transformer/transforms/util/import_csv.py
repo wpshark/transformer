@@ -29,10 +29,10 @@ class UtilImportCSVTransform(BaseTransform):
             "type": "file",
             "required": True,
             "key": "inputs",
-            "label": "CSV file",
+            "label": "CSV File",
         }
 
-    def transform(self, csv_url, **kwargs):
+    def transform(self, csv_url, forced_header, **kwargs):
         # Take a file input and output a set of line-item fields and a big string field
         # note use of temp file and lots of seek(0). This was required as Python file-type objects
         # don't support resetting the iterator back to 0.
@@ -62,7 +62,6 @@ class UtilImportCSVTransform(BaseTransform):
         output = {"line_items": [],"csv_text": "", "header": header}
         # output line-items
         this_line_item = []
-        forced_header = False
         if header:
             # we have headers
             csv_reader = csv.DictReader(response, dialect=dialect)
@@ -75,10 +74,11 @@ class UtilImportCSVTransform(BaseTransform):
             row_1 = header_reader.next()
             if forced_header:
                 # user says that the first row is a header row, lets hope it has everything we need
-                fieldnames = list(s.format(i + 1) for i, s in enumerate(row1))
+                field_names = list(s.format(i + 1) for i, s in enumerate(row_1))
+                output["header"] = 'forced'
             else:
                 # user says that the first row is not a header row, create line item lables item_1...item_n
-                fieldnames = list('item_{}'.format(i + 1) for i, s in enumerate(row1))
+                field_names = list('item_{}'.format(i + 1) for i, s in enumerate(row_1))
                 response.seek(0)
                 # previous version, this put them in reverse order... field_names = { 'item_{}'.format(i + 1): s for i, s in enumerate(row_1)}
             csvreader = csv.DictReader(response, fieldnames=field_names, dialect=dialect)
@@ -92,5 +92,21 @@ class UtilImportCSVTransform(BaseTransform):
 
         response.close()
         return output
+
+
+    def fields(self, *args, **kwargs):
+        return [
+            {
+                'type': 'bool',
+                'required': False,
+                'key': 'forced_header',
+                'label': 'Force First Row as Header Row',
+                "default": "no",
+                'help_text': (
+                    'By default, Import CSV file will try to determine if your file has a header row. '
+                    'If you find in your test step that this magic did not work (header will be false), you can force it here by selecting yes.'
+                ),  # NOQA
+            },
+        ]
 
 register(UtilImportCSVTransform())

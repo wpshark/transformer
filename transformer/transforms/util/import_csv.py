@@ -62,6 +62,7 @@ class UtilImportCSVTransform(BaseTransform):
         output = {"line_items": [],"csv_text": "", "header": header}
         # output line-items
         this_line_item = []
+        forced_header = False
         if header:
             # we have headers
             csv_reader = csv.DictReader(response, dialect=dialect)
@@ -72,10 +73,14 @@ class UtilImportCSVTransform(BaseTransform):
             # we don't have headers, so need some fake LI keys, but first need number of fields, so grab the first row....
             header_reader = csv.reader(response, dialect=dialect)
             row_1 = header_reader.next()
-            field_names = list('item_{}'.format(i + 1) for i, s in enumerate(row_1))
-            # previous version, this put them in reverse order... field_names = { 'item_{}'.format(i + 1): s for i, s in enumerate(row_1)}
-            # now we have field names as item 1..n - lets hope row #1 has everything it needs
-            response.seek(0)
+            if forced_header:
+                # user says that the first row is a header row, lets hope it has everything we need
+                fieldnames = list(s.format(i + 1) for i, s in enumerate(row1))
+            else:
+                # user says that the first row is not a header row, create line item lables item_1...item_n
+                fieldnames = list('item_{}'.format(i + 1) for i, s in enumerate(row1))
+                response.seek(0)
+                # previous version, this put them in reverse order... field_names = { 'item_{}'.format(i + 1): s for i, s in enumerate(row_1)}
             csvreader = csv.DictReader(response, fieldnames=field_names, dialect=dialect)
             for row in csvreader:
                 this_line_item.append(row)

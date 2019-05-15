@@ -31,29 +31,29 @@ class TestUtilImportCSVTransform(unittest.TestCase):
         {
         "csv_text": "1,2,3,4,5\n5,6,7,,8\n9,,11,,12\n,,14,15,16",
         "line_items": [{
-        "item_4": "1",
-        "item_5": "2",
-        "item_2": "3",
-        "item_3": "4",
-        "item_1": "5"
+        "item_1": "1",
+        "item_2": "2",
+        "item_3": "3",
+        "item_4": "4",
+        "item_5": "5"
       }, {
-        "item_4": "5",
-        "item_5": "6",
-        "item_2": "7",
-        "item_3": "",
-        "item_1": "8"
-      }, {
-        "item_4": "9",
-        "item_5": "",
-        "item_2": "11",
-        "item_3": "",
-        "item_1": "12"
-      }, {
+        "item_1": "5",
+        "item_2": "6",
+        "item_3": "7",
         "item_4": "",
-        "item_5": "",
-        "item_2": "14",
-        "item_3": "15",
-        "item_1": "16"
+        "item_5": "8"
+      }, {
+        "item_1": "9",
+        "item_2": "",
+        "item_3": "11",
+        "item_4": "",
+        "item_5": "12"
+      }, {
+        "item_1": "",
+        "item_2": "",
+        "item_3": "14",
+        "item_4": "15",
+        "item_5": "16"
       }],
     "header": False,
   },

@@ -72,7 +72,8 @@ class UtilImportCSVTransform(BaseTransform):
             # we don't have headers, so need some fake LI keys, but first need number of fields, so grab the first row....
             header_reader = csv.reader(response, dialect=dialect)
             row_1 = header_reader.next()
-            field_names = { 'item_{}'.format(i + 1): s for i, s in enumerate(row_1)}
+            field_names = list('item_{}'.format(i + 1) for i, s in enumerate(row_1))
+            # previous version, this put them in reverse order... field_names = { 'item_{}'.format(i + 1): s for i, s in enumerate(row_1)}
             # now we have field names as item 1..n - lets hope row #1 has everything it needs
             response.seek(0)
             csvreader = csv.DictReader(response, fieldnames=field_names, dialect=dialect)

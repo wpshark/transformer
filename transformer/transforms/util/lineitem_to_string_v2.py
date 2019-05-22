@@ -30,6 +30,7 @@ class UtilLineItemToStringV2Transform(BaseTransform):
 
         if not inputs:
             output["text_output"] = ""
+            output["item 1"] = ""
             return output
 
         # update for Loki issue, return string is only one element

@@ -15,7 +15,8 @@ def lookup(name, category=""):
     return None
 
 def get_all(category=""):
-    return [v for k, v in __GLOBAL_REGISTRY.iteritems() if not category or category == v.category]
+    exclude_transforms = ["util.lineitem_to_string"]
+    return [v for k, v in __GLOBAL_REGISTRY.iteritems() if not category or category == v.category and not k in exclude_transforms]
 
 def make_registry():
     import transformer.transforms # NOQA

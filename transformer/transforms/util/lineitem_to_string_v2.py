@@ -29,13 +29,13 @@ class UtilLineItemToStringV2Transform(BaseTransform):
         # Perform main function of Line item to string:
 
         if not inputs:
-            output["text_output"] = ""
+            output["text"] = ""
             output["item 1"] = ""
             return output
 
         # update for Loki issue, return string is only one element
         if not isinstance(inputs, list):
-            output["text_output"] = inputs
+            output["text"] = inputs
             output["item 1"] = inputs
             return output
 
@@ -49,7 +49,7 @@ class UtilLineItemToStringV2Transform(BaseTransform):
         else:
             text_ouput = ",".join(inputs)
 
-        output["text_output"] = text_ouput
+        output["text"] = text_ouput
 
         # Create Separate Fields
 

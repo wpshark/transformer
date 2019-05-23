@@ -54,7 +54,7 @@ class UtilLineItemToStringV2Transform(BaseTransform):
         # Create Separate Fields
 
         for i, v in enumerate(inputs):
-            output["item " + str(i + 1)] = v
+            output["item_" + str(i + 1)] = v
 
         return output
 

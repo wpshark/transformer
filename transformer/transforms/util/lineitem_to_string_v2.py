@@ -30,13 +30,13 @@ class UtilLineItemToStringV2Transform(BaseTransform):
 
         if not inputs:
             output["text"] = ""
-            output["item 1"] = ""
+            output["item_1"] = ""
             return output
 
         # update for Loki issue, return string is only one element
         if not isinstance(inputs, list):
             output["text"] = inputs
-            output["item 1"] = inputs
+            output["item_1"] = inputs
             return output
 
         if options is None:

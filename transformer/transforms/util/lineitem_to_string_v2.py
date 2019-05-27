@@ -31,12 +31,14 @@ class UtilLineItemToStringV2Transform(BaseTransform):
         if not inputs:
             output["text"] = ""
             output["item_1"] = ""
+            output["item_last"] = ""
             return output
 
         # update for Loki issue, return string is only one element
         if not isinstance(inputs, list):
             output["text"] = inputs
             output["item_1"] = inputs
+            output["item_last"] = inputs
             return output
 
         if options is None:
@@ -55,6 +57,7 @@ class UtilLineItemToStringV2Transform(BaseTransform):
 
         for i, v in enumerate(inputs):
             output["item_" + str(i + 1)] = v
+            output["item_last"] = v
 
         return output
 

@@ -102,8 +102,8 @@ class UtilImportCSVTransform(BaseTransform):
                 'label': 'Force First Row as Header Row',
                 "default": "no",
                 'help_text': (
-                    'By default, Import CSV file will try to determine if your file has a header row. '
-                    'If you find in your test step that this magic did not work (header will be false), you can force it here by selecting yes.'
+                    'By default, Import CSV File will try to determine if your file has a header row. '
+                    'If you find in your test step that this did not work (header field will be false), you can force it here by selecting yes.'
                 ),  # NOQA
             },
         ]

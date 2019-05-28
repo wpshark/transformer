@@ -18,7 +18,8 @@ class UtilImportCSVTransform(BaseTransform):
         "Import a CSV file from a public URL, File field from another Zap step, or entered text.  "
         "Limited to 150k (around 1000 rows).  "
         "Output is a line-item field for each column, and a text field with CSV file contents.  "
-        "More on importing csv files [here.](https://zapier.com/help/formatter/#how-import-csv-files-formatter)"
+        "When you do your Test Step, you'll only see the first 10 rows of your CSV file, but when your Zap runs all rows will be processed. "
+        "More on importing CSV files [here.](https://zapier.com/help/formatter/#how-import-csv-files-formatter)"
     )
 
     noun = "CSV"
@@ -29,10 +30,10 @@ class UtilImportCSVTransform(BaseTransform):
             "type": "file",
             "required": True,
             "key": "inputs",
-            "label": "CSV file",
+            "label": "CSV File",
         }
 
-    def transform(self, csv_url, **kwargs):
+    def transform(self, csv_url, forced_header, **kwargs):
         # Take a file input and output a set of line-item fields and a big string field
         # note use of temp file and lots of seek(0). This was required as Python file-type objects
         # don't support resetting the iterator back to 0.
@@ -69,12 +70,17 @@ class UtilImportCSVTransform(BaseTransform):
                 this_line_item.append(row)
             output["line_items"] = this_line_item
         else:
-            # we don't have headers, so need some fake LI keys, but first need number of fields, so grab the first row....
+            # we don't have headers, so need some line-item labels, but first need number of fields, so grab the first row....
             header_reader = csv.reader(response, dialect=dialect)
             row_1 = header_reader.next()
-            field_names = { 'item_{}'.format(i + 1): s for i, s in enumerate(row_1)}
-            # now we have field names as item 1..n - lets hope row #1 has everything it needs
-            response.seek(0)
+            if forced_header:
+                # user says that the first row is a header row, lets hope it has everything we need
+                field_names = list(s.format(i + 1) for i, s in enumerate(row_1))
+                output["header"] = 'forced'
+            else:
+                # user says that the first row is not a header row, create field names item_1...item_n which become the line-item labels
+                field_names = list('item_{}'.format(i + 1) for i, s in enumerate(row_1))
+                response.seek(0)
             csvreader = csv.DictReader(response, fieldnames=field_names, dialect=dialect)
             for row in csvreader:
                 this_line_item.append(row)
@@ -86,5 +92,21 @@ class UtilImportCSVTransform(BaseTransform):
 
         response.close()
         return output
+
+
+    def fields(self, *args, **kwargs):
+        return [
+            {
+                'type': 'bool',
+                'required': False,
+                'key': 'forced_header',
+                'label': 'Force First Row as Header Row',
+                "default": "no",
+                'help_text': (
+                    'By default, Import CSV File will try to determine if your file has a header row. '
+                    'If you find in your Test Step that this did not work (the header field will be False), you can force it here by selecting yes.'
+                ),  # NOQA
+            },
+        ]
 
 register(UtilImportCSVTransform())

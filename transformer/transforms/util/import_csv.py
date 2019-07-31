@@ -18,7 +18,7 @@ class UtilImportCSVTransform(BaseTransform):
         "Import a CSV file from a public URL, File field from another Zap step, or entered text.  "
         "Limited to 150k (around 1000 rows).  "
         "Output is a line-item field for each column, and a text field with CSV file contents.  "
-        "When you do your Test Step, you'll only see the first 10 rows of your CSV file, but when your Zap runs all rows will be processed. "
+        "When you do your Test Step, you'll only see the first 50 rows of your CSV file, but when your Zap runs all rows will be processed. "
         "More on importing CSV files [here.](https://zapier.com/help/formatter/#how-import-csv-files-formatter)"
     )
 
@@ -33,7 +33,8 @@ class UtilImportCSVTransform(BaseTransform):
             "label": "CSV File",
         }
 
-    def transform(self, csv_url, forced_header, **kwargs):
+
+    def transform(self, csv_url, forced_header, forced_dialect='default', **kwargs):
         # Take a file input and output a set of line-item fields and a big string field
         # note use of temp file and lots of seek(0). This was required as Python file-type objects
         # don't support resetting the iterator back to 0.
@@ -50,17 +51,32 @@ class UtilImportCSVTransform(BaseTransform):
         response.seek(0, 2)
         size = response.tell()
         if (size > MAX_CSV_FILE_SIZE):
-            self.raise_exception('CSV Import only supports file sizes < 150K.')
+            self.raise_exception('Import CSV File only supports file sizes < 150K.')
 
         # use csv utils to see if there is a dialect, if the file is malformed in anyway, this will fail and report that error to the user
         response.seek(0)
+        if forced_dialect == 'one':
+            #Python CSV Parser can't deal with a one column csv, so create a new file
+            #with a comma delimeter
+            csv.register_dialect('one',delimiter=',')
+            one_column_file = response
+            new_file = tempfile.TemporaryFile()
+            for line in response:
+                new_file.write(line.splitlines()[0] + "," + "\n")
+            response = new_file
+            response.seek(0)
         dialect = csv.Sniffer().sniff(response.read())
         response.seek(0)
+        # these two are not standard dialects, so create them
+        csv.register_dialect('comma',delimiter=',')
+        csv.register_dialect('semicolon',delimiter=';')
+        if forced_dialect != 'default':
+            #user has selected a forced dialect, so assign that
+            dialect = csv.get_dialect(forced_dialect)
         header = csv.Sniffer().has_header(response.read())
-
         response.seek(0)
 
-        output = {"line_items": [],"csv_text": "", "header": header}
+        output = {"line_items": [],"csv_text": "", "header": header, "dialect": forced_dialect}
         # output line-items
         this_line_item = []
         if header:
@@ -71,6 +87,7 @@ class UtilImportCSVTransform(BaseTransform):
             output["line_items"] = this_line_item
         else:
             # we don't have headers, so need some line-item labels, but first need number of fields, so grab the first row....
+            # need to set up an exception for 1 column CSVs
             header_reader = csv.reader(response, dialect=dialect)
             row_1 = header_reader.next()
             if forced_header:
@@ -88,8 +105,13 @@ class UtilImportCSVTransform(BaseTransform):
 
         #also output a big string of the csv contents
         response.seek(0)
-        output["csv_text"] = response.read()
-
+        # additonal hack here for one column
+        if forced_dialect == "one":
+            one_column_file.seek(0)
+            output["csv_text"] = one_column_file.read()
+            one_column_file.close()
+        else:
+            output["csv_text"] = response.read()
         response.close()
         return output
 
@@ -97,14 +119,26 @@ class UtilImportCSVTransform(BaseTransform):
     def fields(self, *args, **kwargs):
         return [
             {
-                'type': 'bool',
-                'required': False,
-                'key': 'forced_header',
-                'label': 'Force First Row as Header Row',
+                "type": "bool",
+                "required": False,
+                "key": "forced_header",
+                "label": "Force First Row as Header Row",
                 "default": "no",
-                'help_text': (
-                    'By default, Import CSV File will try to determine if your file has a header row. '
-                    'If you find in your Test Step that this did not work (the header field will be False), you can force it here by selecting yes.'
+                "help_text": (
+                    "By default, Import CSV File will try to determine if your file has a header row. "
+                    "If you find in your Test Step that this did not work (the header field will be False), you can force it here by selecting yes."
+                ),  # NOQA
+            },
+            {
+                "type": "unicode",
+                "required": False,
+                "key":  "forced_dialect",
+                "choices": "default|Detect Automatically,comma|Comma Delimited,semicolon|Semicolon Delimited,excel|Excel Comma Delimited,excel-tab|Excel Tab Delimited,one|One Column",
+                "label": "Type of CSV File",
+                "default": "default",
+                "help_text": (
+                    "By default, Import CSV File will try to detect the type of your file. "
+                    "If you find in your Test Step that your file was not recognized correctly, you can force it here by selecting your file type."
                 ),  # NOQA
             },
         ]

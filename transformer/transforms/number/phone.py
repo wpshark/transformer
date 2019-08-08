@@ -10,7 +10,8 @@ class PhoneNumberFormattingTransform(BaseTransform):
     category = 'number'
     name = 'phone'
     label = 'Format Phone Number'
-    help_text = 'Format a phone number to a new style.'
+    help_text = ('Format a phone number to a new style. The number should be a valid phone number for country code (default is US), or '
+    'phone number will be returned unchanged.')
 
     noun = 'Phone Number'
     verb = 'format to a new style'
@@ -78,16 +79,21 @@ class PhoneNumberFormattingTransform(BaseTransform):
             '7': '5558001212 (No Symbols, National)',
             '8': '15558001212 (No Symbols, International)',
         }
-
+        # from https://countrycode.org/
         available_countries = {
-            'US': 'United States',
-            'CA': 'Canada',
-            'GB': 'United Kingdom',
-            'FR': 'France',
-            'ES': 'Spain',
-            'DE': 'Germany',
-            'PT': 'Portugal',
+            'AU': 'Australia',
             'BR': 'Brazil',
+            'CA': 'Canada',
+            'FR': 'France',
+            'DE': 'Germany',
+            'IE': 'Ireland',
+            'IT': 'Italy',
+            'NL': 'Netherlands',
+            'NZ': 'New Zealand',
+            'PT': 'Portugal',
+            'ES': 'Spain',
+            'GB': 'United Kingdom',
+            'US': 'United States',
         }
 
         return [
@@ -102,8 +108,9 @@ class PhoneNumberFormattingTransform(BaseTransform):
             {
                 'key': 'default_region',
                 'type': 'unicode',
-                'label': 'Phone Country',
-                'help_text': 'The 2-letter ISO code for the country of the phone.',
+                'label': 'Phone Number Country Code',
+                'help_text': ('The 2-letter ISO country code of the phone number. If not listed, you can select "Use a Custom Value (advanced)" '
+                'and enter an ISO country code (list of 2-letter ISO country codes [here](https://countrycode.org)).'),
                 'required': False,
                 'default': 'US',
                 'choices': available_countries,

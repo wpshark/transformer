@@ -1,6 +1,8 @@
 import unittest
 import phone
 
+#we should do some external validation against https://libphonenumber.appspot.com/
+
 class TestPhoneNumberFormattingTransform(unittest.TestCase):
     def test_phone(self):
         transformer = phone.PhoneNumberFormattingTransform()
@@ -86,6 +88,17 @@ class TestPhoneNumberFormattingTransform(unittest.TestCase):
             ('0911611611', '6', '091 161 1611', 'ZA'),
             ('0911611611', '7', '0911611611', 'ZA'),
             ('0911611611', '8', '27911611611', 'ZA'),
+
+            # Custom Value test - Ireleand (IE)
+            ('(071) 345 6789', '0', '+353713456789', 'IE'),
+            ('(071) 345 6789', '1', '+353 71 345 6789', 'IE'),
+            ('(071) 345 6789', '2', '(071) 345 6789', 'IE'),
+            ('(071) 345 6789', '3', '+353-71-345-6789', 'IE'),
+            ('(071) 345 6789', '4', '71 345 6789', 'IE'),
+            ('(071) 345 6789', '5', '+353 71 345 6789', 'IE'),
+            ('(071) 345 6789', '6', '071 345 6789', 'IE'),
+            ('(071) 345 6789', '7', '0713456789', 'IE'),
+            ('(071) 345 6789', '8', '353713456789', 'IE'),
         ]
 
         for input_number, format_string, expected_output, region in tests:

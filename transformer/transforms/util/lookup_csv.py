@@ -51,15 +51,15 @@ class UtilLookupCSVTransform(BaseTransform):
         response.seek(0)
         dialect = csv.Sniffer().sniff(response.read())
         response.seek(0)
-        header = csv.Sniffer().has_header(response.read())
-        response.seek(0)
+        #header is fare game for the key?
+        #header = csv.Sniffer().has_header(response.read())
+        #response.seek(0)
 
         # output the found key, or the fallback
-        table = {}
         csv_reader = csv.reader(response, dialect=dialect)
-        if header:
+        #if header:
             # we have headers, ignore them!
-            header_row = csv_reader.next()
+            #header_row = csv_reader.next()
         for row in csv_reader:
             if row[int(column_key)] == input_key:
                 output["key_found"] = True
@@ -68,7 +68,8 @@ class UtilLookupCSVTransform(BaseTransform):
                 return output
         # if we go through whole file sans finding a row, output fallback
         response.close()
-        return fallback
+        output["value"] = fallback
+        return output
 
 
     def fields(self, *args, **kwargs):

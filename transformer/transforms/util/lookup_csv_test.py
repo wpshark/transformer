@@ -1,9 +1,9 @@
 import unittest
-import lookup_v2
+import lookup_csv
 
-class TestUtilLookupV2Transform(unittest.TestCase):
+class TestUtilLookupCSVTransform(unittest.TestCase):
     def test_lookup_empty(self):
-        transformer = lookup_v2.UtilLookupV2Transform()
+        transformer = lookup_csv.UtilLookupCSVTransform()
 
         self.assertEquals(transformer.transform('a', table={'a': 1, 'b': 2}, fallback=3), 1)
         self.assertEquals(transformer.transform('asfguy', table={'a': 1, 'b': 2}, fallback=3), 3)

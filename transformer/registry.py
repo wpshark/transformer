@@ -15,7 +15,7 @@ def lookup(name, category=""):
     return None
 
 def get_all(category=""):
-    legacy_transforms = ["util.append","util.lineitem_to_string"]
+    legacy_transforms = ["util.append","util.lineitem_to_string","string.default_value"]
     return [v for k, v in __GLOBAL_REGISTRY.iteritems() if not category or category == v.category and not k in legacy_transforms]
 
 def make_registry():

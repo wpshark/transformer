@@ -65,7 +65,7 @@ class DateFormattingTransform(BaseTransform):
                 'required': True,
                 'key': 'to_format',
                 'choices': choices,
-                'help_text': 'Provide the format that the date is converted to. For date format help, see: https://zapier.com/help/formatter/#date-time'
+                'help_text': 'Provide the format that the date is converted to. For date format help, see: https://zapier.com/help/create/format/modify-date-formats-in-zaps#customize-date-time-options'
             },
             {
                 'type': 'unicode',

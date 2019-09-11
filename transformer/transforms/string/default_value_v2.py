@@ -40,7 +40,7 @@ class StringDefaultValueV2Transform(BaseTransform):
                 'required': True,
                 'key': 'default_value',
                 'label': 'Default Value',
-                'help_text': 'Value to return if the text is empty.'
+                'help_text': 'Value to return if the text is empty. For supported special characters, see: https://zapier.com/help/create/format/modify-text-formats-in-zaps#find-replace-or-split-special-characters',
             }
         ]
 

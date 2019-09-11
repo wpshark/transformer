@@ -10,7 +10,7 @@ class UtilLineItemToStringTransform(BaseTransform):
     label = 'Line-item to Text'
     help_text = (
         'Convert a line-item to delimited text. [a,b,c,d] becomes \'a,b,c,d\'. More on line-items '
-        '[here](https://zapier.com/help/formatter/#how-use-line-items-formatter).'
+        '[here](https://zapier.com/help/create/format/create-line-items-in-zaps).'
     )
 
     noun = 'Line-Item'

@@ -19,7 +19,7 @@ class UtilImportCSVTransform(BaseTransform):
         "Limited to 150k (around 1000 rows).  "
         "Output is a line-item field for each column, and a text field with CSV file contents.  "
         "When you do your Test Step, you'll only see the first 50 rows of your CSV file, but when your Zap runs all rows will be processed. "
-        "More on importing CSV files [here.](https://zapier.com/help/formatter/#how-import-csv-files-formatter)"
+        "More on importing CSV files [here.](https://zapier.com/help/create/format/import-csv-files-into-zaps)"
     )
 
     noun = "CSV"

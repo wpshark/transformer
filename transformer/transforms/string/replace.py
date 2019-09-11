@@ -28,7 +28,7 @@ class StringReplaceTransform(BaseTransform):
                 'required': True,
                 'key': 'old',
                 'label': 'Find',
-                'help_text': 'To find a space, use `[:space:]`. For supported special characters, see: https://zapier.com/help/formatter/#special-characters'
+                'help_text': 'To find a space, use `[:space:]`. For supported special characters, see: https://zapier.com/help/create/format/modify-text-formats-in-zaps#find-replace-or-split-special-characters'
             },
             {
                 'type': 'unicode',

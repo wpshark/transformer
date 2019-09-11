@@ -14,8 +14,7 @@ class UtilLineItemizerTransform(BaseTransform):
         "Convert comma delimited text or values to line-item(s). 'a,b,c,d' becomes [a,b,c,d]. Append "
         "or prepend to existing line-items by mapping them into the same field as comma separated "
         "text or single values. For details, learn more about "
-        "[Line-items with Formatter](https://zapier.com/help/formatter/#how-use-line-items-formatterv2), "
-        "or jump to [Line Itemizer examples](https://zapier.com/help/formatter/#create-your-own-line-items-for-an-invoicing-action-using-the-line-itemizer-utility)."
+        "[Line-items with Formatter](https://zapier.com/help/create/format/create-line-items-in-zaps)."
     )
 
     noun = "Text"

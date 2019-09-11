@@ -44,7 +44,7 @@ class StringSplitTransform(BaseTransform):
                 'required': False,
                 'key': 'separator',
                 'label': 'Separator',
-                'help_text': 'Character or word separator to split the text on. (Default: `[:space:]`) For supported special characters, see: https://zapier.com/help/formatter/#special-characters)' # NOQA
+                'help_text': 'Character or word separator to split the text on. (Default: `[:space:]`) For supported special characters, see: https://zapier.com/help/create/format/modify-text-formats-in-zaps#find-replace-or-split-special-characters', # NOQA
             },
             {
                 'type': 'unicode',

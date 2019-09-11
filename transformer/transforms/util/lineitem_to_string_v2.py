@@ -11,7 +11,7 @@ class UtilLineItemToStringV2Transform(BaseTransform):
     help_text = (
         "Convert a line-item to delimited text. [a,b,c,d] becomes 'a,b,c,d'. Also returns "
         " each element of the line-item as a separate field. More on line-items "
-        "[here](https://zapier.com/help/formatter/#how-use-line-items-formatter)."
+        "[here](https://zapier.com/help/create/format/create-line-items-in-zaps)."
     )
 
     noun = "Line-Item"

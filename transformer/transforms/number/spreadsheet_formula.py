@@ -444,7 +444,7 @@ class NumberSpreadsheetStyleFormulaTransform(BaseTransform):
         input_field['label'] = 'Formula'
         input_field['help_text'] = (
             'Spreadsheet-style formula to evaluate. Example: `ROUNDUP(100.1231, 2) * 100`. '
-            'For more help and examples, see: https://zapier.com/help/create/format/modify-number-formats-in-zaps'
+            'For more help and examples, see: https://zapier.com/help/create/format/understand-spreadsheet-style-formula-functions'
         )
         return [
             self.build_help_field(),

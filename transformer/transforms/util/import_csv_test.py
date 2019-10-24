@@ -332,3 +332,17 @@ class TestUtilImportCSVTransform(unittest.TestCase):
                 "dialect": "one"
             },
             transformer.transform('https://cdn.zapier.com/storage/files/15df84b0ed71dcdee2588ceb5c371367_2.csv', False, 'one'))
+
+
+    def test_import_csv_notcsv(self):
+        transformer = import_csv.UtilImportCSVTransform()
+      # has csv data, but header gets in the way, so using "text" as dialect
+        self.assertEqual(
+            {
+                "csv_text": "# ----------------------------------------\n# All Web Site Data\n# Google Ads Keywords\n# 20190930-20190930\n# ----------------------------------------\n\nKeyword,Clicks,Cost,CPC,Users,Sessions,Bounce Rate,Pages / Session,Ecommerce Conversion Rate,Transactions,Revenue\nlive chat,19,$22.50,$1.18,17,20,75.00%,0.95,0.00%,0,$0.00\nonsip,16,$114.43,$7.15,29,55,29.09%,1.16,0.00%,0,$0.00\n\nDay Index,Users\n9/30/19,58\n,58\n\n",
+                "line_items": [],
+                "header": "",
+                "dialect": "text"
+            },
+            transformer.transform('https://zappy.zapier.com/csv%20not%20working%202019-10-1011%20at%2011.09.12.csv', False, 'text'))
+            

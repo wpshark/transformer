@@ -52,33 +52,50 @@ class UtilImportCSVTransform(BaseTransform):
         size = response.tell()
         if (size > MAX_CSV_FILE_SIZE):
             self.raise_exception('Import CSV File only supports file sizes < 150K.')
-
-        # use csv utils to see if there is a dialect, if the file is malformed in anyway, this will fail and report that error to the user
         response.seek(0)
-        if forced_dialect == 'one':
+        
+        output = {"line_items": [],"csv_text": "", "header": "", "dialect": forced_dialect}
+        # a mishmash here, depending on the value of forced_dialect. Issues with 
+        # the dialect and header calls when the csv_library can't figure out the dialect
+        # which seems kind of bogus (isn't that what the library is for.
+        # so offering one other dialect, "text" to bail from using the csv library and just
+        # import the text file
+
+        # these two are not standard dialects, so create them
+        csv.register_dialect('comma',delimiter=',')
+        csv.register_dialect('semicolon',delimiter=';')
+        if forced_dialect == 'text':
+            # fake dialect, not really a csv, so just importing text into csv_text field and leave
+            output["csv_text"] = response.read()
+            response.close()
+            return output
+        elif forced_dialect == 'one':
             #Python CSV Parser can't deal with a one column csv, so create a new file
             #with a comma delimeter
             csv.register_dialect('one',delimiter=',')
+            dialect = csv.get_dialect(forced_dialect)
             one_column_file = response
             new_file = tempfile.TemporaryFile()
             for line in response:
                 new_file.write(line.splitlines()[0] + "," + "\n")
             response = new_file
-            response.seek(0)
-        dialect = csv.Sniffer().sniff(response.read())
-        response.seek(0)
-        # these two are not standard dialects, so create them
-        csv.register_dialect('comma',delimiter=',')
-        csv.register_dialect('semicolon',delimiter=';')
-        if forced_dialect != 'default':
-            #user has selected a forced dialect, so assign that
+            response.seek(0)        
+        elif forced_dialect == 'default':
+            #user has not selected a forced dialect, so go try and figure it out
+            dialect = csv.Sniffer().sniff(response.read())
+            response.seek(0)  
+        else:
+            # user selected dialect, so assign that
             dialect = csv.get_dialect(forced_dialect)
+        
+        # assume we can read the CSV, so look for a header
         header = csv.Sniffer().has_header(response.read())
+        output["header"] = header
         response.seek(0)
 
-        output = {"line_items": [],"csv_text": "", "header": header, "dialect": forced_dialect}
         # output line-items
         this_line_item = []
+        # this header logic is a bit circular, would be good to rewrite at some point
         if header:
             # we have headers
             csv_reader = csv.DictReader(response, dialect=dialect)
@@ -133,7 +150,7 @@ class UtilImportCSVTransform(BaseTransform):
                 "type": "unicode",
                 "required": False,
                 "key":  "forced_dialect",
-                "choices": "default|Detect Automatically,comma|Comma Delimited,semicolon|Semicolon Delimited,excel|Excel Comma Delimited,excel-tab|Excel Tab Delimited,one|One Column",
+                "choices": "default|Detect Automatically,comma|Comma Delimited,semicolon|Semicolon Delimited,excel|Excel Comma Delimited,excel-tab|Excel Tab Delimited,one|One Column,text|Text File (no csv parsing)",
                 "label": "Type of CSV File",
                 "default": "default",
                 "help_text": (

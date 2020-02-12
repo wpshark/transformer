@@ -26,11 +26,13 @@ class NumberFormattingTransform(BaseTransform):
         before_decimal = u''.join([x for x in before_decimal if x in u'1234567890-'])
 
         # Python will only do comma-grouped numbers, so convert to that by default then modify if needed
-        try:
-            before_decimal = u'{:,}'.format(int(before_decimal))
-        except ValueError:
-            # Return original input if we can't do anything with it
-            return val
+        #edge case -0
+        if before_decimal != u'-0':
+            try:
+                before_decimal = u'{:,}'.format(int(before_decimal))
+            except ValueError:
+                # Return original input if we can't do anything with it
+                return val
 
         if output_format == u'0':
             decimal_mark = u'.'

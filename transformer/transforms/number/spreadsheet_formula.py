@@ -136,6 +136,8 @@ def evaluate(formula, functions=None, operators=None):
         functions = get_default_functions()
     if operators is None:
         operators = get_default_operators()
+    
+    formula = formula.strip()
 
     # first, parse the formula into reverse polish notation
     try:
@@ -442,7 +444,7 @@ class NumberSpreadsheetStyleFormulaTransform(BaseTransform):
         input_field['label'] = 'Formula'
         input_field['help_text'] = (
             'Spreadsheet-style formula to evaluate. Example: `ROUNDUP(100.1231, 2) * 100`. '
-            'For more help and examples, see: https://zapier.com/help/formatter/#numbers'
+            'For more help and examples, see: https://zapier.com/help/create/format/understand-spreadsheet-style-formula-functions'
         )
         return [
             self.build_help_field(),

@@ -1,8 +1,8 @@
 # Transformer (by Zapier)
 
-Transformer is a little web app that performs data transformations. You specifcy one of the pre-defined transforms to run, along with some input data, and the app will run the data through the transform and return the output.
+Transformer is a little web app that performs data transformations. You specify one of the pre-defined transforms to run, along with some input data, and the app will run the data through the transform and return the output.
 
-Usage:
+## Usage
 
 `GET /` - Lists all the available transforms
 
@@ -31,7 +31,7 @@ pip install -r requirements.txt
 
 ```
 . env27/bin/activate
-DEBUG=true PORT=8080 python transformer/app.py
+DEBUG=true PORT=8888 python transformer/app.py
 ```
 
 ## Test Locally

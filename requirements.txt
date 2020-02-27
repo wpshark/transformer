@@ -9,7 +9,6 @@ gunicorn==19.9.0
 html2text==2017.10.4
 inflect==0.2.5
 itsdangerous==0.24
-Jinja2==2.8
 Markdown==2.6.5
 MarkupSafe==0.23
 mock==2.0.0

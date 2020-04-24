@@ -63,3 +63,13 @@ class TestApp(unittest.TestCase):
         response = self.app.post('/transform', data=json.dumps({'transform': 'string.upper_case', 'inputs': {'abc': 'def', 'ghi': 'jkl'}}))
         output = json.loads(response.data)['outputs']
         self.assertEqual({'abc': 'DEF', 'ghi': 'JKL'}, output)
+
+    def test_run_transform_split(self):
+        response = self.app.post('/transform', data=json.dumps({
+            'transform': 'string.split',
+            'inputs': 'a,b,c',
+            'separator': ',',
+            'index': 'all'
+        }))
+        output = json.loads(response.data)['outputs']
+        self.assertEqual(['a','b','c'], output)

@@ -1,4 +1,5 @@
 import arrow
+import bs4
 import dateutil.parser
 import pytz
 import parsedatetime
@@ -6,9 +7,9 @@ import parsedatetime
 import collections
 import datetime
 import re
-from decimal import Decimal
 
 RELATIVE_KEYWORDS = ('next', 'last', 'yesterday', 'tomorrow', 'from', 'before')
+
 
 class APIError(Exception):
     """ Base Exception for the API """
@@ -26,6 +27,20 @@ class APIError(Exception):
         rv['message'] = self.message
         rv['status'] = self.status_code
         return rv
+
+
+def to_unicode_or_bust(obj, encoding='utf-8'):
+    """
+    Convert a string object to unicode or raise an exception
+
+    """
+    try:
+        if isinstance(obj, basestring):
+            if not isinstance(obj, unicode):
+                obj = unicode(obj, encoding)
+        return obj
+    except:
+        return bs4.UnicodeDammit(obj, is_html=False).unicode_markup
 
 
 def tdelta(input_):
@@ -103,7 +118,8 @@ def try_parse_date(date_value, from_format=None):
                 return dt
 
         try:
-            # Assume that a sufficiently large timestamp is actually in millisecond resolution, but with the decimal point missing
+            # Assume that a sufficiently large timestamp is actually in
+            # millisecond resolution, but with the decimal point missing
             # Also if the timestamp is sufficiently large in the negative direction
             date_value = float(date_value)
             if date_value >= (1 << 32) - 1 or date_value <= -1*(1 << 32) + 1:
@@ -114,7 +130,10 @@ def try_parse_date(date_value, from_format=None):
         # try parsedatetime first if any of the relative keywords appear
         if isinstance(date_value, basestring) and any(k in date_value for k in RELATIVE_KEYWORDS):
             cal = parsedatetime.Calendar()
-            dt, _ = cal.parseDT(datetimeString=date_value, sourceTime=datetime.datetime.now(), tzinfo=pytz.timezone('UTC'))
+            dt, _ = cal.parseDT(
+                datetimeString=date_value,
+                sourceTime=datetime.datetime.now(),
+                tzinfo=pytz.timezone('UTC'))
             if dt:
                 return dt
 
@@ -144,7 +163,6 @@ def int_or_float(v):
     if v.is_integer():
         return long(v)
     return float(v)
-
 
 
 def try_parse_number(number_value, cls=float, default=0):

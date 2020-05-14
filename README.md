@@ -41,6 +41,11 @@ DEBUG=true PORT=8888 python transformer/app.py
 ./run_tests.sh
 ```
 
+## Deploy
+
+- Heroku deploys `develop` to https://zapier-transformer-staging.herokuapp.com/ automatically once tests have passed.
+- Heroku deploys `master` to https://zapier-transformer.herokuapp.com/ automatically once tests have passed.
+
 ## Contributing
 
 If you have a transform that you think would be useful, fork the repo, add the transform, and then make a pull request. To get started, check out the [base class](https://github.com/zapier/transformer/blob/master/transformer/transforms/base.py) for the interface and the [trim space](https://github.com/zapier/transformer/blob/master/transformer/transforms/string/trim_space.py) transform an example.

@@ -15,3 +15,14 @@ class TestStringPatternExtractTransform(unittest.TestCase):
             "Hello foo bar folks and another foo I will not catch", pattern),
             {0: 'oo', 1: ' bar', 2: 'a', '_end': 13, '_start': 6, '_matched': True, 'named': 'a'}
         )
+
+    def test_pattern_extract_without_match_groups(self):
+        transformer = pattern_extract.StringPatternExtractTransform()
+        pattern = "foo"
+        self.assertEqual(transformer.transform("", pattern), {'_matched': False})
+        self.assertEqual(transformer.transform(None, pattern), {'_matched': False})
+        self.assertEqual(transformer.transform(
+            "Hello foo bar folks and another foo I will not catch", pattern),
+            {0: 'foo', '_matched': True, "_start": 6, "_end": 9}
+        )
+

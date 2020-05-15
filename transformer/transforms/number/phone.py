@@ -10,7 +10,8 @@ class PhoneNumberFormattingTransform(BaseTransform):
     category = 'number'
     name = 'phone'
     label = 'Format Phone Number'
-    help_text = 'Format a phone number to a new style.'
+    help_text = ('Format a phone number to a new style. The number should be a valid phone number for country code (default is US), or '
+    'phone number will be returned unchanged.')
 
     noun = 'Phone Number'
     verb = 'format to a new style'
@@ -39,7 +40,7 @@ class PhoneNumberFormattingTransform(BaseTransform):
 
         output = phonenumbers.format_number(number, format_int)
 
-        # if we're using the national format, ensure that the first group of numbers is always grouped by parens
+        # if we're using the national format, ensure that the first group of numbers is always grouped by parenthesis
         if format_string == '2':
             output = re.sub('^(\d+)\s', '(\\1) ', output)
 
@@ -75,8 +76,24 @@ class PhoneNumberFormattingTransform(BaseTransform):
             '4': '555-800-1212 (International, No Country Code)',
             '5': '+1 555 800 1212 (International, No Hyphens)',
             '6': '555 800-1212 (National, No Parenthesis)',
-            '7': '15558001212 (No Symbols, National)',
+            '7': '5558001212 (No Symbols, National)',
             '8': '15558001212 (No Symbols, International)',
+        }
+        # from https://countrycode.org/
+        available_countries = {
+            'AU': 'Australia',
+            'BR': 'Brazil',
+            'CA': 'Canada',
+            'FR': 'France',
+            'DE': 'Germany',
+            'IE': 'Ireland',
+            'IT': 'Italy',
+            'NL': 'Netherlands',
+            'NZ': 'New Zealand',
+            'PT': 'Portugal',
+            'ES': 'Spain',
+            'GB': 'United Kingdom',
+            'US': 'United States',
         }
 
         return [
@@ -87,9 +104,18 @@ class PhoneNumberFormattingTransform(BaseTransform):
                 'help_text': 'The format the phone number will be converted to.',
                 'required': True,
                 'choices': available_formats,
-            }
+            },
+            {
+                'key': 'default_region',
+                'type': 'unicode',
+                'label': 'Phone Number Country Code',
+                'help_text': ('The 2-letter ISO country code of the phone number. If not listed, you can select "Use a Custom Value (advanced)" '
+                'and enter an ISO country code (list of 2-letter ISO country codes [here](https://countrycode.org)).'),
+                'required': False,
+                'default': 'US',
+                'choices': available_countries,
+            },
         ]
-
 
 
 register(PhoneNumberFormattingTransform())

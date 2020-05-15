@@ -7,7 +7,9 @@ class StringReplaceTransform(BaseTransform):
     category = 'string'
     name = 'replace'
     label = 'Replace'
-    help_text = 'Replace any character, word or phrase in the text with another character, word or phrase'
+    help_text = (
+        'Replace all instances of any character, word or phrase in the text with another character, word or phrase.'
+    )
 
     noun = 'Text'
     verb = 'find and replace values within'
@@ -26,7 +28,7 @@ class StringReplaceTransform(BaseTransform):
                 'required': True,
                 'key': 'old',
                 'label': 'Find',
-                'help_text': 'To find a space, use `[:space:]`. For supported special characters, see: https://zapier.com/help/formatter/#special-characters'
+                'help_text': 'To find a space, use `[:space:]`. For supported special characters, see: https://zapier.com/help/create/format/modify-text-formats-in-zaps#find-replace-or-split-special-characters'
             },
             {
                 'type': 'unicode',

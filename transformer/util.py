@@ -1,3 +1,4 @@
+import pdb
 import arrow
 import dateutil.parser
 import pytz
@@ -95,8 +96,10 @@ def try_parse_date(date_value, from_format=None):
     try to parse a int or string value into a datetime format
 
     """
+
     try:
-        if from_format:
+        # Arrow does not handle negative Unix Timestamps (pre-1970) when explicitly using the token 'X'
+        if from_format and not from_format == 'X':
             dt = arrow.get(date_value, from_format)
             if dt:
                 return dt
@@ -104,7 +107,8 @@ def try_parse_date(date_value, from_format=None):
         try:
             # Assume that a sufficiently large timestamp is actually in millisecond resolution, but with the decimal point missing
             date_value = float(date_value)
-            if date_value >= (1 << 32) - 1:
+            #modded_date =
+            if date_value >= (1 << 32) - 1 or date_value <= -1*(1 << 32) + 1:
                 date_value /= 1000.0
         except:
             pass
@@ -117,6 +121,21 @@ def try_parse_date(date_value, from_format=None):
                 return dt
 
         # try using arrow
+        def datetime_to_float(d):
+            epoch = datetime.datetime.utcfromtimestamp(0)
+            total_seconds =  (d - epoch).total_seconds()
+            # total_seconds will be in decimals (millisecond precision)
+            return total_seconds
+
+        try:
+            pdb.set_trace()
+            dtm = datetime.datetime.strptime(date_value, "%d/%m/%Y")
+            unchanged = date_value
+            return unchanged
+        except:
+            pass
+        #dtm = datetime_to_float(date_value)
+        pdb.set_trace()
         dt = arrow.get(date_value)
         if dt:
             return dt

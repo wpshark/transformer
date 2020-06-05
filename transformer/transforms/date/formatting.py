@@ -1,6 +1,8 @@
 import arrow
 import dateutil.tz
 import pytz
+import pdb
+import datetime
 
 from transformer.registry import register
 from transformer.util import try_parse_date
@@ -34,6 +36,8 @@ class DateFormattingTransform(BaseTransform):
     verb = 'format'
 
     def transform(self, date_value, from_format=u'', to_format=u'', from_timezone=u'', to_timezone=u'', **kwargs):
+        pdb.set_trace()
+
         if not date_value:
             return u''
 
@@ -43,6 +47,37 @@ class DateFormattingTransform(BaseTransform):
         dt = try_parse_date(date_value, from_format=from_format)
         if not dt:
             return self.raise_exception('Date could not be parsed')
+        pdb.set_trace()
+        #if to_format == "MM/DD/YYYY" or "DD/MM/YYYY" or "MMMM DD YYYY":
+        if to_format[-4:] == "YYYY" :
+            try:
+                datetime.datetime.strptime(date_value, "%d/%m/%Y")
+                return date_value
+            except:
+                pass
+
+        if to_format ==  "MM/DD/YYYY" or "MM-DD-YYYY" :
+        #if to_format[-4:] == "YYYY" :
+            try:
+                #print to_format[-4:]
+                formatted_date = datetime.datetime.strptime(date_value, "%b/%m/%Y").strftime("%m/%d/%Y")
+                return formatted_date
+            except:
+                pass
+
+         #if to_format ==  "DD/MM/YYYY" and to_format[-4:] == "YYYY" :
+        if to_format ==  "DD/MM/YYYY" or  "DD-MM-YYYY":
+            try:
+                #print to_format[-4:]
+                formatted_date = datetime.datetime.strptime(date_value, "%b/%m/%Y").strftime("%d/%m/%Y")
+                return formatted_date
+            except:
+                pass
+
+        else:
+            pass
+
+
 
         dtout = arrow.get(dt)
 

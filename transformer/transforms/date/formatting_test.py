@@ -46,6 +46,11 @@ class TestDateFormattingTransform(unittest.TestCase):
             to_format='YYYY-MM-DD'
         ), '2016-03-01')
 
+        self.assertEqual(self.transformer.transform(
+            '03/01/2016',
+            to_format='MM/DD/YYYY',
+        ), '03/01/2016')
+
         # Flipping the format to days then months should yield a different output
         self.assertEqual(self.transformer.transform(
             '03/01/2016',

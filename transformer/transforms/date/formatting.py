@@ -1,7 +1,7 @@
 import arrow
 import dateutil.tz
 import pytz
-import pdb
+
 import datetime
 
 from transformer.registry import register
@@ -36,7 +36,7 @@ class DateFormattingTransform(BaseTransform):
     verb = 'format'
 
     def transform(self, date_value, from_format=u'', to_format=u'', from_timezone=u'', to_timezone=u'', **kwargs):
-        pdb.set_trace()
+
 
         if not date_value:
             return u''
@@ -47,7 +47,7 @@ class DateFormattingTransform(BaseTransform):
         dt = try_parse_date(date_value, from_format=from_format)
         if not dt:
             return self.raise_exception('Date could not be parsed')
-        pdb.set_trace()
+
         #if to_format == "MM/DD/YYYY" or "DD/MM/YYYY" or "MMMM DD YYYY":
         if to_format[-4:] == "YYYY" :
             try:

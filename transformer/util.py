@@ -1,4 +1,4 @@
-import pdb
+
 import arrow
 import dateutil.parser
 import pytz
@@ -126,14 +126,14 @@ def try_parse_date(date_value, from_format=None):
             return total_seconds
 
         try:
-            pdb.set_trace()
+
             dtm = datetime.datetime.strptime(date_value, "%d/%m/%Y")
             unchanged = date_value
             return unchanged
         except:
             pass
-        #dtm = datetime_to_float(date_value)
-        pdb.set_trace()
+
+
         dt = arrow.get(date_value)
         if dt:
             return dt

@@ -10,13 +10,13 @@ class PhoneNumberFormattingTransform(BaseTransform):
     category = 'number'
     name = 'phone'
     label = 'Format Phone Number'
-    help_text = ('Format a phone number to a new style. The number should be a valid phone number for country code (default is US), or '
+    help_text = ('Format a phone number to a new style. Validation is on by default, if checked and number is invalid, '
     'phone number will be returned unchanged.')
 
     noun = 'Phone Number'
     verb = 'format to a new style'
 
-    def transform(self, phone_string, format_string=u'', default_region=u'US', **kwargs):
+    def transform(self, phone_string, format_string=u'', default_region=u'US', validate=True, **kwargs):
         if phone_string is None:
             return u''
 
@@ -26,8 +26,9 @@ class PhoneNumberFormattingTransform(BaseTransform):
             # Return original input if we can't do anything with it
             return phone_string
 
-        if not phonenumbers.is_possible_number(number) or not phonenumbers.is_valid_number(number):
-            return phone_string
+        if validate:
+            if not phonenumbers.is_possible_number(number) or not phonenumbers.is_valid_number(number):
+                return phone_string
 
         try:
             format_int = int(format_string)
@@ -114,6 +115,13 @@ class PhoneNumberFormattingTransform(BaseTransform):
                 'required': False,
                 'default': 'US',
                 'choices': available_countries,
+            },
+            {
+                "type": "bool",
+                "required": False,
+                "key": "validate",
+                "label": "Validate phone number?",
+                "default": "yes",
             },
         ]
 

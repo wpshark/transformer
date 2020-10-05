@@ -3,8 +3,6 @@ import phone
 
 #we should do some external validation against https://libphonenumber.appspot.com/
 
-#update on 10/5 - added new tests when validate option is set to True
-
 class TestPhoneNumberFormattingTransform(unittest.TestCase):
     def test_phone(self):
         transformer = phone.PhoneNumberFormattingTransform()
@@ -121,25 +119,6 @@ class TestPhoneNumberFormattingTransform(unittest.TestCase):
         for input_number, format_string, expected_output in tests:
             out = transformer.transform(input_number, format_string=format_string)
             self.assertEqual(out, input_number)
-
-    def test_invalid_phone_dont_validate(self):
-        # set validation to false, we should format these bogus numbers, even if we know they are wrong
-        # but still return string if phone number is not entered
-        transformer = phone.PhoneNumberFormattingTransform()
-
-        tests = [
-            # invalid phone numbers
-            # input, format, expected output
-            ('(999) 999-9999', '1', False, '+1 999-999-9999'),
-            ('1-22-555-1212', '1', False, '+1 1225551212'),
-            ('fred', '1', False, 'fred')
-
-        ]
-
-        for input_number, format_string, validate, expected_output in tests:
-            self.assertEqual(expected_output, transformer.transform(input_number, format_string=format_string, validate=False))
-
-        
 
     def test_empty_phone(self):
         transformer = phone.PhoneNumberFormattingTransform()

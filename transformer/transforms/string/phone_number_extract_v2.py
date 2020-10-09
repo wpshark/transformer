@@ -12,8 +12,8 @@ class StringPhoneExtractV2Transform(BaseTransform):
     category = 'string'
     name = 'phone_extract_v2'
     label = 'Extract Phone Number'
-    help_text = 'Find and copy a complete phone number out of a text field. Finds the first phone number only.'
-
+    help_text = ('Find and copy a complete phone number out of a text field. Finds the first phone number only. '
+    'If numbers can\'t be found consistently, try the [Extract Pattern](https://zapier.com/help/create/format/find-text-with-regex-in-zaps) transform.')
     noun = 'Text'
     verb = 'find and copy a phone number from'
 

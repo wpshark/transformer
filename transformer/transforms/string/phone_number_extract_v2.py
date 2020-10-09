@@ -4,16 +4,16 @@ from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 
 # Regex based on Kristie's regex here: https://regex101.com/r/1bsTTG/47
-URL_REGEX = r"(?:\d{8}(?:\d{2}(?:\d{2})?)?|\(\+?\d{2,3}\)\s?(?:\d{4}[\s*.-]?\d{4}|\d{3}[\s*.-]?\d{3,4}|\d{2}([\s*.-]?)\d{2}\1\d{2}(?:\1\d{2})?))|((\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4})"
+URL_REGEX = r"(?:\+?\d{8}(?:\d{1,5})?|\(\+?\d{2,3}\)\s?(?:\d{4}[\s*.-]?\d{4}|\d{3}[\s*.-]?\d{3,4}|\d{2}([\s*.-]?)\d{2}\1\d{2}(?:\1\d{2})?))|((\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4})|\(?\+?\d{1,4}?\)?[-.\s]?\(?\d{1,3}?\)?([-.\s]?\d{1,9}){3,6}"
 
 
 class StringPhoneExtractV2Transform(BaseTransform):
 
     category = 'string'
     name = 'phone_extract_v2'
-    label = 'Extract Phone Number v2'
-    help_text = 'Find and copy a complete phone number out of a text field. Finds the first phone number only.'
-
+    label = 'Extract Phone Number'
+    help_text = ('Find and copy a complete phone number out of a text field. Finds the first phone number only. '
+    'If numbers can\'t be found consistently, try the [Extract Pattern](https://zapier.com/help/create/format/find-text-with-regex-in-zaps) transform.')
     noun = 'Text'
     verb = 'find and copy a phone number from'
 

@@ -10,8 +10,7 @@ class PhoneNumberFormattingTransform(BaseTransform):
     category = 'number'
     name = 'phone'
     label = 'Format Phone Number'
-    help_text = ('Format a phone number to a new style. Validation is on by default, if checked and number is invalid, '
-    'phone number will be returned unchanged.')
+    help_text = ('Format a phone number to a new style. Phone number validation is on by default')
 
     noun = 'Phone Number'
     verb = 'format to a new style'
@@ -120,7 +119,9 @@ class PhoneNumberFormattingTransform(BaseTransform):
                 "type": "bool",
                 "required": False,
                 "key": "validate",
-                "label": "Validate phone number?",
+                "label": "Validate Phone Number?",
+                'help_text': ('If set to Yes, number is checked to be valid in selected country code (US is default). If invalid, number is '
+                'returned unformatted. Set to No for testing and when using for formatting only.'),
                 "default": "yes",
             },
         ]

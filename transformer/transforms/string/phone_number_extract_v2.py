@@ -11,7 +11,7 @@ class StringPhoneExtractV2Transform(BaseTransform):
 
     category = 'string'
     name = 'phone_extract_v2'
-    label = 'Extract Phone Number v2'
+    label = 'Extract Phone Number'
     help_text = 'Find and copy a complete phone number out of a text field. Finds the first phone number only.'
 
     noun = 'Text'

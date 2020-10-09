@@ -10,8 +10,8 @@ class PhoneNumberFormattingTransform(BaseTransform):
     category = 'number'
     name = 'phone'
     label = 'Format Phone Number'
-    help_text = ('Format a phone number to a new style. Validation is on by default, if checked and number is invalid, '
-    'phone number will be returned unchanged.')
+    help_text = ('Format a phone number to a new style. Validation is on by default, if "Yes" and number is invalid, '
+    'the number will be returned unchanged. Select "No" if you want to format numbers without validating.')
 
     noun = 'Phone Number'
     verb = 'format to a new style'

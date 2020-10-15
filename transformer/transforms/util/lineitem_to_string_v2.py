@@ -70,7 +70,7 @@ class UtilLineItemToStringV2Transform(BaseTransform):
                 "label": "Separator",
                 "help_text": (
                     "Character(s) to delimit text with. (Default: ',') "
-                    "For supported special characters, see: https://zapier.com/help/formatter/#special-characters)"
+                    "For supported special characters, see: https://zapier.com/help/create/format/modify-text-formats-in-zaps#find-replace-or-split-special-characters)"
                 ),  # NOQA
             }
         ]

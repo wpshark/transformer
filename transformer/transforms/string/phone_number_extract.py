@@ -55,7 +55,7 @@ class StringPhoneExtractTransform(BaseTransform):
                 "default": "orig",
                 "help_text": (
                     'By default, we\'ll use our original search, which will find many NANP and International numbers. '
-                    'If this does not work consistently, try a specific format (NAMP and International), ' 
+                    'If this does not work consistently, try a specific format (NANP or International), ' 
                     'or "Universal", which will find most phone numbers, but also can result in false positives.')
          
             },

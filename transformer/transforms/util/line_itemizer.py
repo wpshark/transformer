@@ -166,7 +166,7 @@ class UtilLineItemizerTransform(BaseTransform):
                 "type": "copy",
                 "help_text": "If you have properties called 'Price' and 'Quantity' (or 'Qty') in your line-items above, "
                 "Line Itemizer can multiply those values together to create a corresponding 'Subtotal' property. "
-                "[Learn more about the Subtotal property here](https://zapier.com/apps/formatter/help#create-line-items-with-subtotals-using-the-line-itemizer-utility).",
+                "[Learn more about the Subtotal property here](https://zapier.com/help/doc/how-use-line-items-formatterv2#create-line-items-with-subtotals-using-the-line-itemizer-utility).",
             },
             {
                 "type": "bool",

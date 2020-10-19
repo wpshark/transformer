@@ -5,7 +5,7 @@ class TestStringPhoneExtractTransform(unittest.TestCase):
     def test_phoneextract(self):
         transformer = phone_number_extract.StringPhoneExtractTransform()
 
-        # using the default regex
+        # using the default regex - which is uni1
         self.assertEqual(transformer.transform(""), "")
         self.assertEqual(transformer.transform(None), "")
         self.assertEqual(transformer.transform("This is a test without a phone number"), "")
@@ -37,13 +37,13 @@ class TestStringPhoneExtractTransform(unittest.TestCase):
         for input_text, regex, expected_output in tests:
             self.assertEqual(expected_output, transformer.transform(input_text, regex=regex))
 
-        # using ALL
+        # using UNI2
         tests = [
             # input, format, expected output
-            ('this is 543-3456 a IN (55)44-33-22-11 here', 'all','543-3456'),
-            ('this to IN (55)44*33*22*11 here', 'all','(55)44*33*22*11'),
-            ('this is a IN 999-999-9999 here', 'all','999-999-9999'),
-            ('fred', 'all','')
+            ('this is 543-3456 a IN (55)44-33-22-11 here', 'uni2','543-3456'),
+            ('this to IN (55)44*33*22*11 here', 'uni2','(55)44*33*22*11'),
+            ('this is a IN 999-999-9999 here', 'uni2','999-999-9999'),
+            ('fred', 'uni2','')
         ]
 
         for input_text, regex, expected_output in tests:

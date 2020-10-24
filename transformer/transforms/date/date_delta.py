@@ -12,8 +12,8 @@ class DateDeltaTransform(BaseTransform):
     label = 'Days Between Dates'
     help_text = 'Find the number of days between two dates.'
 
-    noun = 'Date'
-    verb = 'difference'
+    # noun = 'Date'
+    # verb = 'difference'
 
     def transform(self, first_date_value, second_date_value, **kwargs):
         return 'success!' + first_date_value + second_date_value 

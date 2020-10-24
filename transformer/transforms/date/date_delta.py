@@ -13,10 +13,21 @@ class DateDeltaTransform(BaseTransform):
     help_text = 'Find the number of days between two dates.'
 
     noun = 'Date'
-    verb = 'subtract from. Date 1'
+    verb = 'subtract from'
 
-    def transform(self, str_input, second_date_value, **kwargs):
-        return 'success!' + first_date_value + second_date_value 
+    def transform(self, date_value, second_date_value, dtformat=u'', **kwargs):
+        if date_value is None:
+            date_value = u''
+
+        dt1 = try_parse_date(date_value, from_format=dtformat)
+        if not dt1:
+            return self.raise_exception('Date 1 could not be parsed')
+        
+        dt2 = try_parse_date(second_date_value, from_format=dtformat)
+        if not dt2:
+            return self.raise_exception('Date 2 could not be parsed')
+        
+        return 'success!' + date_value + second_date_value + dtformat
 
     def fields(self, *args, **kwargs):
         dt = arrow.get(try_parse_date('Mon Jan 22 15:04:05 -0800 2006')).to('utc')
@@ -29,14 +40,15 @@ class DateDeltaTransform(BaseTransform):
                 'required': True,
                 'key': 'second_date_value',
                 'help_text': (
-                    'Provide the second date here. The date format should be the same for both the dates.'
-                    'Please note that we will always subtract date 2 from date 1. Above date minus this date.'
+                    'Provide the second date here. The date format should be the same for both the dates. '
+                    'Please note that we will always subtract this date from the above date. '
+                    'Above date minus this date.'
                 )
             },
             {
                 'type': 'unicode',
                 'required': False,
-                'key': 'format',
+                'key': 'dtformat',
                 'choices': format_choices,
                 'help_text': 'If we incorrectly interpret any of the dates, set this to explicitly tell us the format. Otherwise, we will do our best to figure it out.'
             }

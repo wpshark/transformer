@@ -18,6 +18,9 @@ class DateDeltaTransform(BaseTransform):
     def transform(self, date_value, second_date_value, date_format=u'', **kwargs):
         if date_value is None:
             date_value = u''
+        
+        if second_date_value is None:
+            second_date_value = u''
 
         dt1 = try_parse_date(date_value, from_format=date_format)
         if not dt1:
@@ -27,7 +30,11 @@ class DateDeltaTransform(BaseTransform):
         if not dt2:
             return self.raise_exception('Date 2 could not be parsed')
         
-        return 'success!' + date_value + second_date_value + date_format
+        delta = arrow.get(dt1) - arrow.get(dt2)
+
+        days = delta.days
+
+        return days
 
     def fields(self, *args, **kwargs):
         dt = arrow.get(try_parse_date('Mon Jan 22 15:04:05 -0800 2006')).to('utc')

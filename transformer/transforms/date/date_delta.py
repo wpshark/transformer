@@ -15,18 +15,18 @@ class DateDeltaTransform(BaseTransform):
     noun = 'Date'
     verb = 'subtract from'
 
-    def transform(self, date_value, second_date_value, date_format=u'', **kwargs):
+    def transform(self, date_value, second_date_value, date_format1=u'', date_format2=u'', **kwargs):
         if date_value is None:
             date_value = u''
         
         if second_date_value is None:
             second_date_value = u''
 
-        dt1 = try_parse_date(date_value, from_format=date_format)
+        dt1 = try_parse_date(date_value, from_format=date_format1)
         if not dt1:
             return self.raise_exception('Date 1 could not be parsed')
         
-        dt2 = try_parse_date(second_date_value, from_format=date_format)
+        dt2 = try_parse_date(second_date_value, from_format=date_format2)
         if not dt2:
             return self.raise_exception('Date 2 could not be parsed')
         
@@ -47,7 +47,7 @@ class DateDeltaTransform(BaseTransform):
                 'required': True,
                 'key': 'second_date_value',
                 'help_text': (
-                    'Provide the second date here. The date format should be the same for both the dates. '
+                    'Provide the second date here. The timezone should be the same for both the dates. '
                     'Please note that we will always subtract this date from the above date. '
                     'Above date minus this date.'
                 )
@@ -55,7 +55,16 @@ class DateDeltaTransform(BaseTransform):
             {
                 'type': 'unicode',
                 'required': False,
-                'key': 'date_format',
+                'key': 'date_format1',
+                'label': 'Date Format - First Date',
+                'choices': format_choices,
+                'help_text': 'If we incorrectly interpret any of the dates, set this to explicitly tell us the format. Otherwise, we will do our best to figure it out.'
+            },
+            {
+                'type': 'unicode',
+                'required': False,
+                'key': 'date_format2',
+                'label': 'Date Format - Second Date',
                 'choices': format_choices,
                 'help_text': 'If we incorrectly interpret any of the dates, set this to explicitly tell us the format. Otherwise, we will do our best to figure it out.'
             }

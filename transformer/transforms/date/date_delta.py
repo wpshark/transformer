@@ -12,10 +12,10 @@ class DateDeltaTransform(BaseTransform):
     label = 'Days Between Dates'
     help_text = 'Find the number of days between two dates.'
 
-    # noun = 'Date'
-    # verb = 'difference'
+    noun = 'Date'
+    verb = 'subtract from. Date 1'
 
-    def transform(self, first_date_value, second_date_value, **kwargs):
+    def transform(self, str_input, second_date_value, **kwargs):
         return 'success!' + first_date_value + second_date_value 
 
     def fields(self, *args, **kwargs):
@@ -24,15 +24,6 @@ class DateDeltaTransform(BaseTransform):
         format_choices = ','.join(['{}|{} ({})'.format(f, f, dt.format(f)) for f in PREDEFINED_DATE_FORMATS])
         
         return [
-            {
-                'type': 'unicode',
-                'required': True,
-                'key': 'first_date_value',
-                'help_text': (
-                    'Provide the first date here. The date format should be the same for both the dates.'
-                    'Please note that we will always subtract date 2 from date 1. This date minus the below date.'
-                )
-            },
             {
                 'type': 'unicode',
                 'required': True,

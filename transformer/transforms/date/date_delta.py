@@ -15,19 +15,19 @@ class DateDeltaTransform(BaseTransform):
     noun = 'Date'
     verb = 'subtract from'
 
-    def transform(self, date_value, second_date_value, dtformat=u'', **kwargs):
+    def transform(self, date_value, second_date_value, date_format=u'', **kwargs):
         if date_value is None:
             date_value = u''
 
-        dt1 = try_parse_date(date_value, from_format=dtformat)
+        dt1 = try_parse_date(date_value, from_format=date_format)
         if not dt1:
             return self.raise_exception('Date 1 could not be parsed')
         
-        dt2 = try_parse_date(second_date_value, from_format=dtformat)
+        dt2 = try_parse_date(second_date_value, from_format=date_format)
         if not dt2:
             return self.raise_exception('Date 2 could not be parsed')
         
-        return 'success!' + date_value + second_date_value + dtformat
+        return 'success!' + date_value + second_date_value + date_format
 
     def fields(self, *args, **kwargs):
         dt = arrow.get(try_parse_date('Mon Jan 22 15:04:05 -0800 2006')).to('utc')
@@ -48,7 +48,7 @@ class DateDeltaTransform(BaseTransform):
             {
                 'type': 'unicode',
                 'required': False,
-                'key': 'dtformat',
+                'key': 'date_format',
                 'choices': format_choices,
                 'help_text': 'If we incorrectly interpret any of the dates, set this to explicitly tell us the format. Otherwise, we will do our best to figure it out.'
             }

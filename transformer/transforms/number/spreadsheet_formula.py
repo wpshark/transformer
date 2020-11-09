@@ -33,7 +33,7 @@ def get_default_functions():
         'SQRT': Func(1, wrap_decimal(math.sqrt)),
         'POW': Func(2, wrap_decimal(math.pow)),
         'POWER': Func(2, wrap_decimal(math.pow)),
-        'QUOTIENT': Func(2, operator.div),
+        'QUOTIENT': Func(2, operator.truediv),
         'MOD': Func(2, operator.mod),
 
         # Basic Rounding Functions

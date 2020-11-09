@@ -130,7 +130,7 @@ class f_tokens:
             return None
         return self.items[self.index]
 
-    def __next__(self):
+    def next(self):
         if self.EOF():
             return None
         return self.items[self.index + 1]

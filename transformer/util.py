@@ -34,13 +34,7 @@ def to_unicode_or_bust(obj, encoding='utf-8'):
     Convert a string object to unicode or raise an exception
 
     """
-    try:
-        if isinstance(obj, str):
-            if not isinstance(obj, str):
-                obj = str(obj, encoding)
-        return obj
-    except:
-        return bs4.UnicodeDammit(obj, is_html=False).unicode_markup
+    return bs4.UnicodeDammit(obj, is_html=False).unicode_markup
 
 
 def tdelta(input_):

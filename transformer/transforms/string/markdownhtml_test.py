@@ -18,4 +18,4 @@ class TestMarkdownHTMLTransform(unittest.TestCase):
         self.assertEqual(transformer.transform("* thing"), "<ul>\n<li>thing</li>\n</ul>")
         self.assertEqual(transformer.transform("* \u5b57 thing"), "<ul>\n<li>\u5b57 thing</li>\n</ul>")
         self.assertEqual(transformer.transform("\ufeff\u062a\u0627\u0632\u06c1"), "<p>\ufeff\u062a\u0627\u0632\u06c1</p>")
-        self.assertEqual(transformer.transform("\xef\xbb\xbf\xd8\xaa\xd8\xa7\xd8\xb2\xdb\x81"), "<p>\ufeff\u062a\u0627\u0632\u06c1</p>")
+        self.assertEqual(transformer.transform(b"\xef\xbb\xbf\xd8\xaa\xd8\xa7\xd8\xb2\xdb\x81"), "<p>\u062a\u0627\u0632\u06c1</p>")

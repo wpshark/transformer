@@ -27,7 +27,7 @@ class TestMarkdownHTMLTransform(unittest.TestCase):
             ('<ul>\n<li>thing</li>\n</ul>', '  * thing'),
             ('<ul>\n<li>\u5b57 thing</li>\n</ul>', '  * \u5b57 thing'),
             ('<p>\ufeff\u062a\u0627\u0632\u06c1</p>', '\ufeff\u062a\u0627\u0632\u06c1'),
-            ('<p>\ufeff\u062a\u0627\u0632\u06c1</p>', '\xef\xbb\xbf\xd8\xaa\xd8\xa7\xd8\xb2\xdb\x81'.decode('utf-8')),
+            ('<p>\ufeff\u062a\u0627\u0632\u06c1</p>', b'\xef\xbb\xbf\xd8\xaa\xd8\xa7\xd8\xb2\xdb\x81'.decode('utf-8')),
         ]
         transformer = htmlmarkdown.StringHTMLMarkdownTransform()
         for html, markdown in tests:

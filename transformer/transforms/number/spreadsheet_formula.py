@@ -336,7 +336,7 @@ def func_double_factorial(a):
     """ functor for a bounded double factorial """
     if a > 288:
         raise Exception('Double factorial limited to N <= 288')
-    return reduce(operator.mul, list(range(a, 0, -2)), 1)
+    return reduce(operator.mul, list(range(int(a), 0, -2)), 1)
 
 
 def func_average(*args):

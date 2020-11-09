@@ -1,7 +1,8 @@
-import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
+
 
 class StringURLEncodeTransform(BaseTransform):
 
@@ -37,5 +38,6 @@ class StringURLEncodeTransform(BaseTransform):
                 'help_text': 'Will convert spaces to "+" instead of "%20" and will _not_ convert "/".',
             },
         ]
+
 
 register(StringURLEncodeTransform())

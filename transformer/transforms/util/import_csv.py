@@ -43,7 +43,7 @@ class UtilImportCSVTransform(BaseTransform):
             return ''
 
         # create a temp file, then load the csv into it
-        response = tempfile.NamedTemporaryFile()
+        response = tempfile.NamedTemporaryFile('w+')
         response.seek(0)
         urllib.request.urlretrieve(csv_url, response.name)
 
@@ -75,7 +75,7 @@ class UtilImportCSVTransform(BaseTransform):
             csv.register_dialect('one',delimiter=',')
             dialect = csv.get_dialect(forced_dialect)
             one_column_file = response
-            new_file = tempfile.TemporaryFile()
+            new_file = tempfile.TemporaryFile('w+')
             for line in response:
                 new_file.write(line.splitlines()[0] + "," + "\n")
             response = new_file

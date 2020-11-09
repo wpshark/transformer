@@ -8,10 +8,10 @@ class TestUtilImportCSVTransform(unittest.TestCase):
         transformer = import_csv.UtilImportCSVTransform()
         self.assertEqual(
             {
-                "csv_text": "\xc3\xb8o,\xc3\xa9e,\xc3\xbcu\n1,2,3\n4,5,6\n8,\xc3\xbcu,10\n",
-                "line_items": [{"\xc3\xb8o": "1", "\xc3\xa9e": "2", "\xc3\xbcu": "3"},
-                               {"\xc3\xb8o": "4", "\xc3\xa9e": "5", "\xc3\xbcu": "6"},
-                               {"\xc3\xb8o": "8", '\xc3\xa9e': "\xc3\xbcu", "\xc3\xbcu": "10"}],
+                "csv_text": b"\xc3\xb8o,\xc3\xa9e,\xc3\xbcu\n1,2,3\n4,5,6\n8,\xc3\xbcu,10\n".decode(),
+                "line_items": [{b"\xc3\xb8o".decode(): "1", b"\xc3\xa9e".decode(): "2", b"\xc3\xbcu".decode(): "3"},
+                               {b"\xc3\xb8o".decode(): "4", b"\xc3\xa9e".decode(): "5", b"\xc3\xbcu".decode(): "6"},
+                               {b"\xc3\xb8o".decode(): "8", b'\xc3\xa9e'.decode(): b"\xc3\xbcu".decode(), b"\xc3\xbcu".decode(): "10"}],
                 "header": True,
                 "dialect": "default"
             },
@@ -181,7 +181,7 @@ class TestUtilImportCSVTransform(unittest.TestCase):
         self.maxDiff = None
         self.assertEqual(
             {
-                "csv_text": "Publisher Name,App Name,Bundle Name,App Store URL,Device\r\nBigStar,roku.bigstartv.bigstar,roku.bigstartv.bigstar,roku.bigstartv.bigstar,roku.bigstartv.bigstar\r\n,com.bigstartv.bigstar,com.bigstartv.bigstar,com.bigstartv.bigstar,com.bigstartv.bigstar\r\n,com.bigstar.movie,com.bigstar.movie,com.bigstar.movie,com.bigstar.movie\r\n",
+                "csv_text": "Publisher Name,App Name,Bundle Name,App Store URL,Device\nBigStar,roku.bigstartv.bigstar,roku.bigstartv.bigstar,roku.bigstartv.bigstar,roku.bigstartv.bigstar\n,com.bigstartv.bigstar,com.bigstartv.bigstar,com.bigstartv.bigstar,com.bigstartv.bigstar\n,com.bigstar.movie,com.bigstar.movie,com.bigstar.movie,com.bigstar.movie\n",
                 "line_items": [
                     {
                         "Publisher Name": "BigStar",

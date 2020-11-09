@@ -1,5 +1,5 @@
 import unittest
-import pattern_extract
+from . import pattern_extract
 
 class TestStringPatternExtractTransform(unittest.TestCase):
     def test_pattern_extract(self):

@@ -1,4 +1,4 @@
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
@@ -15,15 +15,15 @@ class StringURLEncodeTransform(BaseTransform):
 
     def transform(self, str_input, use_plus=False, encoding='utf-8', **kwargs):
         if not str_input:
-            return u''
+            return ''
 
-        if isinstance(str_input, unicode):
+        if isinstance(str_input, str):
             str_input = str_input.encode(encoding)
 
         if use_plus:
-            encoded_text = urllib.quote_plus(str_input)
+            encoded_text = urllib.parse.quote_plus(str_input)
         else:
-            encoded_text = urllib.quote(str_input)
+            encoded_text = urllib.parse.quote(str_input)
 
         return encoded_text
 

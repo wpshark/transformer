@@ -19,7 +19,7 @@ class UtilStringToLineItemTransform(BaseTransform):
     def transform(self, str_input, **kwargs):
 
         if not str_input:
-            return u''
+            return ''
 
         segments = str_input.split(',')
         return segments

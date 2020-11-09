@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 import os
 import sys
 import json
@@ -91,14 +91,14 @@ def hello():
 def fields():
     """ Returns a list of fields for a given transform """
     data = request.args
-    if not data or u'transform' not in data:
+    if not data or 'transform' not in data:
         return jsonify(fields=[])
 
-    transform = registry.lookup(data['transform'], category=data.get(u'category'))
+    transform = registry.lookup(data['transform'], category=data.get('category'))
     if not transform:
         raise APIError('Transform "{}" not found'.format(data['transform']), 404)
 
-    inputs = data.get(u'inputs')
+    inputs = data.get('inputs')
     fields = transform.all_fields(inputs=inputs)
 
     return jsonify(fields=fields)
@@ -115,14 +115,14 @@ def transform():
     if not data:
         raise APIError('Missing request body', 400)
 
-    if u'inputs' not in data:
-        data[u'inputs'] = ''
+    if 'inputs' not in data:
+        data['inputs'] = ''
 
     # Each of these gets popped off so that we don't pass it along in the
     # options to the transform function
-    inputs = data.pop(u'inputs')
-    transform_name = data.pop(u'transform', u'')
-    category = data.pop(u'category', u'')
+    inputs = data.pop('inputs')
+    transform_name = data.pop('transform', '')
+    category = data.pop('category', '')
 
     if not transform_name:
         raise APIError('Missing transform', 400)

@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import unittest
-import email_extract
+from . import email_extract
 
 
 class TestStringEmailExtractTransform(unittest.TestCase):
@@ -27,44 +27,44 @@ class TestStringEmailExtractTransform(unittest.TestCase):
 
     def test_emailvalidation(self):
         valid_emails = [
-            u"email@example.com",
-            u"firstname.lastname@example.com",
-            u"email@subdomain.example.com",
-            u"firstname+lastname@example.com",
-            u"email@123.123.123.123",
-            u"email@[123.123.123.123]",
-            u"\"email\"@example.com",
-            u"1234567890@example.com",
-            u"email@example-one.com",
-            u"_______@example.com",
-            u"email@example.name",
-            u"email@example.museum",
-            u"email@example.co.jp",
-            u"firstname-lastname@example.com",
-            u"\".firstname\"@example.com",
-            u"\"firstname.\"@example.com",
-            u"\".firstname.\"@example.com",
-            u"\"first..name\"@example.com",
+            "email@example.com",
+            "firstname.lastname@example.com",
+            "email@subdomain.example.com",
+            "firstname+lastname@example.com",
+            "email@123.123.123.123",
+            "email@[123.123.123.123]",
+            "\"email\"@example.com",
+            "1234567890@example.com",
+            "email@example-one.com",
+            "_______@example.com",
+            "email@example.name",
+            "email@example.museum",
+            "email@example.co.jp",
+            "firstname-lastname@example.com",
+            "\".firstname\"@example.com",
+            "\"firstname.\"@example.com",
+            "\".firstname.\"@example.com",
+            "\"first..name\"@example.com",
         ]
 
         possibly_valid_emails = [
-            (u"firstname...lastname@example.com", u"lastname@example.com"),
-            (u"firstname..lastname@example.com", u"lastname@example.com"),
-            (u"firstname..lastname..awesome@example.com", u"awesome@example.com"),
-            (u".firstname@example.com", u"firstname@example.com"),
-            (u"done. firstname@example.com", u"firstname@example.com")
+            ("firstname...lastname@example.com", "lastname@example.com"),
+            ("firstname..lastname@example.com", "lastname@example.com"),
+            ("firstname..lastname..awesome@example.com", "awesome@example.com"),
+            (".firstname@example.com", "firstname@example.com"),
+            ("done. firstname@example.com", "firstname@example.com")
         ]
 
         invalid_emails = [
-            u"plainaddress",
-            u"#@%^%#$@#$@#.com",
-            u"@example.com",
-            u"email.example.com",
-            u"あいうえお@example.com",
-            u"email@example",
-            u"\"(),:;<>[\]@example.com",
-            u"firstname.@example.com",
-            u".firstname.@example.com",
+            "plainaddress",
+            "#@%^%#$@#$@#.com",
+            "@example.com",
+            "email.example.com",
+            "あいうえお@example.com",
+            "email@example",
+            "\"(),:;<>[\]@example.com",
+            "firstname.@example.com",
+            ".firstname.@example.com",
         ]
 
         transformer = email_extract.StringEmailExtractTransform()

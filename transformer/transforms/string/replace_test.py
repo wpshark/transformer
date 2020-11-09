@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-import replace
+from . import replace
 
 class TestStringReplaceTransform(unittest.TestCase):
     def test_replace(self):

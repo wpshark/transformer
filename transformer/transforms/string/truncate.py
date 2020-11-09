@@ -13,9 +13,9 @@ class StringTruncateTransform(BaseTransform):
 
     def transform(self, str_input, offset=0, max_length=None, append_ellipsis=False, **kwargs):
         if max_length is None:
-            max_length = len(str_input or u'')
+            max_length = len(str_input or '')
         if not str_input or max_length <= 0:
-            return u''
+            return ''
 
         # Don't append the ellipsis if we're already within the limits
         if (len(str_input) - offset) <= max_length:
@@ -27,7 +27,7 @@ class StringTruncateTransform(BaseTransform):
             short_text = str_input[offset:offset + max_length]
 
         if append_ellipsis:
-            short_text = short_text[0:-3] + u'...'
+            short_text = short_text[0:-3] + '...'
 
         return short_text
 

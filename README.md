@@ -15,29 +15,29 @@ Transformer is a little web app that performs data transformations. You specify 
 ```json
 {
   "transform": "string.upper_case",
-  "inputs": ["abc"],
+  "inputs": ["abc"]
 }
 ```
 
 ## Setup
 
 ```
-virtualenv --python=python2.7 env27
-. env27/bin/activate
+virtualenv --python=python3.6 env
+. env/bin/activate
 pip install -r requirements.txt
 ```
 
 ## Run Locally
 
 ```
-. env27/bin/activate
+. env/bin/activate
 DEBUG=true PORT=8888 python transformer/app.py
 ```
 
 ## Test Locally
 
 ```
-. env27/bin/activate
+. env/bin/activate
 ./run_tests.sh
 ```
 

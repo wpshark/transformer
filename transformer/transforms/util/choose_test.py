@@ -1,5 +1,5 @@
 import unittest
-import choose
+from . import choose
 
 
 class TestUtilChooseTransform(unittest.TestCase):

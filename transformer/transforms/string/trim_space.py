@@ -12,6 +12,6 @@ class StringTrimSpaceTransform(BaseTransform):
     verb = 'remove leading and trailing whitespace from'
 
     def transform(self, str_input, **kwargs):
-        return str_input.strip() if str_input else u''
+        return str_input.strip() if str_input else ''
 
 register(StringTrimSpaceTransform())

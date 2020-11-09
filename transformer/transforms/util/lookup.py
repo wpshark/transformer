@@ -21,7 +21,7 @@ class UtilLookupTransform(BaseTransform):
             'help_text': '{} you would like to {}.'.format(self.noun or 'Value', self.verb or 'transform')
         }
 
-    def transform(self, input_key, table={}, fallback=u'', **kwargs):
+    def transform(self, input_key, table={}, fallback='', **kwargs):
         if input_key and input_key in table:
             return table[input_key]
         return fallback

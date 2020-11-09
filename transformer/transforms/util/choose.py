@@ -31,7 +31,7 @@ class UtilChooseTransform(BaseTransform):
         if not inputs:
             if options is not None and options.get('default') is not None:
                 return options.get('default')
-            return u''
+            return ''
 
         if not isinstance(inputs, list):
             self.raise_exception('Choose requires a list of inputs')
@@ -78,7 +78,7 @@ class UtilChooseTransform(BaseTransform):
 
     def truthy_inputs(self, inputs):
         """ return only truthy inputs """
-        return [v for v in inputs if (not isinstance(v, basestring) and v is not None) or v]
+        return [v for v in inputs if (not isinstance(v, str) and v is not None) or v]
 
 
     def choose_first(self, inputs, default=None):

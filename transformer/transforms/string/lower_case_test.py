@@ -1,5 +1,5 @@
 import unittest
-import lower_case
+from . import lower_case
 
 class TestStringLowercaseTransform(unittest.TestCase):
     def test_lowercase(self):

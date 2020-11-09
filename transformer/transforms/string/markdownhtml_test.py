@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-import markdownhtml
+from . import markdownhtml
 
 class TestMarkdownHTMLTransform(unittest.TestCase):
     def test_markdowntohtml(self):
@@ -14,8 +14,8 @@ class TestMarkdownHTMLTransform(unittest.TestCase):
 
     def test_markdowntohtml_unicode(self):
         transformer = markdownhtml.StringMarkdownHTMLTransform()
-        self.assertEqual(transformer.transform(u""), u"")
-        self.assertEqual(transformer.transform(u"* thing"), u"<ul>\n<li>thing</li>\n</ul>")
-        self.assertEqual(transformer.transform(u"* \u5b57 thing"), u"<ul>\n<li>\u5b57 thing</li>\n</ul>")
-        self.assertEqual(transformer.transform(u"\ufeff\u062a\u0627\u0632\u06c1"), u"<p>\ufeff\u062a\u0627\u0632\u06c1</p>")
-        self.assertEqual(transformer.transform("\xef\xbb\xbf\xd8\xaa\xd8\xa7\xd8\xb2\xdb\x81"), u"<p>\ufeff\u062a\u0627\u0632\u06c1</p>")
+        self.assertEqual(transformer.transform(""), "")
+        self.assertEqual(transformer.transform("* thing"), "<ul>\n<li>thing</li>\n</ul>")
+        self.assertEqual(transformer.transform("* \u5b57 thing"), "<ul>\n<li>\u5b57 thing</li>\n</ul>")
+        self.assertEqual(transformer.transform("\ufeff\u062a\u0627\u0632\u06c1"), "<p>\ufeff\u062a\u0627\u0632\u06c1</p>")
+        self.assertEqual(transformer.transform("\xef\xbb\xbf\xd8\xaa\xd8\xa7\xd8\xb2\xdb\x81"), "<p>\ufeff\u062a\u0627\u0632\u06c1</p>")

@@ -14,12 +14,12 @@ class StringReplaceTransform(BaseTransform):
     noun = 'Text'
     verb = 'find and replace values within'
 
-    def transform(self, str_input, old, new=u'', **kwargs):
+    def transform(self, str_input, old, new='', **kwargs):
         if old:
             old = expand_special_chargroups(old)
         if new:
             new = expand_special_chargroups(new)
-        return str_input.replace(old, new) if str_input and old else u''
+        return str_input.replace(old, new) if str_input and old else ''
 
     def fields(self, *args, **kwargs):
         return [

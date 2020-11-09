@@ -1,5 +1,5 @@
 import unittest
-import math_operation
+from . import math_operation
 
 class TestNumberMathTransform(unittest.TestCase):
     def test_math_operation(self):

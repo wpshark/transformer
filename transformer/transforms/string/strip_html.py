@@ -14,7 +14,7 @@ class StringStripHtmlTransform(BaseTransform):
 
     def transform(self, str_input, **kwargs):
         if not str_input:
-            return u''
+            return ''
 
         soup = BeautifulSoup(str_input, 'html.parser')
 

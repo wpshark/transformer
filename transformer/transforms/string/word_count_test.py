@@ -1,5 +1,5 @@
 import unittest
-import word_count
+from . import word_count
 
 class TestWordCount(unittest.TestCase):
     def test_wordcount(self):

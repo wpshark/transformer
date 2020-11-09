@@ -16,7 +16,7 @@ def lookup(name, category=""):
 
 def get_all(category=""):
     legacy_transforms = ["util.append","util.lineitem_to_string","string.default_value"]
-    return [v for k, v in __GLOBAL_REGISTRY.iteritems() if not category or category == v.category and not k in legacy_transforms]
+    return [v for k, v in __GLOBAL_REGISTRY.items() if not category or category == v.category and not k in legacy_transforms]
 
 def make_registry():
     import transformer.transforms # NOQA

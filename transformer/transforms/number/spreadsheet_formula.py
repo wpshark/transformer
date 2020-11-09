@@ -8,6 +8,7 @@ import operator
 import random
 import math
 from decimal import Decimal, ROUND_HALF_UP, ROUND_DOWN, ROUND_UP
+from functools import reduce
 
 
 def get_default_functions():
@@ -257,7 +258,7 @@ def wrap_decimal(f):
 
 def func_value(a):
     """ functor for converting a text string into a numeric value """
-    if not isinstance(a, basestring):
+    if not isinstance(a, str):
         return a
     try:
         a = a.replace(',', '')
@@ -335,7 +336,7 @@ def func_double_factorial(a):
     """ functor for a bounded double factorial """
     if a > 288:
         raise Exception('Double factorial limited to N <= 288')
-    return reduce(operator.mul, range(a, 0, -2), 1L)
+    return reduce(operator.mul, list(range(a, 0, -2)), 1)
 
 
 def func_average(*args):
@@ -403,7 +404,7 @@ def func_istext(*args):
     """ functor for istext """
     if args:
         for arg in args:
-            if isinstance(arg, basestring):
+            if isinstance(arg, str):
                 return True
     return False
 
@@ -417,14 +418,14 @@ def func_isnumber(*args):
     """ functor for isnumber """
     if args:
         for arg in args:
-            if isinstance(arg, int) or isinstance(arg, long) or isinstance(arg, float):
+            if isinstance(arg, int) or isinstance(arg, int) or isinstance(arg, float):
                 return True
     return False
 
 
 def op_add(a, b):
     """ operator for add """
-    if isinstance(a, basestring) or isinstance(b, basestring):
+    if isinstance(a, str) or isinstance(b, str):
         raise TypeError('add operation requires numeric operands')
     return operator.add(a, b)
 

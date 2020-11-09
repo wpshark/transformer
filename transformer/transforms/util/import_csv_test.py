@@ -1,5 +1,5 @@
 import unittest
-import import_csv
+from . import import_csv
 
 
 class TestUtilImportCSVTransform(unittest.TestCase):

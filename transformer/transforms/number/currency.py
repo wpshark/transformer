@@ -15,9 +15,9 @@ class NumberCurrencyTransform(BaseTransform):
     noun = 'Number'
     verb = 'format as a currency'
 
-    def transform(self, currency_input, currency=u'USD', currency_locale=u'en_US', currency_format=u'¤#,##0.00 ¤¤'):
+    def transform(self, currency_input, currency='USD', currency_locale='en_US', currency_format='¤#,##0.00 ¤¤'):
         if currency_input is None:
-            return u''
+            return ''
 
         try:
             m = money.Money(currency_input, currency)
@@ -57,19 +57,19 @@ class NumberCurrencyTransform(BaseTransform):
                 'key': 'currency_format',
                 'label': 'Currency Format',
                 'help_text': (
-                    u'Specify the format to be used for the currency formatting. '
-                    u'Use the unicode currency symbol (¤) for special formatting options. '
-                    u'Formatting rules can be found here: http://www.unicode.org/reports/tr35/tr35-numbers.html#Number_Format_Patterns'
+                    'Specify the format to be used for the currency formatting. '
+                    'Use the unicode currency symbol (¤) for special formatting options. '
+                    'Formatting rules can be found here: http://www.unicode.org/reports/tr35/tr35-numbers.html#Number_Format_Patterns'
                 ),
                 'choices': [
-                    u'¤#,##0.00',
-                    u'¤#,##0.00 ¤¤',
-                    u'¤#,##0.00 ¤¤¤',
-                    u'¤###0.00',
-                    u'#,##0.00',
-                    u'###0.00',
+                    '¤#,##0.00',
+                    '¤#,##0.00 ¤¤',
+                    '¤#,##0.00 ¤¤¤',
+                    '¤###0.00',
+                    '#,##0.00',
+                    '###0.00',
                 ],
-                'default': u'¤#,##0.00'
+                'default': '¤#,##0.00'
             },
         ]
 

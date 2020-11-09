@@ -1,5 +1,5 @@
 import unittest
-import find
+from . import find
 
 from transformer.util import APIError
 

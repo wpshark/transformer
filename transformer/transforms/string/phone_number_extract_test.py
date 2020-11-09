@@ -1,5 +1,5 @@
 import unittest
-import phone_number_extract
+from . import phone_number_extract
 
 class TestStringPhoneExtractTransform(unittest.TestCase):
     def test_phoneextract(self):

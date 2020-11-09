@@ -14,10 +14,10 @@ class StringNumberExtractTransform(BaseTransform):
 
     def transform(self, str_input, **kwargs):
         if not str_input:
-            return u''
+            return ''
 
         match = re.search(r'[+-]?[0-9]+(?:,[0-9]+)*(?:\.[0-9]+)?', str_input)
-        return match.group(0) if match else u''
+        return match.group(0) if match else ''
 
 
 register(StringNumberExtractTransform())

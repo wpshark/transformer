@@ -12,6 +12,6 @@ class StringCapitalizeTransform(BaseTransform):
     verb = 'capitalize'
 
     def transform(self, str_input, **kwargs):
-        return str_input.title() if str_input else u''
+        return str_input.title() if str_input else ''
 
 register(StringCapitalizeTransform())

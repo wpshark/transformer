@@ -1,5 +1,5 @@
 import unittest
-import truncate
+from . import truncate
 
 class TestStringTruncateTransform(unittest.TestCase):
     def test_truncate(self):

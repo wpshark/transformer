@@ -15,9 +15,9 @@ class DateManipulateTransform(BaseTransform):
     noun = 'Date'
     verb = 'manipulate'
 
-    def transform(self, date_value, expression=u'', from_format=u'', to_format=u'', **kwargs):
+    def transform(self, date_value, expression='', from_format='', to_format='', **kwargs):
         if date_value is None:
-            date_value = u''
+            date_value = ''
 
         delta = tdelta(expression)
 

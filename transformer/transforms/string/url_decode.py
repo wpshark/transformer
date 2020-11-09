@@ -1,4 +1,4 @@
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
@@ -15,12 +15,12 @@ class StringURLDecodeTransform(BaseTransform):
 
     def transform(self, str_input, use_plus=False, **kwargs):
         if not str_input:
-            return u''
+            return ''
 
         if use_plus:
-            decoded_text = urllib.unquote_plus(str_input)
+            decoded_text = urllib.parse.unquote_plus(str_input)
         else:
-            decoded_text = urllib.unquote(str_input)
+            decoded_text = urllib.parse.unquote(str_input)
 
         return decoded_text
 

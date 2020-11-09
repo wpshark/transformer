@@ -14,6 +14,6 @@ class StringEncodeasciiTransform(BaseTransform):
     verb = 'convert to ASCII'
 
     def transform(self, str_input, **kwargs):
-        return unidecode(str_input) if str_input else u''
+        return unidecode(str_input) if str_input else ''
 
 register(StringEncodeasciiTransform())

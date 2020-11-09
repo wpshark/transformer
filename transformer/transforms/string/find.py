@@ -13,15 +13,15 @@ class StringFindTransform(BaseTransform):
     noun = 'Text'
     verb = 'Search'
 
-    def transform(self, str_input, find=u'', offset=0, **kwargs):
-        str_input = str_input or u''
-        find = find or u''
+    def transform(self, str_input, find='', offset=0, **kwargs):
+        str_input = str_input or ''
+        find = find or ''
         pos = -1
 
-        if isinstance(offset, basestring):
+        if isinstance(offset, str):
             offset = try_parse_number(offset, cls=int, default=None)
 
-        if not isinstance(offset, (int, long)):
+        if not isinstance(offset, int):
             self.raise_exception('offset must be a number')
 
         if str_input and find:

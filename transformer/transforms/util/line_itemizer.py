@@ -111,7 +111,7 @@ class UtilLineItemizerTransform(BaseTransform):
 
         # split each string value in the dict by ',' and determine the
         #  length of longest array
-        for k, v in my_dict.items():  # might not need iteritems
+        for k, v in list(my_dict.items()):  # might not need iteritems
             my_dict[k] = v.split(",")
             if len(my_dict[k]) > longest_array:
                 longest_array = len(my_dict[k])
@@ -120,7 +120,7 @@ class UtilLineItemizerTransform(BaseTransform):
         for num in range(0, longest_array):
             # initialize a new individual line-item
             this_line_item = {}
-            for k, v in my_dict.items():
+            for k, v in list(my_dict.items()):
                 # Try to add each property from my_dict to the individual line-item.
                 #  Skips if the list isn't long enough for an available property.
                 try:

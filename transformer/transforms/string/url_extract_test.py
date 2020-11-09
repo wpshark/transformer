@@ -1,5 +1,5 @@
 import unittest
-import url_extract
+from . import url_extract
 
 class TestStringURLExtractTransform(unittest.TestCase):
     def test_urlextract(self):

@@ -1,5 +1,5 @@
 import unittest
-import lineitem_to_string
+from . import lineitem_to_string
 
 
 class TestUtilLineItemToStringTransform(unittest.TestCase):

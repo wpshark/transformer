@@ -1,12 +1,12 @@
 import unittest
-import default_value
+from . import default_value
 
 class TestStringDefaultValueTransform(unittest.TestCase):
     def test_default_value(self):
         transformer = default_value.StringDefaultValueTransform()
 
         self.assertEqual(transformer.transform("", default_value="test"), "test")
-        self.assertEqual(transformer.transform(u"", default_value="test"), "test")
+        self.assertEqual(transformer.transform("", default_value="test"), "test")
         self.assertEqual(transformer.transform(None, default_value="test"), "test")
 
         self.assertEqual(transformer.transform("a", default_value="test"), "a")

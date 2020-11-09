@@ -3,6 +3,7 @@ import operator
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 from transformer.util import try_parse_number
+from functools import reduce
 
 
 class NumberMathTransform(BaseTransform):
@@ -39,7 +40,7 @@ class NumberMathTransform(BaseTransform):
             options = {}
 
         # try converting inputs to numbers
-        inputs = map(try_parse_number, inputs)
+        inputs = list(map(try_parse_number, inputs))
 
         # get the operation
         op = options.get('operation')
@@ -50,7 +51,7 @@ class NumberMathTransform(BaseTransform):
 
         # unary operations return a list
         if operands == 1:
-            return map(op_func, inputs)
+            return list(map(op_func, inputs))
 
         # binary operations return an accumulated value
         initial, rest = inputs[0], inputs[1:]

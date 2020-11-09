@@ -1,5 +1,5 @@
 import unittest
-import upper_case
+from . import upper_case
 
 class TestStringUppercaseTransform(unittest.TestCase):
     def test_uppercase(self):

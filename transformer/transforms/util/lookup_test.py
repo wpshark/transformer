@@ -1,20 +1,20 @@
 import unittest
-import lookup
+from . import lookup
 
 class TestUtilLookupTransform(unittest.TestCase):
     def test_lookup_empty(self):
         transformer = lookup.UtilLookupTransform()
 
-        self.assertEquals(transformer.transform('a', table={'a': 1, 'b': 2}, fallback=3), 1)
-        self.assertEquals(transformer.transform('asfguy', table={'a': 1, 'b': 2}, fallback=3), 3)
-        self.assertEquals(transformer.transform('', table={'a': 1, 'b': 2}, fallback=3), 3)
-        self.assertEquals(transformer.transform('', table={'a': 1, 'b': 2, '': 10}, fallback=3), 3)
+        self.assertEqual(transformer.transform('a', table={'a': 1, 'b': 2}, fallback=3), 1)
+        self.assertEqual(transformer.transform('asfguy', table={'a': 1, 'b': 2}, fallback=3), 3)
+        self.assertEqual(transformer.transform('', table={'a': 1, 'b': 2}, fallback=3), 3)
+        self.assertEqual(transformer.transform('', table={'a': 1, 'b': 2, '': 10}, fallback=3), 3)
 
-        self.assertEquals(transformer.transform(u'a', table={'a': 1, u'b': 2}, fallback=3), 1)
-        self.assertEquals(transformer.transform(u'asfguy', table={'a': 1, u'b': 2}, fallback=3), 3)
-        self.assertEquals(transformer.transform(u'', table={'a': 1, u'b': 2}, fallback=3), 3)
-        self.assertEquals(transformer.transform(u'', table={'a': 1, u'b': 2, '': 10}, fallback=u'cat'), u'cat')
+        self.assertEqual(transformer.transform('a', table={'a': 1, 'b': 2}, fallback=3), 1)
+        self.assertEqual(transformer.transform('asfguy', table={'a': 1, 'b': 2}, fallback=3), 3)
+        self.assertEqual(transformer.transform('', table={'a': 1, 'b': 2}, fallback=3), 3)
+        self.assertEqual(transformer.transform('', table={'a': 1, 'b': 2, '': 10}, fallback='cat'), 'cat')
 
-        self.assertEquals(transformer.transform(u'nothing'), u'')
-        self.assertEquals(transformer.transform(u'something', fallback=u'something'), u'something')
-        self.assertEquals(transformer.transform(None), u'')
+        self.assertEqual(transformer.transform('nothing'), '')
+        self.assertEqual(transformer.transform('something', fallback='something'), 'something')
+        self.assertEqual(transformer.transform(None), '')

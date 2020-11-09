@@ -28,7 +28,7 @@ class StringEmailExtractTransform(BaseTransform):
             combination of printable ASCII characters except backslash and doublequote.
 
         """
-        if isinstance(str_input, basestring):
+        if isinstance(str_input, str):
             match = re.search(r"""
                 (
                     "( [a-zA-Z0-9!#$%&'*/=?^_`{|}~+.,)(><-]+ )"
@@ -42,9 +42,9 @@ class StringEmailExtractTransform(BaseTransform):
                     ([a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)
                 )
             """, str_input, re.U | re.VERBOSE)
-            return match.group(0) if match else u''
+            return match.group(0) if match else ''
         else:
-            return u''
+            return ''
 
 
 register(StringEmailExtractTransform())

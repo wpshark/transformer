@@ -17,7 +17,7 @@ class StringHTMLMarkdownTransform(BaseTransform):
 
     def transform(self, str_input, **kwargs):
         if not str_input:
-            return u''
+            return ''
 
         markdown = html2text.html2text(to_unicode_or_bust(str_input))
         markdown = markdown.strip('\n')

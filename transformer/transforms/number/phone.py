@@ -15,9 +15,9 @@ class PhoneNumberFormattingTransform(BaseTransform):
     noun = 'Phone Number'
     verb = 'format to a new style'
 
-    def transform(self, phone_string, format_string=u'', default_region=u'US', validate=True, **kwargs):
+    def transform(self, phone_string, format_string='', default_region='US', validate=True, **kwargs):
         if phone_string is None:
-            return u''
+            return ''
 
         try:
             number = phonenumbers.parse(phone_string, default_region)

@@ -14,6 +14,6 @@ class StringTitlecaseTransform(BaseTransform):
     verb = 'titlecase'
 
     def transform(self, str_input, **kwargs):
-        return titlecase(str_input) if str_input else u''
+        return titlecase(str_input) if str_input else ''
 
 register(StringTitlecaseTransform())

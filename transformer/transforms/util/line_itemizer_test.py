@@ -1,5 +1,5 @@
 import unittest
-import line_itemizer
+from . import line_itemizer
 
 
 class TestUtilLineItemizerTransform(unittest.TestCase):

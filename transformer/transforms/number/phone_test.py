@@ -1,5 +1,5 @@
 import unittest
-import phone
+from . import phone
 
 #we should do some external validation against https://libphonenumber.appspot.com/
 

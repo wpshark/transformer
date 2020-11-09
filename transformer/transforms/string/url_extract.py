@@ -18,14 +18,14 @@ class StringURLExtractTransform(BaseTransform):
     verb = 'find and copy a web URL from'
 
     def transform(self, str_input, **kwargs):
-        if isinstance(str_input, basestring):
+        if isinstance(str_input, str):
             # stripping e-mails from the input before we check for URLs so our regex
             # doesn't pick up on e-mails with 1 or more subdomains (like test@test.zapier.com)
             strip_emails = re.sub(EMAIL_REGEX, '', str_input)
             match = re.search(URL_REGEX, strip_emails)
-            return match.group(0) if match else u''
+            return match.group(0) if match else ''
         else:
-            return u''
+            return ''
 
 
 register(StringURLExtractTransform())

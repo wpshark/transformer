@@ -12,9 +12,9 @@ class StringSplitTransform(BaseTransform):
     noun = 'String'
     verb = 'split'
 
-    def transform(self, str_input, separator=u'', index=0, **kwargs):
+    def transform(self, str_input, separator='', index=0, **kwargs):
         if not str_input:
-            return u''
+            return ''
 
         separator = expand_special_chargroups(separator)
 
@@ -27,7 +27,7 @@ class StringSplitTransform(BaseTransform):
             return segments
 
         if index == 'fields':
-            return { u'Item {}'.format(i + 1): s for i, s in enumerate(segments) }
+            return { 'Item {}'.format(i + 1): s for i, s in enumerate(segments) }
 
         index = try_parse_number(index, cls=int)
         try:
@@ -35,7 +35,7 @@ class StringSplitTransform(BaseTransform):
         except:
             pass
 
-        return u''
+        return ''
 
     def fields(self, *args, **kwargs):
         return [

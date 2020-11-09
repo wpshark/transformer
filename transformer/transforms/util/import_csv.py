@@ -1,7 +1,7 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 import csv
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import tempfile
 
 #Approximate size of a 1000 line CSV with 14 columns, some text in each
@@ -40,12 +40,12 @@ class UtilImportCSVTransform(BaseTransform):
         # don't support resetting the iterator back to 0.
 
         if not csv_url:
-            return u''
+            return ''
 
         # create a temp file, then load the csv into it
         response = tempfile.NamedTemporaryFile()
         response.seek(0)
-        urllib.urlretrieve(csv_url, response.name)
+        urllib.request.urlretrieve(csv_url, response.name)
 
         #check file size
         response.seek(0, 2)
@@ -106,7 +106,7 @@ class UtilImportCSVTransform(BaseTransform):
             # we don't have headers, so need some line-item labels, but first need number of fields, so grab the first row....
             # need to set up an exception for 1 column CSVs
             header_reader = csv.reader(response, dialect=dialect)
-            row_1 = header_reader.next()
+            row_1 = next(header_reader)
             if forced_header:
                 # user says that the first row is a header row, lets hope it has everything we need
                 field_names = list(s.format(i + 1) for i, s in enumerate(row_1))

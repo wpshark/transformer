@@ -1,5 +1,5 @@
 import unittest
-import url_decode
+from . import url_decode
 
 class TestStringURLDecodeTransform(unittest.TestCase):
     def test_decode(self):
@@ -11,7 +11,7 @@ class TestStringURLDecodeTransform(unittest.TestCase):
         self.assertEqual(transformer.transform("+", use_plus=True), " ")
         self.assertEqual(transformer.transform("%40"), "@")
         self.assertEqual(transformer.transform("%2B"), "+")
-        self.assertEqual(transformer.transform(u"user%2Btest%40example.com"), "user+test@example.com")
+        self.assertEqual(transformer.transform("user%2Btest%40example.com"), "user+test@example.com")
         self.assertEqual(transformer.transform("True%20%21%3D%20False"), "True != False")
         self.assertEqual(transformer.transform("True+%21%3D+False", use_plus=True), "True != False")
         self.assertEqual(transformer.transform("http%3A//www.example.com/%2B/"), "http://www.example.com/+/")

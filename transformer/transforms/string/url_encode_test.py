@@ -1,6 +1,6 @@
 # ~*~ coding: utf-8 ~*~
 import unittest
-import url_encode
+from . import url_encode
 
 class TestStringURLEncodeTransform(unittest.TestCase):
     def test_encode(self):
@@ -12,7 +12,7 @@ class TestStringURLEncodeTransform(unittest.TestCase):
         self.assertEqual(transformer.transform(" ", use_plus=True), "+")
         self.assertEqual(transformer.transform("@"), "%40")
         self.assertEqual(transformer.transform("+"), "%2B")
-        self.assertEqual(transformer.transform(u"user+test@example.com"), "user%2Btest%40example.com")
+        self.assertEqual(transformer.transform("user+test@example.com"), "user%2Btest%40example.com")
         self.assertEqual(transformer.transform("True != False"), "True%20%21%3D%20False")
         self.assertEqual(transformer.transform("True != False", use_plus=True), "True+%21%3D+False")
         self.assertEqual(transformer.transform("http://www.example.com/+/"), "http%3A//www.example.com/%2B/")
@@ -23,4 +23,4 @@ class TestStringURLEncodeTransform(unittest.TestCase):
         self.assertEqual(transformer.transform("é", use_plus=False), "%C3%A9")
         self.assertEqual(transformer.transform("\xc3\xa9", use_plus=True), "%C3%A9")
         self.assertEqual(transformer.transform("\xc3\xa9", use_plus=False), "%C3%A9")
-        self.assertEqual(transformer.transform(u"é", use_plus=False), "%C3%A9")
+        self.assertEqual(transformer.transform("é", use_plus=False), "%C3%A9")

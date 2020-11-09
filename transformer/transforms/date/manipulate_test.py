@@ -1,5 +1,5 @@
 import unittest
-import manipulate
+from . import manipulate
 import datetime
 
 class TestDateManipulateTransform(unittest.TestCase):

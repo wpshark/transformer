@@ -1,5 +1,5 @@
 import unittest
-import append
+from . import append
 
 
 class TestUtilAppendTransform(unittest.TestCase):

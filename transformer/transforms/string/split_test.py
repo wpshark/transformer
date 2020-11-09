@@ -1,5 +1,5 @@
 import unittest
-import split
+from . import split
 
 class TestStringStripTransform(unittest.TestCase):
     def test_split(self):

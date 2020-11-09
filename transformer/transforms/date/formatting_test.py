@@ -2,7 +2,7 @@ import unittest
 import datetime
 from mock import patch
 
-import formatting
+from . import formatting
 
 
 def make_fakedatetime(time):

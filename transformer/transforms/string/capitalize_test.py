@@ -1,5 +1,5 @@
 import unittest
-import capitalize
+from . import capitalize
 
 class TestStringCapitalizeTransform(unittest.TestCase):
     def test_capitalize(self):

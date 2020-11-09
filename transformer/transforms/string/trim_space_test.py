@@ -1,5 +1,5 @@
 import unittest
-import trim_space
+from . import trim_space
 
 class TestStringTrimSpaceTransform(unittest.TestCase):
     def test_truncate(self):

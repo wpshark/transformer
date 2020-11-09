@@ -42,7 +42,7 @@ class BaseTransform(object):
 
         if isinstance(inputs, dict):
             outputs = {}
-            for k, v in inputs.iteritems():
+            for k, v in inputs.items():
                 outputs[k] = self.transform(v, **options)
         elif isinstance(inputs, list):
             outputs = []

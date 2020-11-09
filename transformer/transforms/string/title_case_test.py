@@ -1,5 +1,5 @@
 import unittest
-import title_case
+from . import title_case
 
 class TestStringTitlecaseTransform(unittest.TestCase):
     def test_titlecase(self):

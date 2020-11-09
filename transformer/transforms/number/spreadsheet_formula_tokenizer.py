@@ -130,7 +130,7 @@ class f_tokens:
             return None
         return self.items[self.index]
 
-    def next(self):
+    def __next__(self):
         if self.EOF():
             return None
         return self.items[self.index + 1]
@@ -509,7 +509,7 @@ class ExcelParser(ExcelParserTokens):
             if ((token.ttype == self.TOK_TYPE_OPERAND) and (len(token.tsubtype) == 0)):
                 try:
                     float(token.tvalue)
-                except ValueError, e:
+                except ValueError as e:
                     if ((token.tvalue == 'TRUE') or (token.tvalue == 'FALSE')):
                         token.tsubtype = self.TOK_SUBTYPE_LOGICAL
                     else:
@@ -577,7 +577,7 @@ class ASTNode(object):
         super(ASTNode,self).__init__()
         self.token = token
     def string(self):
-        return u'{}'.format(self.token.tvalue)
+        return '{}'.format(self.token.tvalue)
     def __str__(self):
         return self.token.tvalue
 

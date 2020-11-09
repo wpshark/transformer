@@ -27,21 +27,21 @@ class StringPhoneExtractTransform(BaseTransform):
     verb = 'find and copy a phone number from'
 
     def transform(self, str_input, regex='uni1', **kwargs):
-        if isinstance(str_input, basestring):
+        if isinstance(str_input, str):
             if regex=='uni2':
                 match = re.search(URL_REGEX_UNI2, str_input)
-                return match.group(0) if match else u''
+                return match.group(0) if match else ''
             elif regex=='na':
                 match = re.search(URL_REGEX_NA, str_input)
-                return match.group(0) if match else u''
+                return match.group(0) if match else ''
             elif regex=='in':
                 match = re.search(URL_REGEX_IN, str_input)
-                return match.group(0) if match else u''
+                return match.group(0) if match else ''
             else:
                 match = re.search(URL_REGEX_UNI1, str_input)
-                return match.group(0) if match else u''
+                return match.group(0) if match else ''
         else:
-            return u''
+            return ''
 
     def fields(self, *args, **kwargs):
         return [

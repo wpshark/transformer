@@ -15,6 +15,6 @@ class StringPluralizeTransform(BaseTransform):
     verb = 'make plural'
 
     def transform(self, str_input, **kwargs):
-        return pluralizer.plural(str_input) if str_input else u''
+        return pluralizer.plural(str_input) if str_input else ''
 
 register(StringPluralizeTransform())

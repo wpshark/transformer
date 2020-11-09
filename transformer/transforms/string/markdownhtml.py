@@ -16,6 +16,6 @@ class StringMarkdownHTMLTransform(BaseTransform):
     verb = 'convert to HTML'
 
     def transform(self, str_input, **kwargs):
-        return markdown.markdown(to_unicode_or_bust(str_input)) if str_input else u''
+        return markdown.markdown(to_unicode_or_bust(str_input)) if str_input else ''
 
 register(StringMarkdownHTMLTransform())

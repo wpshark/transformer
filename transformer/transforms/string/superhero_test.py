@@ -1,5 +1,5 @@
 import unittest
-import superhero
+from . import superhero
 
 class TestStringSuperheroTransform(unittest.TestCase):
     def test_capitalize(self):

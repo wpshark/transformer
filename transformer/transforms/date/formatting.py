@@ -33,12 +33,12 @@ class DateFormattingTransform(BaseTransform):
     noun = 'Date'
     verb = 'format'
 
-    def transform(self, date_value, from_format=u'', to_format=u'', from_timezone=u'', to_timezone=u'', **kwargs):
+    def transform(self, date_value, from_format='', to_format='', from_timezone='', to_timezone='', **kwargs):
         if not date_value:
-            return u''
+            return ''
 
         if not to_timezone:
-            to_timezone = u'UTC'
+            to_timezone = 'UTC'
 
         dt = try_parse_date(date_value, from_format=from_format)
         if not dt:

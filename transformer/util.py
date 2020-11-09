@@ -35,9 +35,9 @@ def to_unicode_or_bust(obj, encoding='utf-8'):
 
     """
     try:
-        if isinstance(obj, basestring):
-            if not isinstance(obj, unicode):
-                obj = unicode(obj, encoding)
+        if isinstance(obj, str):
+            if not isinstance(obj, str):
+                obj = str(obj, encoding)
         return obj
     except:
         return bs4.UnicodeDammit(obj, is_html=False).unicode_markup
@@ -97,8 +97,8 @@ def shift_date(dt, delta):
     from dateutil.relativedelta import relativedelta
     from datetime import timedelta
 
-    relative_large = {k: v for k, v in delta.items() if k not in ('hours', 'minutes', 'seconds')}
-    relative_small = {k: v for k, v in delta.items() if k in ('hours', 'minutes', 'seconds')}
+    relative_large = {k: v for k, v in list(delta.items()) if k not in ('hours', 'minutes', 'seconds')}
+    relative_small = {k: v for k, v in list(delta.items()) if k in ('hours', 'minutes', 'seconds')}
 
     dt = dt + relativedelta(**relative_large)
     dt = dt + timedelta(**relative_small)
@@ -128,7 +128,7 @@ def try_parse_date(date_value, from_format=None):
             pass
 
         # try parsedatetime first if any of the relative keywords appear
-        if isinstance(date_value, basestring) and any(k in date_value for k in RELATIVE_KEYWORDS):
+        if isinstance(date_value, str) and any(k in date_value for k in RELATIVE_KEYWORDS):
             cal = parsedatetime.Calendar()
             dt, _ = cal.parseDT(
                 datetimeString=date_value,
@@ -158,10 +158,10 @@ def int_or_float(v):
     returns an int if the value is a long or int or a float that can be
     represented by an int...otherwise returns a float
     """
-    if isinstance(v, int) or isinstance(v, long):
+    if isinstance(v, int) or isinstance(v, int):
         return v
     if v.is_integer():
-        return long(v)
+        return int(v)
     return float(v)
 
 
@@ -169,7 +169,7 @@ def try_parse_number(number_value, cls=float, default=0):
     """
     rudimentary number parsing.
     """
-    if isinstance(number_value, int) or isinstance(number_value, long) or isinstance(number_value, float):
+    if isinstance(number_value, int) or isinstance(number_value, int) or isinstance(number_value, float):
         return number_value
     try:
         return int_or_float(cls(number_value))
@@ -184,7 +184,7 @@ def expand_special_chargroups(str_input):
     helper to replace special character groups with their counterparts
 
     """
-    if not isinstance(str_input, basestring):
+    if not isinstance(str_input, str):
         return str_input
 
     groups = [

@@ -12,7 +12,7 @@ class StringDefaultValueTransform(BaseTransform):
     noun = 'Text'
     verb = 'check if empty'
 
-    def transform(self, str_input, default_value=u'', **kwargs):
+    def transform(self, str_input, default_value='', **kwargs):
         return str_input if str_input is not None and str_input != "" else default_value
 
     def fields(self, *args, **kwargs):

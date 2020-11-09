@@ -1,5 +1,7 @@
 import operator
 
+import numpy
+
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 from transformer.util import try_parse_number
@@ -56,8 +58,7 @@ class NumberMathTransform(BaseTransform):
         # binary operations return an accumulated value
         initial, rest = inputs[0], inputs[1:]
         value = reduce(op_func, rest, initial)
-        return value
-
+        return numpy.float32(value)
 
     def all_fields(self, **kwargs):
         return [
@@ -71,5 +72,6 @@ class NumberMathTransform(BaseTransform):
             },
             self.build_list_input_field()
         ]
+
 
 register(NumberMathTransform())

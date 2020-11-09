@@ -1,7 +1,7 @@
 from transformer.registry import register
 from transformer.transforms.base import BaseTransform
 
-import md5
+import hashlib
 import re
 
 def superheroize(name):
@@ -11,7 +11,7 @@ def superheroize(name):
         return ''
 
     name = 'zapier-' + re.sub(r'\s|\W|\d', '', name)
-    digest = md5.md5(name).hexdigest()
+    digest = hashlib.md5(name).hexdigest()
     hash = [int(digest[:16], 16), int(digest[16:], 16)]
 
     x = abs(hash[0])

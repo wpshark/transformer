@@ -75,7 +75,7 @@ def tdelta(input_):
             m = match.group(key)
             if m is None:
                 continue
-            delta[key] += int(m) if m else 0
+            delta[key] += int(re.sub(re.compile(r"\s+"), "", m)) if m else 0
 
     return delta
 

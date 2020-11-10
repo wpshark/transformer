@@ -1,4 +1,5 @@
 *.pyc
-env27
-.DS_Store
-.vscode
+env27/
+.DS_Store/
+.vscode/
+.idea/

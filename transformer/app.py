@@ -3,6 +3,12 @@ import os
 import sys
 import json
 
+from logging.config import dictConfig
+
+import requests
+
+from deepdiff import DeepDiff
+
 # insert the root dir into the system path
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
@@ -15,6 +21,20 @@ from flask import Flask, jsonify, request
 # Create our Flask App
 app = Flask(__name__)
 
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {}},
+    'handlers': {'wsgi': {
+        'class': 'logging.StreamHandler',
+        'stream': 'ext://flask.logging.wsgi_errors_stream',
+        'formatter': 'default'
+    }},
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['wsgi']
+    }
+})
+
 sentry_dsn = os.environ.get('SENTRY_DSN')
 if sentry_dsn:
     from raven.contrib.flask import Sentry
@@ -23,6 +43,38 @@ if sentry_dsn:
 
 # Prepare the application transform registry
 registry.make_registry()
+
+live_integration_test_server = os.environ.get('LIVE_INTEGRATION_TEST_SERVER')
+
+
+@app.after_request
+def perform_live_integration_test(response):
+    if live_integration_test_server:
+        try:
+            test_response = requests.request(
+                method=request.method,
+                url=live_integration_test_server + request.path,
+                params=request.args,
+                data=request.data
+            )
+
+            if response.status_code == test_response.status_code:
+                app.logger.debug('[perform_live_integration_test] Status codes match!')
+            else:
+                app.logger.error(
+                    '[perform_live_integration_test] Status codes do not match: %s != %s',
+                    response.status_code,
+                    test_response.status_code
+                )
+
+            body_diff = DeepDiff(response.json, test_response.json(), ignore_order=True)
+            if not body_diff:
+                app.logger.debug('[perform_live_integration_test] Bodies match!')
+            else:
+                app.logger.error('[perform_live_integration_test] Bodies do not match: %s', body_diff)
+        except Exception as e:
+            app.logger.error('[perform_live_integration_test] Exception trying to run live integration test: %s', e)
+    return response
 
 
 @app.route('/')

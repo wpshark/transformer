@@ -45,6 +45,7 @@ if sentry_dsn:
 registry.make_registry()
 
 live_integration_test_server = os.environ.get('LIVE_INTEGRATION_TEST_SERVER')
+live_integration_test_timeout = os.environ.get('LIVE_INTEGRATION_TEST_TIMEOUT', 10)
 
 
 @app.after_request
@@ -55,7 +56,8 @@ def perform_live_integration_test(response):
                 method=request.method,
                 url=live_integration_test_server + request.path,
                 params=request.args,
-                data=request.data
+                data=request.data,
+                timeout=live_integration_test_timeout
             )
 
             if response.status_code == test_response.status_code:

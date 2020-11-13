@@ -55,7 +55,7 @@ def str_to_unicode(data):
 def perform_async_live_integration_server_test(method, path, args, data, expected_status_code, expected_json):
     response = requests.request(method=method, url=live_integration_test_server + path, params=args, data=data)
 
-    body_diff = DeepDiff(expected_json, response.json(), ignore_order=True)
+    body_diff = DeepDiff(str_to_unicode(expected_json), response.json(), ignore_order=True)
     full_match = expected_status_code == response.status_code and not body_diff
 
     if full_match:

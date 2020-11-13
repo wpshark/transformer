@@ -1,1 +1,3 @@
-docker-compose run web python -m unittest discover . '*_test.py'
+#! /bin/bash
+
+python -m unittest discover . '*_test.py'

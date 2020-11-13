@@ -34,7 +34,7 @@ docker-compose up -d
 ## Test Locally
 
 ```
-./run_tests.sh
+docker-compose run web ./run_tests.sh
 ```
 
 ## Contributing

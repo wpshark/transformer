@@ -1,1 +1,2 @@
 web: newrelic-admin run-program gunicorn transformer.app:app --workers=6 --graceful-timeout=29 --timeout=31
+worker: newrelic-admin run-program celery -A transformer.app.celery worker --loglevel=info --concurrency=4

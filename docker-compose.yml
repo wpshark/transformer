@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    environment:
+      DEBUG: "true"
+      REDIS_URL: "redis://redis:6379"
+    ports:
+      - "5000:5000"
+
+  worker:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    command: celery -A transformer.app.celery worker --loglevel=info
+    environment:
+      C_FORCE_ROOT: "true"
+      REDIS_URL: "redis://redis:6379"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:5.0

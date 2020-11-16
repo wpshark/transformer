@@ -22,23 +22,19 @@ Transformer is a little web app that performs data transformations. You specify 
 ## Setup
 
 ```
-virtualenv --python=python2.7 env27
-. env27/bin/activate
-pip install -r requirements.txt
+docker-compose build
 ```
 
 ## Run Locally
 
 ```
-. env27/bin/activate
-DEBUG=true PORT=8888 python transformer/app.py
+docker-compose up -d
 ```
 
 ## Test Locally
 
 ```
-. env27/bin/activate
-./run_tests.sh
+docker-compose run web ./run_tests.sh
 ```
 
 ## Contributing

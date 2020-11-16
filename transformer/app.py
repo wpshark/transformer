@@ -1,7 +1,13 @@
 from __future__ import absolute_import
+
+import collections
 import os
 import sys
 import json
+
+from celery import Celery
+from deepdiff import DeepDiff
+import requests
 
 # insert the root dir into the system path
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
@@ -20,9 +26,55 @@ if sentry_dsn:
     from raven.contrib.flask import Sentry
     sentry = Sentry(app, dsn=sentry_dsn)
 
+app.config['CELERY_BROKER_URL'] = os.environ.get('REDIS_URL')
+
+celery = Celery('transformer.app', broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
+
 
 # Prepare the application transform registry
 registry.make_registry()
+
+# Configure live integration testing
+
+live_integration_test_server = os.environ.get('LIVE_INTEGRATION_TEST_SERVER')
+
+
+def str_to_unicode(data):
+    if isinstance(data, basestring):
+        return unicode(data)
+    elif isinstance(data, collections.Mapping):
+        return dict(map(str_to_unicode, data.iteritems()))
+    elif isinstance(data, collections.Iterable):
+        return type(data)(map(str_to_unicode, data))
+    else:
+        return data
+
+
+@celery.task
+def perform_async_live_integration_server_test(method, path, args, data, expected_status_code, expected_json):
+    response = requests.request(method=method, url=live_integration_test_server + path, params=args, data=data)
+
+    body_diff = DeepDiff(str_to_unicode(expected_json), response.json(), ignore_order=True)
+    full_match = expected_status_code == response.status_code and not body_diff
+
+    if full_match:
+        print '[perform_live_integration_test] Responses match!'
+    else:
+        output = '[perform_live_integration_test] Responses do not match:\n' \
+                 'path: %s\ndata: %s\nexpected status code: %s\nactual status code: %s\njson diff: %s' % \
+                 (path, data, expected_status_code, response.status_code, body_diff)
+
+        print output
+
+
+@app.after_request
+def perform_live_integration_test(response):
+    if live_integration_test_server:
+        perform_async_live_integration_server_test.delay(
+            request.method, request.path, request.args, request.data, response.status_code, response.json)
+
+    return response
 
 
 @app.route('/')
